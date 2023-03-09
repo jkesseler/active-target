@@ -1,0 +1,205 @@
+@use "sass:map";
+
+$static-assets-path: "../static-assets" !default;
+
+$enable-flex: true;
+$enable-rounded: true;
+$enable-shadows: true;
+$enable-gradients: true;
+$grid-breakpoints: (
+  xs: 0,
+  sm: 544px,
+  md: 768px,
+  lg: 992px,
+  xl: 1240px
+);
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1240px
+);
+
+$spacer: 1rem !default;
+
+$spacers: (
+  0: 0,
+  1: ($spacer * 0.25),
+  2: ($spacer * 0.5),
+  3: $spacer,
+  4: ($spacer * 1.5),
+  5: ($spacer * 2),
+  6: ($spacer * 3),
+  7: ($spacer * 4),
+  8: ($spacer * 5),
+  9: ($spacer * 6)
+);
+
+
+$white: #fff;
+$gray-100: #f6f6f6;
+$gray-200: rgba(0, 0, 0, 12%);
+$gray-300: rgba(0, 0, 0, 21%);
+$gray-400: #ced4da;
+$gray-500: rgba(0, 0, 0, 54%);
+$gray-600: #878787;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: rgba(0, 0, 0, 87%);
+$black: rgba(5, 4, 4);
+$grays: ();
+$grays: map.merge(
+  (
+    "100": $gray-100,
+    "200": $gray-200,
+    "300": $gray-300,
+    "400": $gray-400,
+    "500": $gray-500,
+    "600": $gray-600,
+    "700": $gray-700,
+    "800": $gray-800,
+    "900": $gray-900
+  ),
+  $grays
+);
+$text-muted: $gray-500;
+$text-basic: $gray-900;
+$blue: #0398cd;
+$orange: #ff8c00;
+$yellow: #fdc600;
+$green: #8cc640;
+$cyan: #5fc9c1;
+$success: #28a745;
+$info: $cyan;
+$warning: #ffcf01;
+$danger: #dc3545;
+$primary: $orange;
+$primary-light: #ffa333;
+$primary-dark: #e67e00;
+
+$secondary: $orange;
+
+$theme-colors: () !default;
+$theme-colors: map.merge(
+  (
+    "primary":    $primary,
+    "secondary":  $secondary,
+    "success":    $success,
+    "info":       $info,
+    "warning":    $warning,
+    "danger":     $danger,
+    "light":      $primary-light,
+    "dark":       $primary-dark
+  ),
+  $theme-colors
+);
+
+$gray-inverted: rgba(255, 255, 255, 54%);
+$gray-inverted-light: rgba(255, 255, 255, 100%);
+$gray-inverted-dark: rgba(255, 255, 255, 12%);
+
+$font-family-sans-serif: "Roboto", sans-serif;
+$font-family-serif: "Lora", serif;
+$font-size-base: 0.875rem;
+
+$line-height-base: 1.25;
+$line-height-lg: $line-height-base;
+$line-height-sm: $line-height-base;
+
+$h1-font-size: 1.5rem;
+$h2-font-size: 1.25rem;
+$h3-font-size: 1rem;
+
+$headings-margin-bottom: 0;
+$headings-line-height: 1.5;
+
+$btn-border-radius: 2px;
+$btn-border-radius-lg: 2px;
+$btn-border-radius-sm: 2px;
+$btn-font-size-lg: 0.875rem;
+$border-radius: 2px;
+
+$input-bg: #F6F6F6;
+$input-border-color: $gray-200;
+$input-border-radius-lg: 2px;
+$input-border-radius-sm: 2px;
+$input-border-radius: 2px;
+$input-border-width: 1px;
+$input-color: $gray-900;
+$input-disabled-bg: $gray-200;
+$input-font-size: 1rem;
+$input-height: 50px;
+$input-padding-y: 0.25rem;
+$input-padding-x: 0.5rem;
+
+$custom-select-background-color: #F6F6F6;
+$custom-select-border-color: $gray-200;
+$custom-control-indicator-border-color: $gray-200;
+$custom-select-color: $gray-900;
+$custom-select-font-size-lg: 1rem;
+$custom-select-height-lg: auto;
+$custom-select-padding-x-lg: 0.875rem;
+$custom-select-padding-y-lg: 0.875rem;
+
+$custom-control-indicator-checked-bg: var(--theme-color-1);
+$custom-control-indicator-checked-color: var(--theme-color-1);
+$custom-checkbox-indicator-icon-checked: "";
+$custom-radio-indicator-icon-checked: "";
+
+$form-feedback-valid-color: $gray-900;
+$form-feedback-invalid-color: $danger;
+
+$form-feedback-icon-valid-color: $form-feedback-valid-color !default;
+$form-feedback-icon-valid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><path fill='#{$form-feedback-icon-valid-color}' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/></svg>") !default;
+$form-feedback-icon-invalid-color: $form-feedback-invalid-color !default;
+$form-feedback-icon-invalid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='#{$form-feedback-icon-invalid-color}' viewBox='0 0 12 12'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='#{$form-feedback-icon-invalid-color}' stroke='none'/></svg>") !default;
+
+$form-validation-states: () !default;
+$form-validation-states: map-merge(
+  (
+    "valid": (
+      "color": $form-feedback-valid-color,
+      "icon": $form-feedback-icon-valid
+    )
+  ),
+  $form-validation-states
+);
+
+
+$body-color: $gray-900;
+$link-color: inherit;
+$link-hover-color: inherit;
+
+$box-shadow-color: 3px 5px 9px 0 rgba(0, 0, 0, 3%), 10px 10px 10px 0 rgba(0, 0, 0, 6%);
+
+$badge-padding-y: 0.5rem;
+$badge-padding-x: 0.675rem;
+$badge-font-weight: 700;
+$badge-font-size: 0.75rem;
+$badge-border-radius: 2px;
+$badge-color: $white;
+
+$grid-gutter-width: 30px;
+
+$table-border-color: $gray-200;
+$table-striped-order: "even";
+
+
+$displays: none, inline, inline-block, block, table, table-row, table-cell, flex, inline-flex, grid, inline-grid, list-item;
+
+$btn-font-weight: 500;
+$btn-border-width: 2px;
+$btn-border-radius: 2px;
+$link-hover-decoration: none;
+
+$label-margin-bottom: 0;
+
+$modal-content-border-radius: $border-radius;
+$modal-content-inner-border-radius: $border-radius;
+$modal-footer-border-color: transparent;
+
+$btn-padding-y-xl: 1rem;
+$btn-padding-x-xl: 1rem;
+$btn-font-size-xl: 0.875rem;
+$btn-line-height-xl: 1;
+$btn-border-radius-xl: $border-radius;

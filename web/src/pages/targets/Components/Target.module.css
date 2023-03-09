@@ -1,0 +1,27 @@
+.targetContain {
+  display: inline-block;
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.target {
+  left: 0;
+  position: relative;
+}
+
+.targetLayer {
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 10;
+}
+
+
+.hit {
+  color: green;
+}
+
+.missed {
+  color: red;
+}

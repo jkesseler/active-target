@@ -1,0 +1,16 @@
+.vscode
+.pio
+node_modules/
+**/node_modules
+.next
+.swc
+
+**/*.pem
+
+npm-debug.log*
+
+**/.env*.local
+
+*.tsbuildinfo
+next-env.d.ts
+*.code-workspace
