@@ -1,6 +1,7 @@
 import { targetsSlice } from './targets.slice';
 import * as selectors from './targets.selectors';
 import * as actions from './targets.actions';
+import { targetsMiddleware } from './targets.middleware';
 
 const allActions = {
   ...targetsSlice.actions,
@@ -10,5 +11,6 @@ const allActions = {
 export {
   targetsSlice,
   selectors,
-  allActions as actions
+  allActions as actions,
+  targetsMiddleware as middleware
 };

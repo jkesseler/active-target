@@ -56,7 +56,9 @@ export const targetsSlice = createSlice({
     },
     addResult: (state, { payload }) => {
       const { gameType } = state;
-      const { roundIndex, turnIndex, targetResult } = payload;
+      const { targetResult } = payload;
+      const { roundIndex, turnIndex } = state;
+
       // TODO: implement other game types
       if (gameType !== GAMETYPE_SEQUENTIAL) {
         return state;

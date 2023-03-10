@@ -1,8 +1,9 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { targetsSlice } from '@/stores/targets';
+import { targetsSlice , middleware as targetsMiddleware } from '@/stores/targets';
 import { toastMiddleware } from '@/stores/toasts';
 import { middleware as websocketsMiddleware } from '@/stores/websockets';
+
 
 export const rootReducer = combineReducers({
   [targetsSlice.name]: targetsSlice.reducer
@@ -13,7 +14,7 @@ export const store = configureStore({
   middleware: getDefaultMiddleware => getDefaultMiddleware({
     serializableCheck: false,
     thunk: true
-  }).concat(websocketsMiddleware, toastMiddleware.middleware),
+  }).concat(targetsMiddleware.middleware, websocketsMiddleware, toastMiddleware.middleware),
   devTools: true
 });
 

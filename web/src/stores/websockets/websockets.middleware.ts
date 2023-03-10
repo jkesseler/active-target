@@ -4,8 +4,6 @@ import { SYSTEM_ID } from '@/constants';
 export const configureWebsocketMiddleware = reduxWebsocket({
   deserializer: message => {
     try {
-      console.log('Message: ', message);
-
       const payload = JSON.parse(message);
 
       if (payload.systemId !== SYSTEM_ID) {
@@ -16,7 +14,6 @@ export const configureWebsocketMiddleware = reduxWebsocket({
 
     } catch (error) {
       console.log('WS Error: ', error);
-      return message;
     }
   },
 
