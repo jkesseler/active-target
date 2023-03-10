@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 const GAMETYPE_RANDOM = 'random'; // [3,5,2,1,4], [2,3,1,5,4], [4,3,1,5,2] ... etc
 const GAMETYPE_SEQUENTIAL = 'seqiential'; // [1,2,3,4,4] [1,2,3,4,5]  ... etc
 
-type GenerateRounds = {
+export type GenerateRounds = {
   numberOfRounds: number;
   turnsPerRound: number;
 } & OneOfType<{
@@ -13,12 +14,20 @@ type GenerateRounds = {
 
 const generateRounds = ({ numberOfRounds, turnsPerRound, gameType }: GenerateRounds): GameRounds => {
   const rounds = Array.from({ length: numberOfRounds }, (_, i) => i);
-  return rounds.map((_, rIdx) => {
-    const turn = Array.from({ length: turnsPerRound }, (_, tIdx) => ({ roundIndex: rIdx, turnIndex: tIdx, targetResult: null }));
+
+  return rounds.map((_, rIdx):Turn[] => {
+    const turns = Array.from({ length: turnsPerRound }, (_, tIdx): Turn => {
+      const turn = {
+        roundIndex: rIdx,
+        turnIndex: tIdx,
+        targetResult: null
+      } as Turn;
+      return turn;
+    });
 
     return gameType === GAMETYPE_RANDOM
-      ? turn.sort(() => Math.random() - 0.5)
-      : turn;
+      ? turns.sort(() => Math.random() - 0.5)
+      : turns;
   });
 };
 
@@ -87,23 +96,3 @@ export const targetsSlice = createSlice({
     }
   }
 });
-
-
-export function makeRounds(dispatch: any) {
-  return async function ({ numberOfRounds, turnsPerRound, gameType }: GenerateRounds) {
-    dispatch(targetsSlice.actions.generateGameRounds({ numberOfRounds, turnsPerRound, gameType }));
-  };
-}
-
-
-export function addResult(dispatch: any) {
-  return async function ({ ...payload }: TargetResultPayload) {
-    await dispatch(targetsSlice.actions.addResult(payload));
-    await dispatch(targetsSlice.actions.advanceTurn());
-  };
-}
-
-
-export const selectTarget = state => state.targets;
-export const selectNumberOrRounds = state => state.targets.numberOfRounds;
-export const selectTurnsPerRound = state => state.targets.turnsPerRound;

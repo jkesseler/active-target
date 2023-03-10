@@ -1,16 +1,12 @@
 type TargetResult = 'hit' | 'missed' | null;
 
-interface TargetResultPayload {
+interface Turn {
   roundIndex: number;
   turnIndex: number;
   targetResult: TargetResult;
 }
 
-
-type GameRounds = TargetResultPayload[];
-
-
-
+type GameRounds = Turns[];
 
 // LoRa related stuff
 interface ILoRaMessage {
