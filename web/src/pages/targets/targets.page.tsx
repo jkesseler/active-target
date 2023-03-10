@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Target } from './Components/Target';
 import { actions, selectors } from '@/stores/targets';
+import { wsConnect } from '@/stores/websockets/websocket.actions';
 import { useAppDispatch, useAppSelector } from '@/store';
 
 const TargetsPage = () => {
   const dispatch = useAppDispatch();
-  const numberOfRounds = useAppSelector(selectors.selectNumberOrRounds);
-  const turnsPerRound = useAppSelector(selectors.selectTurnsPerRound);
   const turnIndex = useAppSelector(selectors.selectTurnIndex);
   const roundIndex = useAppSelector(selectors.selectRoundIndex);
   const rounds = useAppSelector(selectors.selectRounds);
@@ -21,9 +20,8 @@ const TargetsPage = () => {
   };
 
   useEffect(() => {
-    actions.makeRounds(dispatch)({ numberOfRounds, turnsPerRound });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    wsConnect(dispatch)();
+  }, [dispatch]);
 
 
   return (

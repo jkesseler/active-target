@@ -1,0 +1,11 @@
+{
+  "systemId": "1",
+  "type": "target/add-to-basestation",
+  "meta": {
+    "orginator": "11-11-11-11-11-11"
+  },
+  "payload": {
+    "timestamp": "2011-10-05T10:48:00.000Z"
+  }
+}
+

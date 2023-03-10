@@ -1,10 +1,14 @@
-import reduxWebsocket from '@giantmachines/redux-websocket';
+import reduxWebsocket from '@/lib/redux-websocket';
+import { SYSTEM_ID } from '@/constants';
 
 export const configureWebsocketMiddleware = reduxWebsocket({
   deserializer: message => {
     try {
+      console.log('Message: ', message);
+
       const payload = JSON.parse(message);
-      if (payload.systemId !== process.env.NEXT_PUBLIC_SYSTEM_ID) {
+
+      if (payload.systemId !== SYSTEM_ID) {
         return null;
       }
 
@@ -12,16 +16,20 @@ export const configureWebsocketMiddleware = reduxWebsocket({
 
     } catch (error) {
       console.log('WS Error: ', error);
-      console.log('WS Message: ', message);
-      return undefined;
+      return message;
     }
   },
+
   serializer: (payload: JSONObject) => {
     const wsPayload = {
       ...payload,
-      systemId: process.env.NEXT_PUBLIC_SYSTEM_ID
+      systemId: SYSTEM_ID
     };
 
     return JSON.stringify(wsPayload);
+  },
+
+  dateSerializer: (date: Date) => {
+    return date.toISOString();
   }
 });

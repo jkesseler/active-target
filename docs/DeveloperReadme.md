@@ -52,7 +52,10 @@ Basically the target spams the basestation with this message until it revieved a
   }
 }`
 
-## Target Hit message (from target to basestation)
+### Target Hit message (from target to basestation)
+
+The timestamp should be in millisecond resolution and parseable in the app
+
 `{
   "systemId": {uuid},
   "type": "target/record-hit",
@@ -104,7 +107,7 @@ The basestation can send a message to target to enter 'test mode'. The targets s
   }
 }`
 
-## Test single target start
+## Test single target end
 `{
   "systemId": {uuid},
   "type": "basestation/test-target-end",

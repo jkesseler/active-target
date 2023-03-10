@@ -1,0 +1,10 @@
+{
+  "systemId": "1",
+  "type": "target/record-hit",
+  "meta": {
+    "orginator": "60-E3-2B-D9-59-18"
+  },
+  "payload": {
+    "timestamp": "2011-10-05T14:48:00.420Z"
+  }
+}
