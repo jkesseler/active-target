@@ -15,8 +15,7 @@ void setup()
   lastButtonState = digitalRead(BUTTON_PIN);
 
   Serial.begin(115200);
-  while (!Serial)
-    ;
+  while (!Serial);
 
   if (OLED_RST > 0)
   {
@@ -54,8 +53,9 @@ void loop()
 {
   int buttonState = digitalRead(BUTTON_PIN);
 
+  // state changed
   if (lastButtonState != buttonState)
-  {            // state changed
+  {
     delay(50); // debounce time
 
     if (buttonState == HIGH)

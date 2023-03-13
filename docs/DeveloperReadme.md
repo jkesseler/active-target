@@ -119,3 +119,39 @@ The basestation can send a message to target to enter 'test mode'. The targets s
     "timestamp": {timestamp}
   }
 }`
+
+
+
+## Heartbeats
+### Time sync
+The base station sends oit its own time on milliseconds.
+Targers should sync their clock to this time, targets should filter out
+messages not originating from their known basestation
+`{
+  "systemId": {uuid},
+  "type": "basestation/time",
+  "meta": {
+    "orginator": {basestationMACAddress},
+  },
+  "payload": {
+    "timestamp": {timestamp}
+  }
+}`
+
+
+## Target device status
+Send target device status over network, the base station should filterout unknown targets.
+`{
+  "systemId": {uuid},
+  "type": "target/status",
+  "meta": {
+    "orginator": {targetMACAdress},
+  },
+  "payload": {
+    "targetId": {basestationMACAddress},
+    "timestamp": {timestamp},
+    "voltage": "",
+    "device RSSI ": "",
+    "device Rx levels from gateway": ""
+  }
+}`
