@@ -24,8 +24,9 @@ Message are based on [Flux Standard Action](https://github.com/redux-utilities/f
 
 ## Target Add message
 
-When the target first starts up it's intial state is 'connecting to base station'
-Basically the target spams the basestation with this message until it revieved and 'acknowlede' message
+When the target first startsup it's intial state is 'connecting to base station'
+Basically the target spams the basestation with this message until it revieved and 'acknowlede' message.
+If after a set interval the target does not recieve an acknowledge it will stop trying to connect and give feedback on the failure.
 ### From target to basestation
 `{
   "systemId": {uuid},
@@ -124,9 +125,8 @@ The basestation can send a message to target to enter 'test mode'. The targets s
 
 ## Heartbeats
 ### Time sync
-The base station sends oit its own time on milliseconds.
-Targers should sync their clock to this time, targets should filter out
-messages not originating from their known basestation
+The base station sends its own time in milliseconds.
+Targets should sync their clock to this time, targets should filter out messages not originating from their known basestation
 `{
   "systemId": {uuid},
   "type": "basestation/time",

@@ -1,3 +1,5 @@
+// https://github.com/sandeepmistry/arduino-LoRa/blob/master/examples/LoRaDuplexCallback/LoRaDuplexCallback.ino
+
 #include "Roboto_16.h"
 #include "board.h"
 #include <Arduino.h>
@@ -52,10 +54,6 @@ void setup() {
       ;
   }
 
-  display.clear();
-  display.drawString(display.getWidth() / 2, display.getHeight() / 2, "LoraRcv Ready");
-  display.display();
-
   if (SDCARD_CS > 0) {
     display.clear();
     SPIClass sdSPI(VSPI);
@@ -70,39 +68,17 @@ void setup() {
     display.display();
     delay(2000);
   }
+
+  display.clear();
+  display.drawString(display.getWidth() / 2, display.getHeight() / 2, "LoraRcv Ready");
+  display.display();
+
+  LoRa.onReceive(onLoraRecieve);
 }
 
+
+
+
 void loop() {
-  LoRa.onReceive(onLoraRecieve);
-
-  int packetSize = LoRa.parsePacket();
-
-  if (packetSize) {
-    Serial.print("Received packet '");
-
-    // read packet
-    while (LoRa.available()) {
-      contents += (char)LoRa.read();
-    }
-
-    // print RSSI of packet
-    Serial.print("' with RSSI ");
-    Serial.println(LoRa.packetRssi());
-    Serial.println(contents);
-
-    if (contents.equals(buttonPress)) {
-      x = !x;
-    }
-
-    display.clear();
-
-    if (x == true) {
-      display.drawString(display.getWidth() / 2, display.getHeight() / 2, "State On");
-    } else {
-      display.drawString(display.getWidth() / 2, display.getHeight() / 2, "State Off");
-    }
-    display.display();
-
-    contents = "";
-  }
+  // Do nothing
 }
