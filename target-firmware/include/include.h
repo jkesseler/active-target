@@ -6,5 +6,5 @@ static const char *DEVICE_NAME = "Plate 1";
 
 
 #define BUTTON_PIN 34
-#define THRESHOLD 1000
+#define THRESHOLD 250
 #define DEBOUNCE_TIME 150
