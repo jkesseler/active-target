@@ -1,4 +1,4 @@
-import { createSlice /*, PayloadAction */ } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { AppRootState } from '@/configureStore';
 
 export interface ResultLine {
@@ -12,9 +12,9 @@ export const resultsSlice = createSlice({
   name: 'results',
   initialState: [] as ResultLine[],
   reducers: {
-    addResult: (state: ResultLine[], action) => {
-      const { payload, meta } = action;
-      const { targetId, targetName, result } = payload;
+    addResult: (state: ResultLine[], action: PayloadAction <ResultLine>) => {
+      const { payload } = action;
+      const { targetId, targetName, result, timestamp } = payload;
 
       return [
         ...state,
@@ -22,8 +22,8 @@ export const resultsSlice = createSlice({
           targetId,
           targetName,
           result,
-          timestamp: meta.timestamp
-        } 
+          timestamp
+        }
       ]
     },
     resetResults: () => {

@@ -1,7 +1,7 @@
 import { Middleware } from 'redux';
 import mqtt from "mqtt/dist/mqtt";
 // import * as mqtt from "mqtt"
-import { DEVICE_ID } from '@/constants';
+import { DEVICE_ID, MQTT_SEVRVER_URL, MQTT_MIDDLEWARE_TOPICS } from '@/constants';
 import { mqttSlice, selectIsConnected } from './mqttSlice';
 
 const actions = mqttSlice.actions;
@@ -42,28 +42,31 @@ export const mqttMiddleware: Middleware = ({ dispatch, getState }) => {
   return next => action => {
     console.log(action.type);
     if (actions.startConnecting.match(action) && !isConnected) {
-      client = mqtt.connect(import.meta.env.VITE_MQTT_URL, options);
+      client = mqtt.connect(MQTT_SEVRVER_URL, options);
 
       client.on('connect', () => {
-        client.subscribe('at/target/+/actions');
+        MQTT_MIDDLEWARE_TOPICS.forEach(topic => client.subscribe(topic));
         dispatch(actions.connected());
       });
     }
 
-    
+
     if(actions.connected.match(action)) {
-      
+
       client.on('message', (topic, message) => {
         console.log('topic: ', topic);
         const mqttMessage = message.toString();
-    
+
         try {
-          const { type, payload, meta = null } = parseMqttMessage(mqttMessage);
-          console.log('Action: ', {
-            type, payload, meta
-          });
-          
-          dispatch({ type, payload, meta });
+          const { type, payload, meta = {}} = parseMqttMessage(mqttMessage);
+
+          dispatch({
+            type,
+            payload: {
+            ...payload,
+            ...meta
+            }
+        });
 
         } catch (e) {
           console.log(e);
