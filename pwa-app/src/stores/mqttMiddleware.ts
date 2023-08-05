@@ -1,5 +1,5 @@
 import { Middleware } from 'redux';
-import mqtt from "mqtt/dist/mqtt";
+import mqtt from 'mqtt/dist/mqtt';
 // import * as mqtt from "mqtt"
 import { DEVICE_ID, MQTT_SEVRVER_URL, MQTT_MIDDLEWARE_TOPICS } from '@/constants';
 import { mqttSlice, selectIsConnected } from './mqttSlice';
@@ -63,10 +63,10 @@ export const mqttMiddleware: Middleware = ({ dispatch, getState }) => {
           dispatch({
             type,
             payload: {
-            ...payload,
-            ...meta
+              ...payload,
+              ...meta
             }
-        });
+          });
 
         } catch (e) {
           console.log(e);

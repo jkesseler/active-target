@@ -7,8 +7,9 @@ import {
 } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { deserializeError } from 'serialize-error';
+import { createWrapper, type MakeStore } from './utils/store-wrapper';
 import { targetsSlice } from './stores/targetsSlice';
-import { resultsSlice } from './stores/resultsSlice'
+import { resultsSlice } from './stores/resultsSlice';
 import { mqttSlice } from './stores/mqttSlice';
 import { mqttMiddleware } from './stores/mqttMiddleware';
 
@@ -21,7 +22,7 @@ import type {
 
 
 const listenerMiddlewareInstance = createListenerMiddleware({
-  onError: (e) => console.error(deserializeError(e))
+  onError: (e: any) => console.error(deserializeError(e))
 });
 
 
@@ -40,9 +41,12 @@ export const store = configureStore({
   devTools: true
 });
 
+
+const makeStore: MakeStore<any> = () => store;
+export const wrapper = createWrapper<AppRootStore>(makeStore, { debug: false });
+
 export const startAppListening = listenerMiddlewareInstance.startListening as AppStartListening;
 export const addAppListener = addListener as AppAddListener;
-
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type AppRootStore = ReturnType<typeof configureStore>

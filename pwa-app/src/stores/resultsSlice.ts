@@ -24,10 +24,10 @@ export const resultsSlice = createSlice({
           result,
           timestamp
         }
-      ]
+      ];
     },
     resetResults: () => {
-      return [] as ResultLine[]
+      return [] as ResultLine[];
     }
   }
 });

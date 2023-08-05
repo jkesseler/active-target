@@ -1,0 +1,132 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript"
+  ],
+  "rules": {
+    "block-scoped-var": "error",
+    "brace-style": ["error", "1tbs"],
+    "camelcase": ["error", {
+      "ignoreGlobals": true,
+      "properties": "never",
+      "allow": ["^o_", "node_*", "npm_*"]
+    }],
+    "comma-dangle": ["error", "never"],
+    "curly": "error",
+    "eol-last": "error",
+    "eqeqeq": "error",
+    "id-length": [ "error",
+    {
+      "exceptions": ["t", "q", "e", "i", "j", "_"],
+      "properties": "never"
+    }
+    ],
+    "indent": ["error", 2],
+    "jsx-quotes": ["error", "prefer-double"],
+    "max-len": ["warn",
+      {
+        "code": 140,
+        "ignoreTemplateLiterals": true,
+        "ignoreUrls": true
+      }],
+    "max-depth": ["warn", 3],
+    "no-bitwise": "warn",
+    "no-duplicate-imports": "off",
+    "no-else-return": "error",
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-lone-blocks": "error",
+    "no-multi-spaces": "error",
+    "no-param-reassign": "error",
+    "no-prototype-builtins": "error",
+    "no-return-assign": "error",
+    "no-template-curly-in-string": "error",
+    "no-trailing-spaces": "error",
+    "no-underscore-dangle": ["error", {
+      "allow": ["__lang", "__namespaces", "__NEXT_DATA__", "__N_SSG", "__N_SSP", "__nextReduxWrapperStore"]
+    }],
+    "no-unneeded-ternary": "error",
+    "no-unused-expressions": ["error", {"allowShortCircuit": true, "allowTernary": true}],
+    "no-useless-concat": "error",
+    "no-useless-constructor": "error",
+    "no-var": "error",
+    "no-undef": "error",
+    "no-unused-vars": "off",
+      "no-restricted-syntax": [
+        "error",
+        {
+          "selector": "MemberExpression[property.name='replaceState']",
+          "message": "Use 'next/router' for history manipulation, not doing so breaks the browser history buttons in NextJs' projects"
+        },
+        {
+          "selector": "MemberExpression[property.name='pushState']",
+          "message": "Use 'next/router' for history manipulation, not doing so breaks the browser history buttons in NextJs' projects"
+        }
+      ],
+    "one-var": ["error", "never"],
+    "one-var-declaration-per-line": ["error", "always"],
+    "prefer-const": "error",
+    "prefer-template": "error",
+    "quotes": ["error", "single"],
+    "radix": "error",
+    "semi": ["error", "always"],
+    "space-infix-ops": ["error", { "int32Hint": false }],
+    "space-unary-ops": "error",
+    "template-curly-spacing": ["error", "never"],
+    "import/newline-after-import": "error",
+    "import/no-duplicates": "error",
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "@/**|@components*/**|@hooks/**|@lib/**|@services/**|@state/**|@styles/**@utils/**",
+            "group": "internal"
+          }
+        ]
+      }
+    ],
+    "react/jsx-closing-bracket-location": "warn",
+    "react/no-typos": "error",
+    "react/prefer-stateless-function": "error",
+    "react/prop-types": ["off", {  /* interferes with TS https://stackoverflow.com/a/63263323 */
+      "skipUndeclared": true
+    }],
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "@typescript-eslint/ban-ts-comment": "warn",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
+}

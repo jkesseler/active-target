@@ -1,38 +1,62 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "module": "ESNext",
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "Bundler",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-
+    "target": "es5",
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"
       ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@constants/*": [
+        "constants/*"
+      ],
+      "@gql/*": [
+        "queries/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+      "@stores/*": [
+        "src/stores/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@images/*": [
+        "public/images/*"
+      ]
     }
   },
-  "include": ["src", "@types/**/*.d.ts", "@types.**/*.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "@types/**/*.d.ts",
+    "@types.**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

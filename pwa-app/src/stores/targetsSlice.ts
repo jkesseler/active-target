@@ -38,10 +38,10 @@ export const selectTargets = (state: AppRootState) => state.targets;
 
 export const selectTargetById = createSelector(
   [
-    state => state.targets, 
+    state => state.targets,
     (_, targetId) => targetId
   ],
   (targets, targetId) => {
-    targets ? targets.find((target: Target) => target.targetId === targetId) : null
+    return targets ? targets.find((target: Target) => target.targetId === targetId) : null;
   }
-)
+);
