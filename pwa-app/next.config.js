@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('next').NextConfig} */
 const path = require('path');
+const nextTranslate = require('next-translate-plugin');
+
 
 const nextConfig = {
   productionBrowserSourceMaps: true,
@@ -15,6 +17,6 @@ const nextConfig = {
   }
 };
 
-module.exports = ({
-  ...nextConfig,
+module.exports = nextTranslate({
+  ...nextConfig
 });
