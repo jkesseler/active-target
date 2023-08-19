@@ -19,8 +19,8 @@ char mqttClientId[64];
 volatile unsigned long lastInterruptTime = 0;
 
 String deviceName = settings.getString("deviceName", "My Target");
-int SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime", 100);
-int SENSOR_THRESHOLD = settings.getInt("sensorThreshold", 250);
+int SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime", 150);
+int SENSOR_THRESHOLD = settings.getInt("sensorThreshold", 150);
 
 void onMessageReceive(char *topic, byte *message, unsigned int length) {
   Serial.print("Message arrived on topic: ");
@@ -35,7 +35,7 @@ void onMessageReceive(char *topic, byte *message, unsigned int length) {
   Serial.println(messageTemp);
 
   
-  handleSetSettingsMessage(messageTemp);
+  handleMqttMessage(messageTemp);
 
 }
 
@@ -77,9 +77,6 @@ void setup() {
   DeviceId deviceId;
   uuid = deviceId.get();
   jsonMessages = Messages(uuid);
-
-  settings.set("name", "My device name");
-  settings.set("sensorDebounceTime", 250);
 
   sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
   sprintf(mqttTopic, "at/devbice/%s/actions", uuid.c_str());

@@ -4,27 +4,35 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-void handleSetSettingsMessage(String jsonString) {
-  DynamicJsonDocument tmpJsonDoc(256);
-  DeserializationError error = deserializeJson(tmpJsonDoc, jsonString);
-
+void handleMqttMessage(String jsonString) {
+  DynamicJsonDocument doc(256);
+  DeserializationError error = deserializeJson(doc, jsonString);
+  
+  // TODO: error handling
   if (error) {
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
     return;
   }
-    
-  String deviceName = tmpJsonDoc["payload"]["deviceName"];
+
+  String actionType = doc["type"];
+  if (actionType == "settings/set") {
+    handleSetSettings(doc);
+  }
+}
+
+void handleSetSettings(DynamicJsonDocument doc) {    
+  String deviceName = doc["payload"]["deviceName"];
   if(deviceName) {
     settings.set("deviceName", deviceName);
   }
 
-  int sensorDebounceTime = tmpJsonDoc["payload"]["sensorDebounceTime"];
+  int sensorDebounceTime = doc["payload"]["sensorDebounceTime"];
   if (sensorDebounceTime) {
     settings.set("sensorDebounceTime", sensorDebounceTime);
   }
 
-  int sensorThreshold = tmpJsonDoc["payload"]["sensorThreshold"];
+  int sensorThreshold = doc["payload"]["sensorThreshold"];
   if (sensorThreshold) {
     settings.set("sensorThreshold", sensorThreshold);
   }

@@ -48,12 +48,34 @@ at/device/77981e7d-d799-4442-a16d-35dd8e261bfe/actions
 }
 
 
+# Update device settings
 {
   "meta": {
     "timestamp": "2023-07-14T08:33:08.728Z"
   },
   "type": "settings/set",
   "payload": {
-    "sensorDebounceTime": 250
+    "sensorDebounceTime": 200
+  }
+}
+
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z"
+  },
+  "type": "settings/set",
+  "payload": {
+    "deviceName": "My target plate"
+  }
+}
+
+
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z"
+  },
+  "type": "settings/set",
+  "payload": {
+    "sensorThreshold": 100
   }
 }
