@@ -1,39 +1,40 @@
-// file: handleMqttMessage.cpp
 #include "handleMqttMessage.h"
 #include "settings.h"
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-void handleMqttMessage(String jsonString) {
+void handleMqttMessage(const String &jsonString) {
   DynamicJsonDocument doc(256);
   DeserializationError error = deserializeJson(doc, jsonString);
-  
-  // TODO: error handling
+
+  // Error handling
   if (error) {
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
     return;
   }
 
-  String actionType = doc["type"];
-  if (actionType == "settings/set") {
+  const char *actionType = doc["type"]; // This returns a pointer, avoiding String conversion
+  if (strcmp(actionType, "settings/set") == 0) {
     handleSetSettings(doc);
   }
 }
 
-void handleSetSettings(DynamicJsonDocument doc) {    
-  String deviceName = doc["payload"]["deviceName"];
-  if(deviceName) {
+void handleSetSettings(const DynamicJsonDocument &doc) {
+  // TODO:
+  
+  const char *deviceName = doc["payload"]["deviceName"];
+  if (deviceName != nullptr) {
     settings.set("deviceName", deviceName);
   }
 
-  int sensorDebounceTime = doc["payload"]["sensorDebounceTime"];
-  if (sensorDebounceTime) {
+  if (doc["payload"].containsKey("sensorDebounceTime")) {
+    int sensorDebounceTime = doc["payload"]["sensorDebounceTime"];
     settings.set("sensorDebounceTime", sensorDebounceTime);
   }
 
-  int sensorThreshold = doc["payload"]["sensorThreshold"];
-  if (sensorThreshold) {
+  if (doc["payload"].containsKey("sensorThreshold")) {
+    int sensorThreshold = doc["payload"]["sensorThreshold"];
     settings.set("sensorThreshold", sensorThreshold);
   }
 }
