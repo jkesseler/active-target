@@ -19,4 +19,5 @@ private:
   void reset();
 };
 
+extern DeviceId deviceId;
 #endif

@@ -1,7 +1,9 @@
-#include <ArduinoJson.h>
 #include "json_messages.h"
 #include "date_time.h"
-// #include "DeviceId.h"
+#include "settings.h"
+#include <ArduinoJson.h>
+
+// Settings settings;
 
 Messages::Messages(String uuid) {
   this->UUID = uuid;
@@ -15,8 +17,8 @@ String Messages::createAddTargetMessage() {
 
   doc["type"] = "targets/addTarget";
   meta["timestamp"] = isoDateTime;
-  payload["targetId"] = this->UUID;
-  payload["targetName"] = "My First Target"; // TODO: Get from prefereneces
+  payload["deviceId"] = this->UUID;
+  payload["deviceName"] = settings.getString("deviceName"); 
   String jsonString;
   serializeJson(doc, jsonString);
 
@@ -32,8 +34,8 @@ String Messages::createUpdateTargetMessage() {
 
   doc["type"] = "targets/updateTarget";
   meta["timestamp"] = isoDateTime;
-  payload["targetId"] = this->UUID;
-  payload["targetName"] = "My First Target"; // TODO: Get from prefereneces
+  payload["deviceId"] = this->UUID;
+  payload["deviceName"] = settings.getString("deviceName");
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -50,8 +52,8 @@ String Messages::createAddResultMessage() {
 
   doc["type"] = "results/addResult";
   meta["timestamp"] = isoDateTime;
-  payload["targetId"] = this->UUID;
-  payload["targetName"] = "My First Target"; // TODO: Get from prefereneces
+  payload["deviceId"] = this->UUID;
+  payload["deviceName"] = settings.getString("deviceName");
   payload["result"] = "hit";
 
   String jsonString;

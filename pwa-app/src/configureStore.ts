@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { deserializeError } from 'serialize-error';
 import { createWrapper, type MakeStore } from './utils/store-wrapper';
-import { targetsSlice } from './stores/targetsSlice';
+import { devicesSlice } from './stores/targetsSlice';
 import { resultsSlice } from './stores/resultsSlice';
 import { mqttSlice } from './stores/mqttSlice';
 import { mqttMiddleware } from './stores/mqttMiddleware';
@@ -29,7 +29,7 @@ const listenerMiddlewareInstance = createListenerMiddleware({
 export const rootReducer = combineReducers({
   [mqttSlice.name]: mqttSlice.reducer,
   [resultsSlice.name]: resultsSlice.reducer,
-  [targetsSlice.name]: targetsSlice.reducer
+  [devicesSlice.name]: devicesSlice.reducer
 });
 
 export const store = configureStore({

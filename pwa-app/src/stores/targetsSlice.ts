@@ -1,24 +1,24 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { AppRootState } from '@/configureStore';
 
-export interface Target {
-  targetId: string;
-  targetName: string;
-  targetState: 'TEST' | 'IDLE' | 'ACTIVE-ON' | 'ACTIVE-OFF' | 'ERROR';
+export interface Device {
+  deviceId: string;
+  deviceName: string;
+  deviceState: 'TEST' | 'IDLE' | 'ACTIVE-ON' | 'ACTIVE-OFF' | 'ERROR';
 }
 
-export const targetsSlice = createSlice({
-  name: 'targets',
-  initialState: [] as Target[],
+export const devicesSlice = createSlice({
+  name: 'devices',
+  initialState: [] as Device[],
   reducers: {
-    updateTarget: (state, { payload }) => {
-      const { targetId } = payload;
-      return state.map((target: Target) => target.targetId === targetId
-        ? { ...target, ...payload }
-        : target);
+    updateDevice: (state, { payload }) => {
+      const { deviceId } = payload;
+      return state.map((device: Device) => device.deviceId === deviceId
+        ? { ...device, ...payload }
+        : device);
     },
-    addTarget: (state, { payload }) => {
-      const idx = state.findIndex(target => target.targetId === payload.targetId);
+    addDevice: (state, { payload }) => {
+      const idx = state.findIndex(device => device.deviceId === payload.deviceId);
 
       if(idx !== -1) {
         return state;
@@ -33,15 +33,15 @@ export const targetsSlice = createSlice({
   }
 });
 
-export const { addTarget, updateTarget } = targetsSlice.actions;
-export const selectTargets = (state: AppRootState) => state.targets;
+export const { addDevice, updateDevice } = devicesSlice.actions;
+export const selectDevices = (state: AppRootState) => state.devices;
 
-export const selectTargetById = createSelector(
+export const selectDeviceById = createSelector(
   [
-    state => state.targets,
-    (_, targetId) => targetId
+    state => state.devices,
+    (_, deviceId) => deviceId
   ],
-  (targets, targetId) => {
-    return targets ? targets.find((target: Target) => target.targetId === targetId) : null;
+  (devices, deviceId) => {
+    return devices ? devices.find((device: Device) => device.deviceId === deviceId) : null;
   }
 );

@@ -2,8 +2,8 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { AppRootState } from '@/configureStore';
 
 export interface ResultLine {
-  targetId: string;
-  targetName: string;
+  deviceId: string;
+  deviceName: string;
   result: any;
   timestamp: any;
 }
@@ -14,13 +14,13 @@ export const resultsSlice = createSlice({
   reducers: {
     addResult: (state: ResultLine[], action: PayloadAction <ResultLine>) => {
       const { payload } = action;
-      const { targetId, targetName, result, timestamp } = payload;
+      const { deviceId, deviceName, result, timestamp } = payload;
 
       return [
         ...state,
         {
-          targetId,
-          targetName,
+          deviceId,
+          deviceName,
           result,
           timestamp
         }

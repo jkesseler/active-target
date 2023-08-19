@@ -1,6 +1,6 @@
 # Topic
 
-at/target/77981e7d-d799-4442-a16d-35dd8e261bfe/actions
+at/device/77981e7d-d799-4442-a16d-35dd8e261bfe/actions
 
 # Add Target
 {
@@ -45,4 +45,15 @@ at/target/77981e7d-d799-4442-a16d-35dd8e261bfe/actions
     "timestamp": "2023-07-14T08:33:08.728Z"
   },
   "type": "results/resetResults"
+}
+
+
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z"
+  },
+  "type": "settings/set",
+  "payload": {
+    "sensorDebounceTime": 250
+  }
 }

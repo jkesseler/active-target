@@ -1,12 +1,14 @@
+#include "DeviceId.h"
+#include "settings.h"
+#include "date_time.h"
+#include "include.h"
+#include "json_messages.h"
+#include "wifi_utils.h"
+#include "handleMqttMessage.h"
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include "include.h"
-#include "DeviceId.h"
-#include "wifi_utils.h"
-#include "date_time.h"
-#include "json_messages.h"
 
-
+// Settings settings;
 WiFiClient espClient;
 PubSubClient client(espClient);
 String uuid = EMPTY_UUID;
@@ -16,44 +18,43 @@ char mqttTopic[64];
 char mqttClientId[64];
 volatile unsigned long lastInterruptTime = 0;
 
+String deviceName = settings.getString("deviceName", "My Target");
+int SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime", 100);
+int SENSOR_THRESHOLD = settings.getInt("sensorThreshold", 250);
 
-void onMessageReceive(char *topic, byte *message, unsigned int length)
-{
+void onMessageReceive(char *topic, byte *message, unsigned int length) {
   Serial.print("Message arrived on topic: ");
   Serial.print(topic);
   Serial.print(". Message: ");
   String messageTemp;
 
-  for (int i = 0; i < length; i++)
-  {
+  for (int i = 0; i < length; i++) {
     Serial.print((char)message[i]);
     messageTemp += (char)message[i];
   }
   Serial.println(messageTemp);
+
+  
+  handleSetSettingsMessage(messageTemp);
+
 }
 
-void connectToMqttServer()
-{
+void connectToMqttServer() {
   int initialReconnectDelay = 1000;
   int currentReconnectDelay = initialReconnectDelay;
   int maxReconnectDelay = 16000;
 
-  while (!client.connected())
-  {
+  while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
 
-    if (client.connect(mqttClientId))
-    {
+    if (client.connect(mqttClientId)) {
       Serial.println("connected");
 
-      char topic[50];
-      sprintf(topic, "/at/%s/actions", uuid.c_str());
-      client.subscribe(topic);
-    }
-    else
-    {
-      if (currentReconnectDelay < maxReconnectDelay)
-      {
+      char actionsTopic[50];
+      sprintf(actionsTopic, "at/device/%s/actions", uuid.c_str());
+      client.subscribe(actionsTopic);
+    } else {
+      if (currentReconnectDelay < maxReconnectDelay) {
         currentReconnectDelay *= 2;
       }
       int sec = ((currentReconnectDelay + 500) / 1000);
@@ -77,38 +78,43 @@ void setup() {
   uuid = deviceId.get();
   jsonMessages = Messages(uuid);
 
+  settings.set("name", "My device name");
+  settings.set("sensorDebounceTime", 250);
 
-  sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());  
-  sprintf(mqttTopic, "at/target/%s/actions", uuid.c_str());
+  sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
+  sprintf(mqttTopic, "at/devbice/%s/actions", uuid.c_str());
 
   connectToWiFi(ssid, password);
 
   timeSync();
 
-  client.setServer(mqtt_server, 1883);
+  client.setServer(MQTT_SERVER, 1883);
   client.setCallback(onMessageReceive);
   connectToMqttServer();
 
-  
-
   String addTargetMessage = jsonMessages.createAddTargetMessage();
   client.publish(mqttTopic, addTargetMessage.c_str());
-  
+
   delay(500);
   String updateTargetMessage = jsonMessages.createUpdateTargetMessage();
   client.publish(mqttTopic, updateTargetMessage.c_str());
 }
 
 void loop() {
+
   if (!client.connected()) {
     connectToMqttServer();
   }
+  
+  deviceName = settings.getString("deviceName");
+  SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime");
+  SENSOR_THRESHOLD = settings.getInt("sensorThreshold");
 
   int piezoVal = analogRead(BUTTON_PIN);
 
   unsigned long currentTime = millis();
-  if (piezoVal > THRESHOLD && currentTime - lastInterruptTime > DEBOUNCE_TIME)
-  {
+  if (piezoVal > SENSOR_THRESHOLD &&
+      currentTime - lastInterruptTime > SENSOR_DEBOUNCE) {
     Serial.println(piezoVal);
     lastInterruptTime = currentTime;
 

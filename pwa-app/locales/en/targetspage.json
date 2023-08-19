@@ -7,5 +7,5 @@
   "th.target": "Target",
   "th.result": "Result",
   "th.time-difference": "Time diff.",
-  "td.difference": "{{difference}} sec."
+  "td.difference": "{{ difference }} sec."
 }
