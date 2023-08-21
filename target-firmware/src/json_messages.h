@@ -6,9 +6,9 @@ class Messages
 {
   public:
     Messages(String uuid);
-    String createAddTargetMessage();
+    String createDeviceOnlineMessage();
     String createAddResultMessage();
-    String createUpdateTargetMessage();
+    String createDeviceUpdatedMessage();
 
   private : String UUID;
 

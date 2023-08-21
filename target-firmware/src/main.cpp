@@ -16,11 +16,11 @@ Messages jsonMessages(uuid);
 
 char mqttTopic[64];
 char mqttClientId[64];
-volatile unsigned long lastInterruptTime = 0;
+volatile unsigned long lastDebounceTime = 0;
 
-String deviceName = settings.getString("deviceName", "My Target");
-int SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime", 150);
-int SENSOR_THRESHOLD = settings.getInt("sensorThreshold", 150);
+String deviceName = settings.getString("deviceName", DEFAULT_DEVICE_NAME);
+int SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime", DEFAULT_SENSOR_DEBOUNCE);
+int SENSOR_THRESHOLD = settings.getInt("sensorThreshold", DEFAULT_SENSOR_THRESHOLD);
 
 void onMessageReceive(char *topic, byte *message, unsigned int length) {
   Serial.print("Message arrived on topic: ");
@@ -36,7 +36,6 @@ void onMessageReceive(char *topic, byte *message, unsigned int length) {
 
   
   handleMqttMessage(messageTemp);
-
 }
 
 void connectToMqttServer() {
@@ -79,7 +78,7 @@ void setup() {
   jsonMessages = Messages(uuid);
 
   sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
-  sprintf(mqttTopic, "at/devbice/%s/actions", uuid.c_str());
+  sprintf(mqttTopic, "at/device/%s/actions", uuid.c_str());
 
   connectToWiFi(ssid, password);
 
@@ -89,12 +88,8 @@ void setup() {
   client.setCallback(onMessageReceive);
   connectToMqttServer();
 
-  String addTargetMessage = jsonMessages.createAddTargetMessage();
-  client.publish(mqttTopic, addTargetMessage.c_str());
-
-  delay(500);
-  String updateTargetMessage = jsonMessages.createUpdateTargetMessage();
-  client.publish(mqttTopic, updateTargetMessage.c_str());
+  String addTargetMessage = jsonMessages.createDeviceOnlineMessage();
+  client.publish("at/devices/online", addTargetMessage.c_str());
 }
 
 void loop() {
@@ -103,20 +98,18 @@ void loop() {
     connectToMqttServer();
   }
   
-  deviceName = settings.getString("deviceName");
   SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime");
   SENSOR_THRESHOLD = settings.getInt("sensorThreshold");
 
   int piezoVal = analogRead(BUTTON_PIN);
 
   unsigned long currentTime = millis();
-  if (piezoVal > SENSOR_THRESHOLD &&
-      currentTime - lastInterruptTime > SENSOR_DEBOUNCE) {
+  if (piezoVal > SENSOR_THRESHOLD && currentTime - lastDebounceTime > SENSOR_DEBOUNCE) {
     Serial.println(piezoVal);
-    lastInterruptTime = currentTime;
+    lastDebounceTime = currentTime;
 
-    Serial.println("Pew Pew");
-    // TODO: Add number of millies since last trigger to the message
+    Serial.println("Sensor triggered");
+
     String resultMessage = jsonMessages.createAddResultMessage();
     client.publish(mqttTopic, resultMessage.c_str());
   }

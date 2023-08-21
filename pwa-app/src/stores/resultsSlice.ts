@@ -5,7 +5,7 @@ export interface ResultLine {
   deviceId: string;
   deviceName: string;
   result: any;
-  timestamp: any;
+  timeMillies: number;
 }
 
 export const resultsSlice = createSlice({
@@ -14,7 +14,7 @@ export const resultsSlice = createSlice({
   reducers: {
     addResult: (state: ResultLine[], action: PayloadAction <ResultLine>) => {
       const { payload } = action;
-      const { deviceId, deviceName, result, timestamp } = payload;
+      const { deviceId, deviceName, result, timeMillies } = payload;
 
       return [
         ...state,
@@ -22,7 +22,7 @@ export const resultsSlice = createSlice({
           deviceId,
           deviceName,
           result,
-          timestamp
+          timeMillies
         }
       ];
     },

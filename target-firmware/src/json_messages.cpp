@@ -1,5 +1,6 @@
 #include "json_messages.h"
 #include "date_time.h"
+#include "include.h"
 #include "settings.h"
 #include <ArduinoJson.h>
 
@@ -9,16 +10,17 @@ Messages::Messages(String uuid) {
   this->UUID = uuid;
 }
 
-String Messages::createAddTargetMessage() {
+String Messages::createDeviceOnlineMessage() {
   StaticJsonDocument<256> doc;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
-  int64_t isoDateTime = getTimeMillies();
 
-  doc["type"] = "targets/addTarget";
-  meta["timestamp"] = isoDateTime;
+  doc["type"] = "devices/online";
+  payload["timestamp"] = getISODateTime();
+  payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
   payload["deviceName"] = settings.getString("deviceName"); 
+
   String jsonString;
   serializeJson(doc, jsonString);
 
@@ -26,14 +28,14 @@ String Messages::createAddTargetMessage() {
 }
 
 
-String Messages::createUpdateTargetMessage() {
+String Messages::createDeviceUpdatedMessage() {
   StaticJsonDocument<256> doc;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
-  int64_t isoDateTime = getTimeMillies();
 
-  doc["type"] = "targets/updateTarget";
-  meta["timestamp"] = isoDateTime;
+  doc["type"] = "devices/updated";
+  payload["timestamp"] = getISODateTime();
+  payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
   payload["deviceName"] = settings.getString("deviceName");
 
@@ -45,15 +47,15 @@ String Messages::createUpdateTargetMessage() {
 
 
 String Messages::createAddResultMessage() {
-  StaticJsonDocument<192> doc;
+  StaticJsonDocument<256> doc;
   JsonObject payload = doc.createNestedObject("payload");
-  JsonObject meta = doc.createNestedObject("meta");
-  int64_t isoDateTime = getTimeMillies();
 
   doc["type"] = "results/addResult";
-  meta["timestamp"] = isoDateTime;
+  payload["timestamp"] = getISODateTime();
+  payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
   payload["deviceName"] = settings.getString("deviceName");
+  payload["deviceType"] = DEVICE_TYPE;
   payload["result"] = "hit";
 
   String jsonString;

@@ -2,6 +2,7 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { AppRootState } from '@/configureStore';
 
 export interface Device {
+  deviceType: string;
   deviceId: string;
   deviceName: string;
   deviceState: 'TEST' | 'IDLE' | 'ACTIVE-ON' | 'ACTIVE-OFF' | 'ERROR';

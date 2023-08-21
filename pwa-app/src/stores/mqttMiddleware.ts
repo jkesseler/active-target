@@ -58,14 +58,11 @@ export const mqttMiddleware: Middleware = ({ dispatch, getState }) => {
         const mqttMessage = message.toString();
 
         try {
-          const { type, payload, meta = {}} = parseMqttMessage(mqttMessage);
+          const { type, payload } = parseMqttMessage(mqttMessage);
 
           dispatch({
             type,
-            payload: {
-              ...payload,
-              ...meta
-            }
+            payload
           });
 
         } catch (e) {

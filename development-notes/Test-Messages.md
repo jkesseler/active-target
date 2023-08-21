@@ -1,30 +1,36 @@
 # Topic
 
-at/device/77981e7d-d799-4442-a16d-35dd8e261bfe/actions
 
-# Add Target
+
+# Device turns on and comes online
+Topic: `at/devices/online`
+```json
 {
-  "meta": {
-    "timestamp": "2023-07-14T08:33:08.728Z"
-  },
-  "type": "targets/addTarget",
+  "type": "devices/add",
   "payload": {
-    "targetId": "77981e7d-d799-4442-a16d-35dd8e261bfe"
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillies": "0000001",
+    "deviceId": "77981e7d-d799-4442-a16d-35dd8e261bfe",
+    "deviceName": "Plate 01",
+    "deviceType": "target/plate",
   }
 }
+```
 
-# Update TargetName
+
+# Update device settings
+Topic: `at/device/77981e7d-d799-4442-a16d-35dd8e261bfe/actions`
+
+```json
 {
-  "meta": {
-    "timestamp": "2023-07-14T08:33:08.728Z"
-  },
-  "type": "targets/updateTarget",
+  "type": "settings/set",
   "payload": {
-    "targetId": "77981e7d-d799-4442-a16d-35dd8e261bfe",
-    "targetName": "Plate 01"
+    "deviceName": "My favorite plate",
+    "sensorDebounceTime": 250,
+    "sensorThreshold": 500
   }
 }
-
+``
 
 
 # Add Hit

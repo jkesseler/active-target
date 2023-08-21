@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { deserializeError } from 'serialize-error';
 import { createWrapper, type MakeStore } from './utils/store-wrapper';
-import { devicesSlice } from './stores/targetsSlice';
+import { devicesSlice } from './stores/devicesSlice';
 import { resultsSlice } from './stores/resultsSlice';
 import { mqttSlice } from './stores/mqttSlice';
 import { mqttMiddleware } from './stores/mqttMiddleware';

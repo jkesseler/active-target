@@ -9,7 +9,7 @@ import { AppRootState } from '@/configureStore';
 
 
 export const TargetsPage = () => {
-  const { t } = useTranslation('devicespage');
+  const { t } = useTranslation('targetspage');
   const dispatch = useDispatch();
   const isConnecting = useSelector((state: AppRootState) => selectIsConnecting(state));
   const isConnected = useSelector((state: AppRootState) => selectIsConnected(state));
@@ -50,8 +50,8 @@ export const TargetsPage = () => {
                   let difference = 0;
                   if (idx > 0) {
                     // timestamp is Unix Epoch in milliseconds
-                    const previousTimestamp = results[idx - 1].timestamp ?? 0;
-                    const currentTimestamp = device.timestamp || 0;
+                    const previousTimestamp = results[idx - 1].timeMillies ?? 0;
+                    const currentTimestamp = device.timeMillies || 0;
                     difference = (currentTimestamp - previousTimestamp) / 1000;
                   }
                   const displayName = device?.deviceName || device?.deviceId;

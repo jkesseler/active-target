@@ -54,6 +54,10 @@ void Settings::set(const String &key, const String &value) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, false);
   settingsPrefs.putString(key.c_str(), value);
   settingsPrefs.end();
+
+  char settingsString[512];
+  sprintf(settingsString , "Settings updated: \"%s\": \"%s\"", key.c_str(), value.c_str());
+  Serial.print(settingsString);
 }
 
 void Settings::set(const String &key, int value) {
