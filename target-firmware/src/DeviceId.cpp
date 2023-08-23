@@ -6,7 +6,6 @@
 #include "include.h"
 
 Preferences prefs;
-DeviceId deviceId;
 
 DeviceId::DeviceId() {
   this->deviceId = readFromFlash();

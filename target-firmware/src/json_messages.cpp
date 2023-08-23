@@ -1,13 +1,15 @@
 #include "json_messages.h"
 #include "date_time.h"
 #include "include.h"
-#include "settings.h"
 #include <ArduinoJson.h>
 
-// Settings settings;
+Messages::Messages() {
 
-Messages::Messages(String uuid) {
+}
+
+void Messages::begin(String uuid, Settings settings) {
   this->UUID = uuid;
+  this->settings = settings;
 }
 
 String Messages::createDeviceOnlineMessage() {
@@ -19,7 +21,7 @@ String Messages::createDeviceOnlineMessage() {
   payload["timestamp"] = getISODateTime();
   payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
-  payload["deviceName"] = settings.getString("deviceName"); 
+  payload["deviceName"] = this->settings.getString("deviceName");
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -37,7 +39,7 @@ String Messages::createDeviceUpdatedMessage() {
   payload["timestamp"] = getISODateTime();
   payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
-  payload["deviceName"] = settings.getString("deviceName");
+  payload["deviceName"] = this->settings.getString("deviceName");
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -54,7 +56,7 @@ String Messages::createAddResultMessage() {
   payload["timestamp"] = getISODateTime();
   payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
-  payload["deviceName"] = settings.getString("deviceName");
+  payload["deviceName"] = this->settings.getString("deviceName");
   payload["deviceType"] = DEVICE_TYPE;
   payload["result"] = "hit";
 

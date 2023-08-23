@@ -8,19 +8,18 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
 
-// Settings settings;
 WiFiClient espClient;
 PubSubClient client(espClient);
 String uuid = EMPTY_UUID;
-Messages jsonMessages(uuid);
+Messages jsonMessages;
 
 char mqttTopic[64];
 char mqttClientId[64];
 volatile unsigned long lastDebounceTime = 0;
 
-String deviceName = settings.getString("deviceName", DEFAULT_DEVICE_NAME);
-int SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime", DEFAULT_SENSOR_DEBOUNCE);
-int SENSOR_THRESHOLD = settings.getInt("sensorThreshold", DEFAULT_SENSOR_THRESHOLD);
+String deviceName = DEFAULT_DEVICE_NAME;
+int SENSOR_DEBOUNCE = DEFAULT_SENSOR_DEBOUNCE;
+int SENSOR_THRESHOLD = DEFAULT_SENSOR_THRESHOLD;
 
 void onMessageReceive(char *topic, byte *message, unsigned int length) {
   Serial.print("Message arrived on topic: ");
@@ -56,9 +55,11 @@ void connectToMqttServer() {
       if (currentReconnectDelay < maxReconnectDelay) {
         currentReconnectDelay *= 2;
       }
+
       int sec = ((currentReconnectDelay + 500) / 1000);
       char delayString[20];
       sprintf(delayString, "%s seconds", sec / 1000);
+      
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.print("Reconn. in ");
@@ -70,19 +71,19 @@ void connectToMqttServer() {
 }
 
 void setup() {
-
   Serial.begin(115200);
 
   DeviceId deviceId;
+  Settings settings;
+
   uuid = deviceId.get();
-  jsonMessages = Messages(uuid);
+  jsonMessages.begin(uuid, settings);
+
+  connectToWiFi(ssid, password);
+  timeSync();
 
   sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
   sprintf(mqttTopic, "at/device/%s/actions", uuid.c_str());
-
-  connectToWiFi(ssid, password);
-
-  timeSync();
 
   client.setServer(MQTT_SERVER, 1883);
   client.setCallback(onMessageReceive);
