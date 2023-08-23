@@ -4,7 +4,8 @@
 #include <ArduinoJson.h>
 
 void handleMqttMessage(const String &jsonString) {
-  DynamicJsonDocument doc(256);
+  Settings settings;
+  DynamicJsonDocument doc(512);
   DeserializationError error = deserializeJson(doc, jsonString);
 
   if (error) {
@@ -13,29 +14,27 @@ void handleMqttMessage(const String &jsonString) {
     return;
   }
 
-  const char *actionType = doc["type"];
-  if (strcmp(actionType, "settings/set") == 0) {
-    handleSetSettings(doc);
-  }
-}
+  if (strcmp(doc["type"], "settings/set") == 0) {
+    String deviceName = doc["payload"]["deviceName"];
+    if (deviceName) {
+      settings.set("deviceName", deviceName);
+      Serial.println(deviceName);
+    }
 
-void handleSetSettings(const DynamicJsonDocument &doc) {
-  const char *deviceName = doc["payload"]["deviceName"];
-  if (deviceName != nullptr) {
-    settings.set("deviceName", deviceName);
-  }
+    int sensorDebounceTime = doc["payload"]["sensorDebounceTime"];
+    if (sensorDebounceTime) {
+      settings.set("sensorDebounceTime", sensorDebounceTime);
+      Serial.println(sensorDebounceTime);
+    }
 
-  int sensorDebounceTime = doc["payload"]["sensorDebounceTime"];
-  if (sensorDebounceTime) {
-    settings.set("sensorDebounceTime", sensorDebounceTime);
-  }
+    int sensorThreshold = doc["payload"]["sensorThreshold"];
+    if (sensorThreshold) {
+      settings.set("sensorThreshold", sensorThreshold);
+      Serial.println(sensorThreshold);
+    }
 
-  int sensorThreshold = doc["payload"]["sensorThreshold"];
-  if (sensorThreshold) {
-    settings.set("sensorThreshold", sensorThreshold);
+    // TODO: Publish 'settings updated' message
+    // String updateTargetMessage = jsonMessages.createDeviceUpdatedMessage();
+    // client.publish(mqttTopic, updateTargetMessage.c_str());
   }
-
-  // TODO: Publish 'settings updated' message
-  // String updateTargetMessage = jsonMessages.createDeviceUpdatedMessage();
-  // client.publish(mqttTopic, updateTargetMessage.c_str());
 }

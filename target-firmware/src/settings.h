@@ -8,19 +8,19 @@ class Settings {
 public:
   
   Settings();
+  void begin();
   // Methods for String type
-  String getString(const String &key, const String &defaultValue = "");
-  void set(const String &key, const String &value);
+  String getString(String key, String defaultValue = "");
+  void set(String key, String value);
 
   // Methods for int type
-  int getInt(const String &key, int defaultValue = -1);
-  void set(const String &key, int value);
+  int getInt(const String key, int defaultValue = -1);
+  void set(const String key, int value);
 
 private:
   std::map<String, String> cache;
-  String readStringFromFlash(const String &key);
-  int readIntFromFlash(const String &key);
+  String readStringFromFlash(const String key);
+  int readIntFromFlash(const String key);
 };
 
-extern Settings settings;
 #endif

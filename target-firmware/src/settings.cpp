@@ -6,50 +6,61 @@
 #define SETTINGS_NAMESPACE "settings"
 
 Preferences settingsPrefs;
-Settings settings;
 
-Settings::Settings() { 
-   std::map<String, String> cache; 
+Settings::Settings() {
+
 }
 
-String Settings::readStringFromFlash(const String &key) {
+void Settings::begin() {
+  std::map<String, String> cache;
+  this->cache = cache;
+}
+
+
+String Settings::readStringFromFlash(String key) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, true);
   String value = settingsPrefs.getString(key.c_str(), "");
+  
   settingsPrefs.end();
+
   if (value != "") {
-    cache[key] = value;
+    this->cache[key] = value;
   }
+
+  settingsPrefs.end();
   return value;
 }
 
-int Settings::readIntFromFlash(const String &key) {
+int Settings::readIntFromFlash(String key) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, true);
   int value = settingsPrefs.getInt(key.c_str(), -1);
+
   settingsPrefs.end();
-  cache[key] = String(value);
+  
+  this->cache[key] = String(value);
   return value;
 }
 
-String Settings::getString(const String &key, const String &defaultValue) {
-  if (cache.find(key) != cache.end()) {
-    return cache[key];
+String Settings::getString(String key, String defaultValue) {
+  if (this->cache.find(key) != this->cache.end()) {
+    return this->cache[key];
   } else {
     String value = readStringFromFlash(key);
     return (value != "") ? value : defaultValue;
   }
 }
 
-int Settings::getInt(const String &key, int defaultValue) {
-  if (cache.find(key) != cache.end()) {
-    return cache[key].toInt();
+int Settings::getInt(const String key, int defaultValue) {
+  if (this->cache.find(key) != this->cache.end()) {
+    return this->cache[key].toInt();
   } else {
     int value = readIntFromFlash(key);
     return (value != -1) ? value : defaultValue;
   }
 }
 
-void Settings::set(const String &key, const String &value) {
-  cache[key] = value;
+void Settings::set(String key, String value) {
+  this->cache[key] = value;
 
   settingsPrefs.begin(SETTINGS_NAMESPACE, false);
   settingsPrefs.putString(key.c_str(), value);
@@ -60,8 +71,8 @@ void Settings::set(const String &key, const String &value) {
   Serial.print(settingsString);
 }
 
-void Settings::set(const String &key, int value) {
-  cache[key] = String(value);
+void Settings::set(String key, int value) {
+  this->cache[key] = String(value);
 
   settingsPrefs.begin(SETTINGS_NAMESPACE, false);
   settingsPrefs.putInt(key.c_str(), value);

@@ -5,6 +5,9 @@
 #include "ESPRandom.h"
 #include "include.h"
 
+#define STORAGE_NAMESPACE "deviceData" // Max. 15 chars
+#define STORAGE_KEY "deviceId"
+
 Preferences prefs;
 
 DeviceId::DeviceId() {

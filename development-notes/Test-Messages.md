@@ -19,7 +19,7 @@ Topic: `at/devices/online`
 
 
 # Update device settings
-Topic: `at/device/77981e7d-d799-4442-a16d-35dd8e261bfe/actions`
+Topic: `at/device/eb3acb20-bd29-426b-9b54-bdd7a8f94905/actions`
 
 ```json
 {

@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
 
+Settings settings;
 WiFiClient espClient;
 PubSubClient client(espClient);
 String uuid = EMPTY_UUID;
@@ -33,8 +34,10 @@ void onMessageReceive(char *topic, byte *message, unsigned int length) {
   }
   Serial.println(messageTemp);
 
-  
   handleMqttMessage(messageTemp);
+
+  SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime");
+  SENSOR_THRESHOLD = settings.getInt("sensorThreshold");
 }
 
 void connectToMqttServer() {
@@ -48,8 +51,9 @@ void connectToMqttServer() {
     if (client.connect(mqttClientId)) {
       Serial.println("connected");
 
-      char actionsTopic[50];
+      char actionsTopic[100];
       sprintf(actionsTopic, "at/device/%s/actions", uuid.c_str());
+      Serial.println(actionsTopic);
       client.subscribe(actionsTopic);
     } else {
       if (currentReconnectDelay < maxReconnectDelay) {
@@ -72,25 +76,30 @@ void connectToMqttServer() {
 
 void setup() {
   Serial.begin(115200);
-
-  DeviceId deviceId;
-  Settings settings;
-
-  uuid = deviceId.get();
-  jsonMessages.begin(uuid, settings);
-
+  
   connectToWiFi(ssid, password);
   timeSync();
 
+  settings.begin();
+
+  DeviceId deviceId;
+  uuid = deviceId.get();
+  deviceName = settings.getString("deviceName", DEFAULT_DEVICE_NAME);
+
+  Serial.println(uuid);
+  Serial.println(deviceName);
+
+  jsonMessages.begin(uuid, DEFAULT_DEVICE_NAME);
+
   sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
   sprintf(mqttTopic, "at/device/%s/actions", uuid.c_str());
-
+  
   client.setServer(MQTT_SERVER, 1883);
   client.setCallback(onMessageReceive);
   connectToMqttServer();
 
   String addTargetMessage = jsonMessages.createDeviceOnlineMessage();
-  client.publish("at/devices/online", addTargetMessage.c_str());
+  client.publish("at/device/online", addTargetMessage.c_str());
 }
 
 void loop() {
@@ -99,14 +108,13 @@ void loop() {
     connectToMqttServer();
   }
   
-  SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime");
-  SENSOR_THRESHOLD = settings.getInt("sensorThreshold");
+  // SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime");
+  // SENSOR_THRESHOLD = settings.getInt("sensorThreshold");
 
   int piezoVal = analogRead(BUTTON_PIN);
 
   unsigned long currentTime = millis();
   if (piezoVal > SENSOR_THRESHOLD && currentTime - lastDebounceTime > SENSOR_DEBOUNCE) {
-    Serial.println(piezoVal);
     lastDebounceTime = currentTime;
 
     Serial.println("Sensor triggered");

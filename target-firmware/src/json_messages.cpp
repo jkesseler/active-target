@@ -7,9 +7,9 @@ Messages::Messages() {
 
 }
 
-void Messages::begin(String uuid, Settings settings) {
+void Messages::begin(String uuid, String deviceName) {
   this->UUID = uuid;
-  this->settings = settings;
+  this->deviceName = deviceName;
 }
 
 String Messages::createDeviceOnlineMessage() {
@@ -17,11 +17,11 @@ String Messages::createDeviceOnlineMessage() {
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
 
-  doc["type"] = "devices/online";
+  doc["type"] = "device/online";
   payload["timestamp"] = getISODateTime();
   payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
-  payload["deviceName"] = this->settings.getString("deviceName");
+  payload["deviceName"] = this->deviceName;
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -35,11 +35,11 @@ String Messages::createDeviceUpdatedMessage() {
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
 
-  doc["type"] = "devices/updated";
+  doc["type"] = "device/updated";
   payload["timestamp"] = getISODateTime();
   payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
-  payload["deviceName"] = this->settings.getString("deviceName");
+  payload["deviceName"] = this->deviceName;
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -56,7 +56,7 @@ String Messages::createAddResultMessage() {
   payload["timestamp"] = getISODateTime();
   payload["timeMillies"] = getTimeMillies();
   payload["deviceId"] = this->UUID;
-  payload["deviceName"] = this->settings.getString("deviceName");
+  payload["deviceName"] = this->deviceName;
   payload["deviceType"] = DEVICE_TYPE;
   payload["result"] = "hit";
 
