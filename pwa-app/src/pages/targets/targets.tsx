@@ -40,7 +40,7 @@ export const TargetsPage = () => {
             <Table striped>
               <thead>
                 <tr>
-                  <th>{t('th.device')}</th>
+                  <th>{t('th.target')}</th>
                   <th>{t('th.result')}</th>
                   <th>{t('th.time-difference')}</th>
                 </tr>

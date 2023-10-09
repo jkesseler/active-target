@@ -93,16 +93,18 @@ void setup() {
 
   sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
   sprintf(mqttTopic, "at/device/%s/actions", uuid.c_str());
-  
+
+  client.setBufferSize(756);
   client.setServer(MQTT_SERVER, 1883);
   client.setCallback(onMessageReceive);
   connectToMqttServer();
 
   String addTargetMessage = jsonMessages.createDeviceOnlineMessage();
-  client.publish("at/device/online", addTargetMessage.c_str());
+  client.publish("at/devices", addTargetMessage.c_str());
 }
 
 void loop() {
+  client.loop();
 
   if (!client.connected()) {
     connectToMqttServer();
@@ -120,6 +122,13 @@ void loop() {
     Serial.println("Sensor triggered");
 
     String resultMessage = jsonMessages.createAddResultMessage();
-    client.publish(mqttTopic, resultMessage.c_str());
+    Serial.println(mqttTopic);
+    Serial.println(resultMessage.c_str());
+
+   bool isPublished = client.publish(mqttTopic, resultMessage.c_str());
+
+   if(!isPublished) {
+    Serial.println("Not Published");
+   }
   }
 }
