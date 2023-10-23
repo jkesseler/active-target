@@ -20,14 +20,15 @@ Topic: `at/devices/online`
 
 # Update device settings
 Topic: `at/device/eb3acb20-bd29-426b-9b54-bdd7a8f94905/actions`
+        at/device/939b9197-8249-44ab-8661-fe07b2d1f5dd/actions
 
 ```json
 {
   "type": "settings/set",
   "payload": {
     "deviceName": "My favorite plate",
-    "sensorDebounceTime": 250,
-    "sensorThreshold": 500
+    "sensorDebounceTime": 85,
+    "sensorThreshold": 45
   }
 }
 ``

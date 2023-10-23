@@ -16,8 +16,7 @@ void Settings::begin() {
   this->cache = cache;
 }
 
-
-String Settings::readStringFromFlash(String key) {
+String Settings::readStringFromFlash(String key, String defaultValue) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, true);
   String value = settingsPrefs.getString(key.c_str(), "");
   
@@ -31,13 +30,15 @@ String Settings::readStringFromFlash(String key) {
   return value;
 }
 
-int Settings::readIntFromFlash(String key) {
+int Settings::readIntFromFlash(String key, int defaultValue) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, true);
-  int value = settingsPrefs.getInt(key.c_str(), -1);
+  int value = settingsPrefs.getInt(key.c_str(), defaultValue);
+
+  if(value != -1) {
+    this->cache[key] = String(value);
+  }
 
   settingsPrefs.end();
-  
-  this->cache[key] = String(value);
   return value;
 }
 
@@ -67,8 +68,7 @@ void Settings::set(String key, String value) {
   settingsPrefs.end();
 
   char settingsString[512];
-  sprintf(settingsString , "Settings updated: \"%s\": \"%s\"", key.c_str(), value.c_str());
-  Serial.print(settingsString);
+  sprintf(settingsString , "Settings updated with string: \"%s\": \"%s\"", key.c_str(), value.c_str());
 }
 
 void Settings::set(String key, int value) {
@@ -77,4 +77,8 @@ void Settings::set(String key, int value) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, false);
   settingsPrefs.putInt(key.c_str(), value);
   settingsPrefs.end();
+
+  char settingsString[512];
+  sprintf(settingsString, "Settings updated with int: \"%s\": \"%s\"", key.c_str(), value);
+  Serial.print(settingsString);
 }

@@ -17,15 +17,18 @@ Messages jsonMessages;
 char mqttTopic[64];
 char mqttClientId[64];
 volatile unsigned long lastDebounceTime = 0;
+volatile unsigned long lastReadTime = 0;
 
 String deviceName = DEFAULT_DEVICE_NAME;
 int SENSOR_DEBOUNCE = DEFAULT_SENSOR_DEBOUNCE;
 int SENSOR_THRESHOLD = DEFAULT_SENSOR_THRESHOLD;
+int lastSensorDebounce = SENSOR_DEBOUNCE;
+int lastSensorThreshold = SENSOR_THRESHOLD;
 
-void onMessageReceive(char *topic, byte *message, unsigned int length) {
+  void onMessageReceive(char *topic, byte *message, unsigned int length) {
   Serial.print("Message arrived on topic: ");
   Serial.print(topic);
-  Serial.print(". Message: ");
+  Serial.println(". Message: ");
   String messageTemp;
 
   for (int i = 0; i < length; i++) {
@@ -35,9 +38,6 @@ void onMessageReceive(char *topic, byte *message, unsigned int length) {
   Serial.println(messageTemp);
 
   handleMqttMessage(messageTemp);
-
-  SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime");
-  SENSOR_THRESHOLD = settings.getInt("sensorThreshold");
 }
 
 void connectToMqttServer() {
@@ -94,9 +94,9 @@ void setup() {
   sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
   sprintf(mqttTopic, "at/device/%s/actions", uuid.c_str());
 
-  client.setBufferSize(756);
   client.setServer(MQTT_SERVER, 1883);
   client.setCallback(onMessageReceive);
+  client.setBufferSize(1024);
   connectToMqttServer();
 
   String addTargetMessage = jsonMessages.createDeviceOnlineMessage();
@@ -104,31 +104,55 @@ void setup() {
 }
 
 void loop() {
-  client.loop();
+  unsigned long currentTime = millis();
 
   if (!client.connected()) {
     connectToMqttServer();
   }
-  
-  // SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime");
-  // SENSOR_THRESHOLD = settings.getInt("sensorThreshold");
 
-  int piezoVal = analogRead(BUTTON_PIN);
 
-  unsigned long currentTime = millis();
-  if (piezoVal > SENSOR_THRESHOLD && currentTime - lastDebounceTime > SENSOR_DEBOUNCE) {
+  if (currentTime - lastReadTime > 500) {
+    lastReadTime = currentTime;
+    client.loop();
+
+    SENSOR_DEBOUNCE = settings.getInt("sensorDebounceTime", DEFAULT_SENSOR_DEBOUNCE);
+    if(lastSensorDebounce != SENSOR_DEBOUNCE) {
+      lastSensorDebounce = SENSOR_DEBOUNCE;
+      Serial.print("New sensor debounce: ");
+      Serial.print(SENSOR_DEBOUNCE);
+      Serial.println(" ----- ");
+    }
+
+    SENSOR_THRESHOLD = settings.getInt("sensorThreshold", DEFAULT_SENSOR_THRESHOLD);
+    if (lastSensorThreshold != SENSOR_THRESHOLD) {
+      lastSensorThreshold = SENSOR_THRESHOLD;
+      Serial.print("New sensor threshold: ");
+      Serial.print(SENSOR_THRESHOLD);
+      Serial.println(" ----- ");
+    }
+  }
+
+
+  if (currentTime - lastDebounceTime > SENSOR_DEBOUNCE) {
     lastDebounceTime = currentTime;
 
-    Serial.println("Sensor triggered");
+    int piezoVal = analogRead(BUTTON_PIN);
 
-    String resultMessage = jsonMessages.createAddResultMessage();
-    Serial.println(mqttTopic);
-    Serial.println(resultMessage.c_str());
+    if (piezoVal > SENSOR_THRESHOLD) {
+      Serial.println("Sensor triggered with value: ");
+      Serial.println(piezoVal); 
+      Serial.println("------");
+      Serial.println("");
 
-   bool isPublished = client.publish(mqttTopic, resultMessage.c_str());
+      String resultMessage = jsonMessages.createAddResultMessage();
+      Serial.println(mqttTopic);
+      Serial.println(resultMessage.c_str());
 
-   if(!isPublished) {
-    Serial.println("Not Published");
-   }
+      bool isPublished = client.publish(mqttTopic, resultMessage.c_str());
+
+      if (!isPublished) {
+        Serial.println("Not Published");
+      }
+    }
   }
 }

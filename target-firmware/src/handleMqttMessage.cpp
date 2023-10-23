@@ -13,21 +13,21 @@ void handleMqttMessage(const String &jsonString) {
     Serial.println(error.f_str());
     return;
   }
-
-  if (strcmp(doc["type"], "settings/set") == 0) {
-    String deviceName = doc["payload"]["deviceName"];
+  const char* type = doc["type"];
+  if (strcmp(type, "settings/set") == 0) {
+    const char* deviceName = doc["payload"]["deviceName"];
     if (deviceName) {
       settings.set("deviceName", deviceName);
       Serial.println(deviceName);
     }
 
-    int sensorDebounceTime = doc["payload"]["sensorDebounceTime"];
+    const char* sensorDebounceTime = doc["payload"]["sensorDebounceTime"];
     if (sensorDebounceTime) {
       settings.set("sensorDebounceTime", sensorDebounceTime);
       Serial.println(sensorDebounceTime);
     }
 
-    int sensorThreshold = doc["payload"]["sensorThreshold"];
+    const char *sensorThreshold = doc["payload"]["sensorThreshold"];
     if (sensorThreshold) {
       settings.set("sensorThreshold", sensorThreshold);
       Serial.println(sensorThreshold);

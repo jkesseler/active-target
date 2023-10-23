@@ -1,3 +1,6 @@
+# Issues
+[] Setting won't update from mqtt. It seems the string comaprison "settings/set"  always returns false.
+
 # Hardware to do
 [] Packaging / housing with battery and on/off switch
 [] LED's for status indication

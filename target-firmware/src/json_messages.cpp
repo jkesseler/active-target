@@ -13,7 +13,7 @@ void Messages::begin(String uuid, String deviceName) {
 }
 
 String Messages::createDeviceOnlineMessage() {
-  StaticJsonDocument<512> doc;
+  StaticJsonDocument<768> doc;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
 
@@ -31,7 +31,7 @@ String Messages::createDeviceOnlineMessage() {
 
 
 String Messages::createDeviceUpdatedMessage() {
-  StaticJsonDocument<512> doc;
+  StaticJsonDocument<768> doc;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
 
@@ -49,7 +49,7 @@ String Messages::createDeviceUpdatedMessage() {
 
 
 String Messages::createAddResultMessage() {
-  StaticJsonDocument<512> doc;
+  StaticJsonDocument<768> doc;
   JsonObject payload = doc.createNestedObject("payload");
 
   doc["type"] = "results/addResult";

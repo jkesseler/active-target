@@ -6,5 +6,5 @@ static const char *DEFAULT_DEVICE_NAME = "Plate Target";
 static const char *DEVICE_TYPE = "target/plate";
 
 #define BUTTON_PIN 34
-#define DEFAULT_SENSOR_THRESHOLD 150
-#define DEFAULT_SENSOR_DEBOUNCE 100
+#define DEFAULT_SENSOR_THRESHOLD 50
+#define DEFAULT_SENSOR_DEBOUNCE 50
