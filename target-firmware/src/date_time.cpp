@@ -7,8 +7,11 @@
 const time_t TIME_SYNC_THRESHOLD = 1611667200; // 2021-01-27 00:00:00 UTC
 const int MAX_SYNC_WAIT_TIME = 10;             // in seconds
 
-bool timeSync() {
-  configTime(0, 0, "pool.ntp.org");
+bool timeSync(const String &ntpServer) {
+  char ntpServerChar[16];
+  ntpServer.toCharArray(ntpServerChar, 16);
+
+  configTime(0, 0, ntpServerChar);
   int waitTime = 0;
 
   while (time(nullptr) < TIME_SYNC_THRESHOLD && waitTime < MAX_SYNC_WAIT_TIME) {

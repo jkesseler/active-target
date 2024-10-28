@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-bool timeSync();
+bool timeSync(const String &ntpServer);
 String getISODateTime();
 int_fast64_t getTimeMillies();
 

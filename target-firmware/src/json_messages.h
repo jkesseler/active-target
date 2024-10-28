@@ -8,7 +8,7 @@ class Messages
     Messages();
     void begin(String uuid, String deviceName);
     String createDeviceOnlineMessage();
-    String createAddResultMessage();
+    String createAddResultMessage(const char *targetZone);
     String createDeviceUpdatedMessage();
 
   private: String UUID;

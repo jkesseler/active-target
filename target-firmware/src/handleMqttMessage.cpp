@@ -5,7 +5,7 @@
 
 void handleMqttMessage(const String &jsonString) {
   Settings settings;
-  DynamicJsonDocument doc(512);
+  DynamicJsonDocument doc(768);
   DeserializationError error = deserializeJson(doc, jsonString);
 
   if (error) {

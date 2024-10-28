@@ -1,6 +1,6 @@
 #include <WiFi.h> // Include the Wi-Fi library
 
-void connectToWiFi(const char *ssid, const char *password) {
+String connectToWiFi(const char *ssid, const char *password) {
   // Connect to Wi-Fi network
   Serial.println();
   Serial.print("Connecting to ");
@@ -12,9 +12,14 @@ void connectToWiFi(const char *ssid, const char *password) {
     delay(500);
     Serial.print(".");
   }
+  IPAddress apIP = WiFi.gatewayIP();
+  
 
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  Serial.println(WiFi.gatewayIP());
+
+  return apIP.toString();
 }

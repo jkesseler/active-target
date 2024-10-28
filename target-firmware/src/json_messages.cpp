@@ -18,9 +18,9 @@ String Messages::createDeviceOnlineMessage() {
   JsonObject meta = doc.createNestedObject("meta");
 
   doc["type"] = "device/online";
-  payload["timestamp"] = getISODateTime();
-  payload["timeMillies"] = getTimeMillies();
-  payload["deviceId"] = this->UUID;
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["deviceId"] = this->UUID;
   payload["deviceName"] = this->deviceName;
 
   String jsonString;
@@ -36,9 +36,9 @@ String Messages::createDeviceUpdatedMessage() {
   JsonObject meta = doc.createNestedObject("meta");
 
   doc["type"] = "device/updated";
-  payload["timestamp"] = getISODateTime();
-  payload["timeMillies"] = getTimeMillies();
-  payload["deviceId"] = this->UUID;
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["deviceId"] = this->UUID;
   payload["deviceName"] = this->deviceName;
 
   String jsonString;
@@ -47,18 +47,19 @@ String Messages::createDeviceUpdatedMessage() {
   return jsonString;
 }
 
-
-String Messages::createAddResultMessage() {
+String Messages::createAddResultMessage(const char *targetZone) {
   StaticJsonDocument<768> doc;
   JsonObject payload = doc.createNestedObject("payload");
+  JsonObject meta = doc.createNestedObject("meta");
 
-  doc["type"] = "results/addResult";
-  payload["timestamp"] = getISODateTime();
-  payload["timeMillies"] = getTimeMillies();
-  payload["deviceId"] = this->UUID;
+  doc["type"] = "stages/hit";
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["deviceId"] = this->UUID;
   payload["deviceName"] = this->deviceName;
   payload["deviceType"] = DEVICE_TYPE;
   payload["result"] = "hit";
+  payload["targetZone"] = targetZone; // This now directly accepts const char*
 
   String jsonString;
   serializeJson(doc, jsonString);

@@ -1,16 +1,21 @@
-# Topic
+# Example messages
 
+Server publishes on topic `at/device/${deviceId}/actions`
+Devices listen on topic: `at/device/${deviceId}/actions`
+where `deviceId` is the id of a target.
 
 
 # Device turns on and comes online
 Topic: `at/devices/online`
 ```json
 {
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
+  },
   "type": "devices/add",
   "payload": {
-    "timestamp": "2023-07-14T08:33:08.728Z",
-    "timeMillies": "0000001",
-    "deviceId": "77981e7d-d799-4442-a16d-35dd8e261bfe",
     "deviceName": "Plate 01",
     "deviceType": "target/plate",
   }
@@ -18,57 +23,133 @@ Topic: `at/devices/online`
 ```
 
 
-# Update device settings
-Topic: `at/device/eb3acb20-bd29-426b-9b54-bdd7a8f94905/actions`
-        at/device/939b9197-8249-44ab-8661-fe07b2d1f5dd/actions
+# Log Hits
+```json
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
+  },
+  "type": "stage/hit",
+  "payload": {
+    "deviceType": "target/plate"
+  }
+}
+```
 
 ```json
 {
-  "type": "settings/set",
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
+  },
+  "type": "stage/hit",
   "payload": {
-    "deviceName": "My favorite plate",
+    "deviceType": "target/standard",
+    "targetZone": "A" // "B" | "C"
+  }
+}
+```
+
+
+## Stage messages
+Published on `at/devices/*`
+
+Tells all devices in the stage the start beep has been given.
+```json
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
+  },
+  "type": "stages/start"
+}
+```
+
+Tells all devices in the stage is finished. This message is send by shooting the 'end' plate
+```json
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
+  },
+  "type": "stage/end"
+}
+```
+
+Tells all devices in the stage to reset to their default state.
+Triggered by pushing the reset button on screen.
+```json
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
+  },
+  "type": "stages/reset"
+}
+```
+
+
+# Get or set device settings
+Used by the 'Settings' screen for individual devices.
+## Get settings from a device
+Server publishes the follwing message on topic: `at/device/${deviceId}/action`
+
+```json
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
+  },
+  "type": "settings/get",
+}
+```
+
+Device publishes the following message on topic: `at/devices/settings`
+```json
+{
+  "meta": {
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
+  },
+  "type": "settings/get",
+  "payload": {
     "sensorDebounceTime": 85,
-    "sensorThreshold": 45
+    "deviceName": "My target plate",
+    "deviceType": "target/plate",
+    "sensorThreshold": 100
   }
 }
-``
+```
 
 
-# Add Hit
+
+```json
 {
   "meta": {
-    "timestamp": "2023-07-14T08:33:08.728Z"
-  },
-  "type": "results/addResult",
-  "payload": {
-    "targetId": "77981e7d-d799-4442-a16d-35dd8e261bfe",
-    "result": "hit"
-  }
-}
-
-# Reset Results
-{
-  "meta": {
-    "timestamp": "2023-07-14T08:33:08.728Z"
-  },
-  "type": "results/resetResults"
-}
-
-
-# Update device settings
-{
-  "meta": {
-    "timestamp": "2023-07-14T08:33:08.728Z"
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
   },
   "type": "settings/set",
   "payload": {
-    "sensorDebounceTime": 200
+    "sensorDebounceTime": 85
   }
 }
 
+
 {
   "meta": {
-    "timestamp": "2023-07-14T08:33:08.728Z"
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
   },
   "type": "settings/set",
   "payload": {
@@ -76,13 +157,16 @@ Topic: `at/device/eb3acb20-bd29-426b-9b54-bdd7a8f94905/actions`
   }
 }
 
-
 {
   "meta": {
-    "timestamp": "2023-07-14T08:33:08.728Z"
+    "timestamp": "2023-07-14T08:33:08.728Z",
+    "timeMillis": "1696735807123",
+    "deviceId": "f64c9bee-83db-4435-9325-bd57fa986753"
   },
   "type": "settings/set",
   "payload": {
     "sensorThreshold": 100
   }
 }
+
+```
