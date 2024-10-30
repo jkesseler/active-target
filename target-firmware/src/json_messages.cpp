@@ -57,9 +57,8 @@ String Messages::createAddResultMessage(const char *targetZone) {
   meta["timeMillies"] = getTimeMillies();
   meta["deviceId"] = this->UUID;
   payload["deviceName"] = this->deviceName;
-  payload["deviceType"] = DEVICE_TYPE;
   payload["result"] = "hit";
-  payload["targetZone"] = targetZone; // This now directly accepts const char*
+  payload["targetZone"] = targetZone;
 
   String jsonString;
   serializeJson(doc, jsonString);
