@@ -14,7 +14,8 @@ PubSubClient client(espClient);
 String uuid = EMPTY_UUID;
 Messages jsonMessages;
 
-char mqttTopic[64];
+char mqttActionsTopic[100];
+char mqttSettingsTopic[64];
 char mqttClientId[64];
 volatile unsigned long lastDebounceTimeA = DEFAULT_SENSOR_DEBOUNCE;
 volatile unsigned long lastDebounceTimeB = DEFAULT_SENSOR_DEBOUNCE;
@@ -50,14 +51,17 @@ void connectToMqttServer() {
 
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-
+    sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
+    
     if (client.connect(mqttClientId)) {
       Serial.println("connected");
+      sprintf(mqttActionsTopic, "at/device/%s/actions", uuid.c_str());
+      Serial.println(mqttActionsTopic);
+      client.subscribe(mqttActionsTopic);
 
-      char actionsTopic[100];
-      sprintf(actionsTopic, "at/device/%s/actions", uuid.c_str());
-      Serial.println(actionsTopic);
-      client.subscribe(actionsTopic);
+      sprintf(mqttSettingsTopic, "at/device/%s/settings", uuid.c_str());
+      client.subscribe(mqttSettingsTopic);
+
     } else {
       if (currentReconnectDelay < maxReconnectDelay) {
         currentReconnectDelay *= 2;
@@ -94,9 +98,6 @@ void setup() {
 
   jsonMessages.begin(uuid, DEFAULT_DEVICE_NAME);
 
-  sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());
-  sprintf(mqttTopic, "at/device/%s/actions", uuid.c_str());
-
   client.setServer(MQTT_SERVER, 1883);
   client.setCallback(onMessageReceive);
   client.setBufferSize(1024);
@@ -112,19 +113,20 @@ void checkSensor(int pin, const char *targetZone, volatile unsigned long &lastDe
 
   if (piezoVal > SENSOR_THRESHOLD && (currentTime - lastDebounceTime > SENSOR_DEBOUNCE)) {
     lastDebounceTime = currentTime;
-
+    Serial.println("------");
+    Serial.println("------");
+    Serial.println("------");
     Serial.print("Sensor triggered on target zone ");
     Serial.print(targetZone);
     Serial.print(" with value: ");
     Serial.println(piezoVal);
     Serial.println("------");
-
     // Generate and publish result message for the triggered sensor
     String resultMessage = jsonMessages.createAddResultMessage(targetZone);
-    Serial.println(mqttTopic);
+    Serial.println(mqttActionsTopic);
     Serial.println(resultMessage.c_str());
 
-    bool isPublished = client.publish(mqttTopic, resultMessage.c_str());
+    bool isPublished = client.publish(mqttActionsTopic, resultMessage.c_str());
 
     if (!isPublished) {
       Serial.println("Not Published");

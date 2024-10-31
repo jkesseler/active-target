@@ -4,14 +4,14 @@ static const char *password = "pewpewpew";
 static const char *MQTT_SERVER = "raspberrypi.local";
 static const char *DEFAULT_DEVICE_NAME = "IPSC Action Air Micro Target";
 
-#define DEFAULT_SENSOR_THRESHOLD 50
-#define DEFAULT_SENSOR_DEBOUNCE 50
+#define DEFAULT_SENSOR_THRESHOLD 300
+#define DEFAULT_SENSOR_DEBOUNCE 90
 
 // Update for 4 zones
-#define SENSOR_PIN_A 4
-#define SENSOR_PIN_B 5
-#define SENSOR_PIN_C 6
-#define SENSOR_PIN_D 7
+#define SENSOR_PIN_A 0
+#define SENSOR_PIN_B 2
+#define SENSOR_PIN_C 3
+#define SENSOR_PIN_D 10
 
 // MQTT Topics for each target zone
 #define TARGET_ZONE_A "A"

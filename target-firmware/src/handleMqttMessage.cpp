@@ -35,6 +35,6 @@ void handleMqttMessage(const String &jsonString) {
 
     // TODO: Publish 'settings updated' message
     // String updateTargetMessage = jsonMessages.createDeviceUpdatedMessage();
-    // client.publish(mqttTopic, updateTargetMessage.c_str());
+    // client.publish(mqttSettingsTopic, updateTargetMessage.c_str());
   }
 }
