@@ -17,10 +17,7 @@ Messages jsonMessages;
 char mqttActionsTopic[100];
 char mqttSettingsTopic[64];
 char mqttClientId[64];
-volatile unsigned long lastDebounceTimeA = DEFAULT_SENSOR_DEBOUNCE;
-volatile unsigned long lastDebounceTimeB = DEFAULT_SENSOR_DEBOUNCE;
-volatile unsigned long lastDebounceTimeC = DEFAULT_SENSOR_DEBOUNCE;
-volatile unsigned long lastDebounceTimeD = DEFAULT_SENSOR_DEBOUNCE;
+volatile unsigned long lastDebounceTime = DEFAULT_SENSOR_DEBOUNCE;
 volatile unsigned long lastReadTime = 0;
 
 String deviceName = DEFAULT_DEVICE_NAME;
@@ -107,7 +104,7 @@ void setup() {
   client.publish("at/devices", addTargetMessage.c_str());
 }
 
-void checkSensor(int pin, const char *targetZone, volatile unsigned long &lastDebounceTime) {
+void checkSensor(int pin, const char *targetZone) {
   int piezoVal = analogRead(pin);
   unsigned long currentTime = millis();
 
@@ -162,9 +159,8 @@ void loop() {
     }
   }
 
-  // Check each sensor with its unique debounce timer and target zone identifier
-  checkSensor(SENSOR_PIN_A, TARGET_ZONE_A, lastDebounceTimeA);
-  checkSensor(SENSOR_PIN_B, TARGET_ZONE_B, lastDebounceTimeB);
-  checkSensor(SENSOR_PIN_C, TARGET_ZONE_C, lastDebounceTimeC);
-  checkSensor(SENSOR_PIN_D, TARGET_ZONE_D, lastDebounceTimeD);
+  checkSensor(SENSOR_PIN_A, TARGET_ZONE_A);
+  checkSensor(SENSOR_PIN_B, TARGET_ZONE_B);
+  checkSensor(SENSOR_PIN_C, TARGET_ZONE_C);
+  checkSensor(SENSOR_PIN_D, TARGET_ZONE_D);
 }

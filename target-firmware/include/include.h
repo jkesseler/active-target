@@ -7,7 +7,7 @@ static const char *DEFAULT_DEVICE_NAME = "IPSC Action Air Micro Target";
 #define DEFAULT_SENSOR_THRESHOLD 300
 #define DEFAULT_SENSOR_DEBOUNCE 90
 
-// Update for 4 zones
+// Needs GPIO0~4
 #define SENSOR_PIN_A 0
 #define SENSOR_PIN_B 2
 #define SENSOR_PIN_C 3
