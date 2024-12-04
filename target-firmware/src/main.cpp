@@ -81,6 +81,11 @@ void connectToMqttServer() {
 void setup() {
   Serial.begin(115200);
 
+  pinMode(SENSOR_PIN_A, INPUT_PULLUP);
+  pinMode(SENSOR_PIN_B, INPUT_PULLUP);
+  pinMode(SENSOR_PIN_C, INPUT_PULLUP);
+  pinMode(SENSOR_PIN_D, INPUT_PULLUP);
+
   String apIP = connectToWiFi(ssid, password);
   timeSync(apIP);
 

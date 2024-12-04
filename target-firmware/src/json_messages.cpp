@@ -10,6 +10,7 @@ Messages::Messages() {
 void Messages::begin(String uuid, String deviceName) {
   this->UUID = uuid;
   this->deviceName = deviceName;
+  this->deviceType = deviceType;
 }
 
 String Messages::createDeviceOnlineMessage() {
@@ -22,13 +23,13 @@ String Messages::createDeviceOnlineMessage() {
   meta["timeMillies"] = getTimeMillies();
   meta["deviceId"] = this->UUID;
   payload["deviceName"] = this->deviceName;
+  payload["deviceType"] = this->deviceType;
 
   String jsonString;
   serializeJson(doc, jsonString);
 
   return jsonString;
 }
-
 
 String Messages::createDeviceUpdatedMessage() {
   StaticJsonDocument<768> doc;
@@ -52,12 +53,10 @@ String Messages::createAddResultMessage(const char *targetZone) {
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
 
-  doc["type"] = "stages/hit";
+  doc["type"] = "targets/hit";
   meta["timestamp"] = getISODateTime();
   meta["timeMillies"] = getTimeMillies();
   meta["deviceId"] = this->UUID;
-  payload["deviceName"] = this->deviceName;
-  payload["result"] = "hit";
   payload["targetZone"] = targetZone;
 
   String jsonString;

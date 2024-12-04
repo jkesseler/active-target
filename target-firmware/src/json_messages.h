@@ -13,6 +13,7 @@ class Messages
 
   private: String UUID;
   private: String deviceName;
+  private: String deviceType;
 };
 
 

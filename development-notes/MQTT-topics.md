@@ -1,4 +1,7 @@
-Please not this is outdated
+# Please not this is outdated
+ChatGPT actually has a pretty good suggestion for Flux based architecture:
+https://chatgpt.com/share/6745c142-6fc4-8001-9359-edf263266b10
+
 
 # MQTT Topics
 
@@ -68,15 +71,15 @@ The controller is subscribed to `target/+/status/online` and thus knows a device
 
 ```
 topic:
-`at/target/77981e7d-d799-4442-a16d-35dd8e261bfe/actions`
+`at/target/77981e7d-d799-4442-a16d-35dd8e261bfe/status/online`
 message:
 {
-  "type": "targets/addTarget",
+  "type": "device/online",
   "payload": {
     "timestamp": "2023-07-14T08:33:08.728Z"
     "timeMillies": "112254",
     "deviceId": "77981e7d-d799-4442-a16d-35dd8e261bfe",
-    "deviceType": "plate",
+    "deviceType": "TARGET"
   }
 }
 ```
@@ -87,13 +90,12 @@ topic: `at/target/77981e7d-d799-4442-a16d-35dd8e261bfe/actions`
 message: 
 ```
 {
-  "type": "results/addResult",
+  "type": "target/hit",
   "payload": {
     "timestamp": "2023-07-14T08:33:08.728Z"
     "timeMillies": "112254",
     "deviceId": "77981e7d-d799-4442-a16d-35dd8e261bfe",
-    "deviceType": "plate",
-    "result": "hit"
+    "targetZone": "A"
   }
 }
 
