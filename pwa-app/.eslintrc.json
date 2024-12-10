@@ -3,7 +3,8 @@
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
-    "@stylistic"
+    "@stylistic",
+    "@stylistic/jsx"
   ],
   "extends": [
     "next/core-web-vitals",
@@ -11,16 +12,24 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript"
   ],
-  "rules": {
-    "block-scoped-var": "error",
+  "rules": {   
+    "@stylistic/array-element-newline": ["error", "consistent"],
     "@stylistic/brace-style": ["error", "1tbs"],
+    "@stylistic/comma-dangle": ["error", "never"],
+    "@stylistic/eol-last": "error",
+    "@stylistic/indent": ["error", 2],
+    "@stylistic/jsx-quotes": ["error", "prefer-double"],
+    "@stylistic/jsx/jsx-closing-bracket-location": "warn",
+    "@stylistic/quotes": ["error", "single"],
+    "@stylistic/space-infix-ops": ["error", { "int32Hint": false }],
+    "@stylistic/space-unary-ops": "error",
+    "@stylistic/template-curly-spacing": ["error", "never"],
+    "block-scoped-var": "error",
     "camelcase": ["error", {
       "ignoreGlobals": true,
       "properties": "never",
       "allow": ["^o_", "node_*", "npm_*"]
     }],
-    "@stylistic/comma-dangle": ["error", "never"],
-    "@stylistic/eol-last": "error",
     "eqeqeq": "error",
     "id-length": [ "error",
     {
@@ -28,7 +37,6 @@
       "properties": "never"
     }
     ],
-    "@stylistic/jsx-quotes": ["error", "prefer-double"],
     "max-len": ["warn",
       {
         "code": 140,
@@ -49,7 +57,7 @@
     "no-template-curly-in-string": "error",
     "no-trailing-spaces": "error",
     "no-underscore-dangle": ["error", {
-      "allow": ["__lang", "__namespaces", "__NEXT_DATA__", "__N_SSG", "__N_SSP", "__nextReduxWrapperStore"]
+      "allow": ["__lang", "__namespaces", "__NEXT_DATA__", "__N_SSG", "__N_SSP"]
     }],
     "no-unneeded-ternary": "error",
     "no-unused-expressions": ["error", {"allowShortCircuit": true, "allowTernary": true}],
@@ -67,10 +75,7 @@
       ],
     "prefer-const": "error",
     "prefer-template": "error",
-    "quotes": ["error", "single"],
-    "space-infix-ops": ["error", { "int32Hint": false }],
-    "space-unary-ops": "error",
-    "template-curly-spacing": ["error", "never"],
+
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",
     "import/order": [
@@ -94,7 +99,6 @@
         ]
       }
     ],
-    "react/jsx-closing-bracket-location": "warn",
     "react/prefer-stateless-function": "error",
     "react-hooks/exhaustive-deps": "warn"
   },
