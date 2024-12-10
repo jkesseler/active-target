@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /**
  * The original next-redux-wrapper library contains a bug that has been fixed,
- * the PR has not been aproved by the library maintainer yet.
+ * but the PR has not been aproved by the library maintainer yet.
  * This file contains is the fixed version
  * See: https://github.com/kirill-konshin/next-redux-wrapper/pull/540
  */

@@ -3,7 +3,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
-    "prettier"
+    "@stylistic"
   ],
   "extends": [
     "next/core-web-vitals",
@@ -13,15 +13,14 @@
   ],
   "rules": {
     "block-scoped-var": "error",
-    "brace-style": ["error", "1tbs"],
+    "@stylistic/brace-style": ["error", "1tbs"],
     "camelcase": ["error", {
       "ignoreGlobals": true,
       "properties": "never",
       "allow": ["^o_", "node_*", "npm_*"]
     }],
-    "comma-dangle": ["error", "never"],
-    "curly": "error",
-    "eol-last": "error",
+    "@stylistic/comma-dangle": ["error", "never"],
+    "@stylistic/eol-last": "error",
     "eqeqeq": "error",
     "id-length": [ "error",
     {
@@ -29,8 +28,7 @@
       "properties": "never"
     }
     ],
-    "indent": ["error", 2],
-    "jsx-quotes": ["error", "prefer-double"],
+    "@stylistic/jsx-quotes": ["error", "prefer-double"],
     "max-len": ["warn",
       {
         "code": 140,
@@ -55,10 +53,6 @@
     }],
     "no-unneeded-ternary": "error",
     "no-unused-expressions": ["error", {"allowShortCircuit": true, "allowTernary": true}],
-    "no-useless-concat": "error",
-    "no-useless-constructor": "error",
-    "no-var": "error",
-    "no-undef": "error",
     "no-unused-vars": "off",
       "no-restricted-syntax": [
         "error",
@@ -71,13 +65,9 @@
           "message": "Use 'next/router' for history manipulation, not doing so breaks the browser history buttons in NextJs' projects"
         }
       ],
-    "one-var": ["error", "never"],
-    "one-var-declaration-per-line": ["error", "always"],
     "prefer-const": "error",
     "prefer-template": "error",
     "quotes": ["error", "single"],
-    "radix": "error",
-    "semi": ["error", "always"],
     "space-infix-ops": ["error", { "int32Hint": false }],
     "space-unary-ops": "error",
     "template-curly-spacing": ["error", "never"],
@@ -98,18 +88,14 @@
         ],
         "pathGroups": [
           {
-            "pattern": "@/**|@components*/**|@hooks/**|@lib/**|@services/**|@state/**|@styles/**@utils/**",
+            "pattern": "@/**",
             "group": "internal"
           }
         ]
       }
     ],
     "react/jsx-closing-bracket-location": "warn",
-    "react/no-typos": "error",
     "react/prefer-stateless-function": "error",
-    "react/prop-types": ["off", {  /* interferes with TS https://stackoverflow.com/a/63263323 */
-      "skipUndeclared": true
-    }],
     "react-hooks/exhaustive-deps": "warn"
   },
   "overrides": [
