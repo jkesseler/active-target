@@ -5,7 +5,7 @@
 Define a hierarchical MQTT topic structure to enable scoped and flexible communication.
 `devices/{UUID}/status`: For status updates from a device.
 `devices/{UUID}/command`: For issuing commands to a device.
-`devices/{UUID}/response`: For responses to commands.
+`devices/{UUID}/response`: For responses from a device to commands.
 `broadcast`: For messages intended for all devices.
 
 
@@ -13,7 +13,7 @@ Define a hierarchical MQTT topic structure to enable scoped and flexible communi
 Example message:
 ```json
 {
-  "type": "DEVICE_ONLINE",
+  "action": "DEVICE_ONLINE",
   "meta": {
     "uuid": "123e4567-e89b-12d3-a456-426614174000",
     "timestamp": "2024-11-26T15:30:00Z",
@@ -53,19 +53,28 @@ The server acts as the dispatcher:
 
 ```
 
-'targets' slice
+'devices' slice
+The `sideEffects` key defines a list of messages to publish with a specific topis and payload
+Mainly intended so that poppers can be used as triggers for actuators or turn on lights or something
 ```json
 {
-  "targets": {
-    "<target-01-UUID>": {
+  "devices": {
+    "<device-01-UUID>": {
+      "type": "TARGET",
       "status": "online",
       "lastUpdated": "2024-11-26T15:30:00Z",
       "currentCommand": "",
-      "responses": []
+      "responses": [],
     },
-    "<target-02-UUID>": {
+    "<device-02-UUID>": {
+      "type": "NOSHOOT",
       "status": "offline",
-      "lastUpdated": "2024-11-26T15:00:00Z"
+      "lastUpdated": "2024-11-26T15:00:00Z",
+      "sideEffects": [{
+       // Assume 357c5fc8-54e7-427c-838a-61384e076fcb is a LED that accepts the 'blink' command
+        "topic": "at/devices/357c5fc8-54e7-427c-838a-61384e076fcb",
+        "payload": "blink"
+      }]
     }
   }
 }

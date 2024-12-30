@@ -1,0 +1,71 @@
+{
+  "devices": [{
+      "id": "08076715-8a01-4e76-a117-00f654f2c9b8",
+      "name": "IPSC Action Air Micro Target",
+      "type": "TARGET",
+      "status": "online",
+      "lastUpdated": "2024-11-26T15:30:00Z",
+      "responses": []
+    },
+    {
+      "id": "ef16f5d7-9ab1-43b1-823a-271f88877fec",
+      "name": "IPSC Action Air Micro Target",
+      "type": "TARGET",
+      "status": "online",
+      "responses": []
+    },
+    {
+      "id": "08076715-8a01-4e76-a117-00f654f2c9b8",
+      "name": "IPSC Action Air Popper",
+      "type": "POPPER",
+      "status": "online",
+      "lastUpdated": "2024-11-26T15:30:00Z",
+      "responses": []
+    },
+    {
+      "id": "0cd38db3-f89f-46ff-b83c-8384ebd12d40",
+      "name": "No Shoot",
+      "type": "NOSHOOT",
+      "status": "online",
+      "lastUpdated": "2024-11-26T15:30:00Z",
+      "responses": [],
+      "sideEffects": [{
+      "topic": "at/devices/357c5fc8-54e7-427c-838a-61384e076fcb",
+        "payload": "blink_on"
+      }]
+    },
+    {
+      "id": "7e524368-42da-4344-9dc1-733f6915ea4e",
+      "name": "TRIGGER",
+      "type": "TRIGGER",
+      "status": "online",
+      "lastUpdated": "2024-11-26T15:30:00Z",
+      "responses": []
+    },
+    {
+      "id": "1fd9c296-9d1b-4755-8b78-01f1ecccfc32",
+      "name": "Actuator",
+      "type": "ACTUATOR",
+      "status": "online",
+      "lastUpdated": "2024-11-26T15:30:00Z",
+      "responses": []
+    },
+    {
+      "id": "08076715-8a01-4e76-a117-00f654f2c9b8",
+      "name": "Stop Plate",
+      "type": "STOP_PLATE",
+      "status": "online",
+      "lastUpdated": "2024-11-26T15:30:00Z",
+      "responses": [],
+      "sideEffects": [{
+        "topic": "at/devices/357c5fc8-54e7-427c-838a-61384e076fcb",
+        "payload": "blink_off"
+      },
+      {
+        "topic": "at/devices/29718cae-5745-443c-b4ba-1ba194f28db2",
+        "payload": "sound-end-of-stage-horn"
+      }
+    ]
+    }
+  ]
+}

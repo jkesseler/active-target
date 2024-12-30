@@ -1,9 +1,9 @@
+#include "common.h"
 #include <vector>
 #include <Preferences.h>
 #include <WiFi.h>
 #include "DeviceId.h"
 #include "ESPRandom.h"
-#include "include.h"
 
 #define STORAGE_NAMESPACE "deviceData" // Max. 15 chars
 #define STORAGE_KEY "deviceId"

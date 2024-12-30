@@ -6,9 +6,10 @@ class Messages
 {
   public:
     Messages();
-    void begin(String uuid, String deviceName);
+    void begin(String uuid, String deviceName, String deviceType);
     String createDeviceOnlineMessage();
-    String createAddResultMessage(const char *targetZone);
+    String createTargetHitMessage(const char *targetZone);
+    String createMessageWitoutPayload(String action);
     String createDeviceUpdatedMessage();
 
   private: String UUID;

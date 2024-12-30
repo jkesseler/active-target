@@ -40,7 +40,9 @@ let client: mqtt.MqttClient;
 export const mqttMiddleware: Middleware = ({ dispatch, getState }) => {
   const isConnected = selectIsConnected(getState());
   return next => action => {
+
     console.log(action.type);
+
     if (actions.startConnecting.match(action) && !isConnected) {
       client = mqtt.connect(MQTT_SEVRVER_URL, options);
 
@@ -58,11 +60,14 @@ export const mqttMiddleware: Middleware = ({ dispatch, getState }) => {
         const mqttMessage = message.toString();
 
         try {
-          const { type, payload } = parseMqttMessage(mqttMessage);
+          const { type, payload, meta = undefined } = parseMqttMessage(mqttMessage);
+
+          // TODO: Map mqttMessage to correct action creators
 
           dispatch({
             type,
-            payload
+            payload,
+            ...(meta ? meta : {})
           });
 
         } catch (e) {

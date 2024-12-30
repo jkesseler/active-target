@@ -17,7 +17,6 @@ type MyAppProps = AppProps & {
   pageProps: any;
 }
 
-
 // Prevent unstyled font-awsome icons on SSR
 config.autoAddCss = false;
 

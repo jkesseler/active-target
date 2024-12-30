@@ -1,3 +1,4 @@
+#include "common.h"
 #include <WiFi.h> // Include the Wi-Fi library
 int maxRetries = 5;
 
