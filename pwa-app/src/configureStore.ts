@@ -1,4 +1,3 @@
-// see: https://github.com/reduxjs/redux-toolkit/blob/c87f80370ab16fabe62bf098e49ab47bd18a358f/examples/action-listener/counter/src/store.ts
 import {
   configureStore,
   combineReducers,
@@ -9,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deserializeError } from 'serialize-error';
 import { devicesSlice } from '@/pages/manage-devices/devicesSlice';
 import { resultsSlice } from '@/pages/targets-demo/resultsSlice';
-import { createWrapper, type MakeStore } from './utils/store-wrapper';
 import { mqttSlice } from './stores/mqttSlice';
 import { mqttMiddleware } from './stores/mqttMiddleware';
 
@@ -21,9 +19,6 @@ import type {
 } from '@reduxjs/toolkit';
 
 
-const listenerMiddlewareInstance = createListenerMiddleware({
-  onError: (e: any) => console.error(deserializeError(e))
-});
 
 
 export const rootReducer = combineReducers({
@@ -42,12 +37,6 @@ export const store = configureStore({
 });
 
 
-const makeStore: MakeStore<any> = () => store;
-export const wrapper = createWrapper<AppRootStore>(makeStore, { debug: false });
-
-export const startAppListening = listenerMiddlewareInstance.startListening as AppStartListening;
-export const addAppListener = addListener as AppAddListener;
-
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type AppRootStore = ReturnType<typeof configureStore>
 export type AppRootState = ReturnType<typeof rootReducer>
@@ -56,6 +45,12 @@ export type AppListenerEffectAPI = ListenerEffectAPI<AppRootState, AppDispatch>
 export type AppStartListening = TypedStartListening<AppRootState>
 export type AppAddListener = TypedAddListener<AppRootState>
 
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
+
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<AppRootState> = useSelector;
+const listenerMiddlewareInstance = createListenerMiddleware({
+  onError: (e: any) => console.error(deserializeError(e))
+});
+
+export const startAppListening = listenerMiddlewareInstance.startListening as AppStartListening;
+export const addAppListener = addListener as AppAddListener;

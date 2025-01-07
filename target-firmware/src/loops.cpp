@@ -1,4 +1,5 @@
 #include "common.h"
+#include "actions.h"
 
 static void checkSensor(int pin, const char *targetZone) {
   int piezoVal = analogRead(pin);
@@ -39,28 +40,37 @@ static void popperLoop() {
 }
 
 static bool noShootLoop() {
-  String action = "DEVICES/NO_SHOOT";
-  String message = jsonMessages.createMessageWitoutPayload(action);
+  String action = ACTION_DEVICE_NOSHOOT_HIT;
+  String message = jsonMessages.createMessage(action);
   bool isPublished = mqttClient.publish(mqttResponseTopic, message.c_str());
   return isPublished;
 }
 
 static bool stopPlateLoop() {
-  String action = "DEVICES/STOP_PLATE";
-  String message = jsonMessages.createMessageWitoutPayload(action);
+  String action = ACTION_DEVICE_NOSHOOT_HIT;
+  String message = jsonMessages.createMessage(action);
   bool isPublished = mqttClient.publish(mqttResponseTopic, message.c_str());
+
+  // TODO: Some clear visual indication the stopplate has been it.
+  // Like changing the color of a LED
+
   return isPublished;
 }
 
 static bool triggerLoop() {
-  String action = "DEVICES/TRIGGER"; // TODO: Come up with a better name
-  String message = jsonMessages.createMessageWitoutPayload(action);
+  String action = ACTION_DEVICE_TRIGGERED;
+  String message = jsonMessages.createMessage(action);
   bool isPublished = mqttClient.publish(mqttResponseTopic, message.c_str());
+
+  // TODO: Some clear visual indication the trigger has been triggered.
+  // Like changing the color of a LED
+
   return isPublished;
 }
 
 static void actuatorLoop() {
   // TODO: Listen for incomming messages and act upon those
+  // Like activating a solenoid, horn, lights
 }
 
 static void checkSettingLoop() {

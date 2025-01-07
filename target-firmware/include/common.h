@@ -1,6 +1,5 @@
 #ifndef AT_COMMON
 #define AT_COMMON
-
 #include "DeviceId.h"
 #include "date_time.h"
 #include "handleMqttMessage.h"
@@ -9,6 +8,8 @@
 #include "wifi_utils.h"
 #include <Arduino.h>
 #include <PubSubClient.h>
+#include <WiFiManager.h>
+#include <vector>
 
 #define DEFAULT_SENSOR_THRESHOLD 300
 #define DEFAULT_SENSOR_DEBOUNCE 90
@@ -44,6 +45,7 @@ static const char *MQTT_SERVER = "raspberrypi.local";
 static String DEFAULT_DEVICE_NAME = "IPSC Action Air Micro Target";
 static String DEFAULT_DEVICE_TYPE = DEVICE_TYPE_TARGET;
 
+extern WiFiManager wifiManager;
 extern Settings settings;
 extern WiFiClient wifiClient;
 extern PubSubClient mqttClient;

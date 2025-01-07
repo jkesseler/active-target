@@ -1,14 +1,16 @@
-#include "common.h"
 #include "DeviceId.h"
+#include "common.h"
 #include "date_time.h"
 #include "handleMqttMessage.h"
 #include "json_messages.h"
+#include "loops.cpp"
 #include "settings.h"
 #include "wifi_utils.h"
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include "loops.cpp"
+#include <WiFiManager.h>
 
+WiFiManager wifiManager;
 Settings settings;
 DeviceId deviceId;
 WiFiClient wifiClient;
@@ -103,6 +105,14 @@ void setup() {
   pinMode(SENSOR_PIN_C, INPUT_PULLUP);
   pinMode(SENSOR_PIN_D, INPUT_PULLUP);
 
+  WiFi.mode(WIFI_STA);
+  wifiManager.setConfigPortalTimeout(60);
+  if (wifiManager.autoConnect("pewpewpew")) {
+    Serial.println("wifiManager: connected");
+  } else {
+    Serial.println("wifiManager: Configportal running");
+  }
+
   String apIP = connectToWiFi(ssid, password);
   timeSync(apIP);
 
@@ -129,7 +139,8 @@ void setup() {
 
 void loop() {
   unsigned long currentTime = millis();
-  
+  wifiManager.process();
+
   if (!mqttClient.connected()) {
     connectToMqttServer();
   }

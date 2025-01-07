@@ -2,7 +2,7 @@ export interface Device {
   id: string;
   name: string;
   type: string;
-  status?: string;
+  status?: 'online' | 'offline';
   lastUpdated?: Date;
   responses?: string[];
   sideEffects?: SideEffect[];

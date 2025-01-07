@@ -1,5 +1,6 @@
 #include "json_messages.h"
 #include "common.h"
+#include "actions.h"
 #include "date_time.h"
 #include <ArduinoJson.h>
 
@@ -24,7 +25,7 @@ String Messages::createDeviceOnlineMessage() {
   payload["name"] = this->deviceName;
   payload["type"] = this->deviceType;
 
-  doc["action"] = "device/online";
+  doc["action"] =  ACTIONS_DEVICE_ONLINE;
   doc["payload"] = payload;
   
   String jsonString;
@@ -42,7 +43,7 @@ String Messages::createDeviceUpdatedMessage() {
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
   doc["payload"] = payload;
-  doc["action"] = "devices/updated";
+  doc["action"] = ACTIONS_DEVICE_UPDATED;
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -60,7 +61,7 @@ String Messages::createTargetHitMessage(const char *targetZone) {
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
   doc["payload"] = payload;
-  doc["action"] = "DEVICES/TARGET";
+  doc["action"] = ACTIONS_DEVICE_TARGET_HIT;
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -68,7 +69,7 @@ String Messages::createTargetHitMessage(const char *targetZone) {
   return jsonString;
 }
 
-String Messages::createMessageWitoutPayload(String action) {
+String Messages::createMessage(String action) {
   StaticJsonDocument<768> doc;
   JsonObject meta = doc.createNestedObject("meta");
 
@@ -77,6 +78,22 @@ String Messages::createMessageWitoutPayload(String action) {
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
   
+
+  String jsonString;
+  serializeJson(doc, jsonString);
+
+  return jsonString;
+}
+
+String Messages::createMessage(String action, JsonObject payload) {
+  StaticJsonDocument<768> doc;
+  JsonObject meta = doc.createNestedObject("meta");
+  
+  doc["action"] = action;
+  doc["payload"] = payload;
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["id"] = this->UUID;
 
   String jsonString;
   serializeJson(doc, jsonString);

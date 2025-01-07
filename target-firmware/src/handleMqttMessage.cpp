@@ -1,4 +1,5 @@
 #include "common.h"
+#include "actions.h"
 #include "handleMqttMessage.h"
 #include "settings.h"
 #include <Arduino.h>
@@ -16,11 +17,9 @@ void handleMqttMessage(const String &jsonString) {
   }
   // TODO: Handle 'DEVICE/ACTUATOR' messages
 
-
-
   // Handle Settings
   const char* action = doc["action"];
-  if (strcmp(action, "settings/set") == 0) {
+  if (strcmp(action, ACTION_SETTINGS_SET) == 0) {
     const char* deviceName = doc["payload"]["deviceName"];
     if (deviceName) {
       settings.set("deviceName", deviceName);
@@ -43,7 +42,15 @@ void handleMqttMessage(const String &jsonString) {
     mqttClient.publish(mqttResponseTopic, updateTargetMessage.c_str());
   }
 
-  if (strcmp(action, "status") == 0) {
-    // Send current status
+  if (strcmp(action, ACTION_SETTINGS_GET) == 0) {
+    const char *settingName = doc["payload"]["setting"];
+    if (settingName) {
+      settings.getString(settingName);
+      Serial.println(deviceName);
+      // TODO: Reply with correct mqtt message
+    }
+
+    // TODO: If no setting name is given, send every thing as a json blob
   }
+  
 }

@@ -2,15 +2,6 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { AppRootState } from '@/configureStore';
 import type * as Types from './types';
 
-
-/** The are the the actipons types we can send over mqtt */
-// const actionTypes = [
-//   'devices/deviceAdded',
-//   'devices/deviceUpdated',
-//   'deviceRemoved/deviceRemoved'
-// };
-
-
 export const devicesSlice = createSlice({
   name: 'devices',
   initialState: [] as Types.Device[],
@@ -36,6 +27,20 @@ export const devicesSlice = createSlice({
     deviceRemoved: (state, { payload }) => {
       const { id } = payload;
       return state.filter((device: Types.Device) => device.id === id);
+    },
+    deviceOnline: (state, { payload }) => {
+      const { id } = payload;
+      return state.map((device: Types.Device) => ({
+        ...device,
+        ...(device.id === id ? { status: 'online' } : {})
+      }))
+    },
+    deviceOffline: (state, { payload }) => {
+      const { id } = payload;
+      return state.map((device: Types.Device) => ({
+        ...device,
+        ...(device.id === id ? { status: 'offline' } : {})
+      }))
     }
   }
 });

@@ -1,19 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 import { Container, Row, Col, Badge } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import { startConnecting, selectIsConnecting, selectIsConnected } from '@/stores/mqttSlice';
 import { useBrowserLayoutEffect } from '@/hooks/useBrowserLayoutEffect';
 import { selectResults } from '@/stores/resultsSlice';
-import { AppRootState } from '@/configureStore';
+import { useAppDispatch, useAppSelector } from '@/configureStore';
 
 
 export const ShotsPage = () => {
   const { t } = useTranslation('shotspage');
-  const dispatch = useDispatch();
-  const isConnecting = useSelector((state: AppRootState) => selectIsConnecting(state));
-  const isConnected = useSelector((state: AppRootState) => selectIsConnected(state));
-  const results = useSelector((state: AppRootState) => selectResults(state));
+  const dispatch = useAppDispatch();
+  const isConnecting = useAppSelector((state) => selectIsConnecting(state));
+  const isConnected = useAppSelector((state) => selectIsConnected(state));
+  const results = useAppSelector((state) => selectResults(state));
 
   useBrowserLayoutEffect(() => {
     if (!isConnected) {

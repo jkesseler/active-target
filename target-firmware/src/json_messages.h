@@ -9,7 +9,8 @@ class Messages
     void begin(String uuid, String deviceName, String deviceType);
     String createDeviceOnlineMessage();
     String createTargetHitMessage(const char *targetZone);
-    String createMessageWitoutPayload(String action);
+    String createMessage(String action);
+    String createMessage(String action, JsonObject payload);
     String createDeviceUpdatedMessage();
 
   private: String UUID;

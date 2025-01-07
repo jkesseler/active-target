@@ -21,14 +21,14 @@
 # App To Do
 [] Multiple Stages
 [] Move away from NextJS as SSR is irrelevant for this usecase. 
-   React-Native might be a solution
+   [luestack-ui-starter-kits seems promising](https://github.com/gluestack/gluestack-ui-starter-kits/blob/main/universal/)
 [] Multiple users
 [] IPSC score sheet per user
 [] Button trigger to start the stage (button press makes beep and starts timer)
 [] Set one target as 'end' stage plate
+[] target zones for IPSC competition
 
 # Next version
-[] target zones for IPSC competition
 [] Major / minor scoring per zone
 [] Hit factor
 [] Research ESP-NOW
