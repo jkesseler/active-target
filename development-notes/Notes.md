@@ -21,9 +21,11 @@
 # App To Do
 [] Multiple Stages
 [] Move away from NextJS as SSR is irrelevant for this usecase. 
-   [luestack-ui-starter-kits seems promising](https://github.com/gluestack/gluestack-ui-starter-kits/blob/main/universal/)
+   TanstackRouter + rspack / vite?
 [] Multiple users
 [] IPSC score sheet per user
+   Final score depends on HitFactor (stage score / time)
+   [IPSC Scoring and Hit Factor Explained: A Comprehensive Guide](https://shootntrain.com/ipsc-scoring-and-hit-factor-explained-a-comprehensive-guide/)
 [] Button trigger to start the stage (button press makes beep and starts timer)
 [] Set one target as 'end' stage plate
 [] target zones for IPSC competition

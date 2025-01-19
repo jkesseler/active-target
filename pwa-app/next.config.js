@@ -6,6 +6,7 @@ const nextTranslate = require('next-translate-plugin');
 
 const nextConfig = {
   productionBrowserSourceMaps: true,
+  output: 'standalone',
   pageExtensions: ['api.ts', 'page.tsx'], // Allows for colocation of non page files under /pages/ without having a route created to them
   poweredByHeader: false,
   swcMinify: true,
