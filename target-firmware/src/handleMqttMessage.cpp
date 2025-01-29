@@ -5,8 +5,9 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
+// TODO: Refactor to `handleSettingsMessage` 
 void handleMqttMessage(const String &jsonString) {
-  Settings settings;
+  // Settings settings;
   DynamicJsonDocument doc(768);
   DeserializationError error = deserializeJson(doc, jsonString);
 
@@ -15,8 +16,6 @@ void handleMqttMessage(const String &jsonString) {
     Serial.println(error.f_str());
     return;
   }
-  // TODO: Handle 'DEVICE/ACTUATOR' messages
-
   // Handle Settings
   const char* action = doc["action"];
   if (strcmp(action, ACTION_SETTINGS_SET) == 0) {

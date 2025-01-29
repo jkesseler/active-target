@@ -19,8 +19,8 @@ public:
 
 private:
   std::map<String, String> cache;
-  String readStringFromFlash(const String key, String defaultValue = "");
-  int readIntFromFlash(const String key, int defaultValue = -1);
+  String readStringFromFlash(const String key);
+  int readIntFromFlash(const String key);
 };
 
 #endif

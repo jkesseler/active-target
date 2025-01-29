@@ -1,3 +1,7 @@
+#include <Arduino.h>
+#include <PubSubClient.h>
+#include <WiFiManager.h>
+
 #include "DeviceId.h"
 #include "common.h"
 #include "date_time.h"
@@ -5,10 +9,7 @@
 #include "json_messages.h"
 #include "loops.cpp"
 #include "settings.h"
-#include "wifi_utils.h"
-#include <Arduino.h>
-#include <PubSubClient.h>
-#include <WiFiManager.h>
+// #include "wifi_utils.h"
 
 WiFiManager wifiManager;
 Settings settings;
@@ -20,6 +21,7 @@ Messages jsonMessages;
 
 char mqttClientId[64];
 char mqttRequestTopic[64];
+char mqttBroadcastTopic[64];
 char mqttResponseTopic[64];
 volatile unsigned long lastDebounceTime;
 volatile unsigned long lastReadTime;
@@ -37,6 +39,7 @@ void init() {
   sprintf(mqttClientId, "DEVICE/{%s}", uuid.c_str());
   sprintf(mqttRequestTopic, "at/device/%s/commands", uuid.c_str());
   sprintf(mqttResponseTopic, "at/device/%s/response", uuid.c_str());
+  sprintf(mqttBroadcastTopic, "at/devices/broadcast");
 
   lastDebounceTime = DEFAULT_SENSOR_DEBOUNCE;
   lastReadTime = 0;
@@ -77,6 +80,7 @@ void connectToMqttServer() {
       Serial.println("connected");
       Serial.println(mqttRequestTopic);
       mqttClient.subscribe(mqttRequestTopic);
+      mqttClient.subscribe(mqttBroadcastTopic);
     } else {
       if (currentReconnectDelay < maxReconnectDelay) {
         currentReconnectDelay *= 2;
@@ -105,16 +109,21 @@ void setup() {
   pinMode(SENSOR_PIN_C, INPUT_PULLUP);
   pinMode(SENSOR_PIN_D, INPUT_PULLUP);
 
+  // String apIP = connectToWiFi(ssid, password);
+  // timeSync(apIP);
+
   WiFi.mode(WIFI_STA);
-  wifiManager.setConfigPortalTimeout(60);
-  if (wifiManager.autoConnect("pewpewpew")) {
-    Serial.println("wifiManager: connected");
+  if (wifiManager.autoConnect("AT-Device")) {
+    Serial.println("WiFi connected successfully!");
   } else {
-    Serial.println("wifiManager: Configportal running");
+    Serial.println("Failed to connect to WiFi. Config portal timed out.");
   }
 
-  String apIP = connectToWiFi(ssid, password);
-  timeSync(apIP);
+  IPAddress gateway = WiFi.gatewayIP();
+  Serial.print("Gateway IP: ");
+  Serial.println(gateway);
+
+  timeSync(gateway.toString());
 
   settings.begin();
   uuid = deviceId.get();

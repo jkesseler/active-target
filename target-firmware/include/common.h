@@ -5,11 +5,12 @@
 #include "handleMqttMessage.h"
 #include "json_messages.h"
 #include "settings.h"
-#include "wifi_utils.h"
 #include <Arduino.h>
+#include <Preferences.h>
 #include <PubSubClient.h>
 #include <WiFiManager.h>
 #include <vector>
+// #include "wifi_utils.h"
 
 #define DEFAULT_SENSOR_THRESHOLD 300
 #define DEFAULT_SENSOR_DEBOUNCE 90
@@ -46,6 +47,7 @@ static String DEFAULT_DEVICE_NAME = "IPSC Action Air Micro Target";
 static String DEFAULT_DEVICE_TYPE = DEVICE_TYPE_TARGET;
 
 extern WiFiManager wifiManager;
+extern Preferences settingsPrefs;
 extern Settings settings;
 extern WiFiClient wifiClient;
 extern PubSubClient mqttClient;
@@ -55,6 +57,7 @@ extern DeviceId deviceId;
 
 extern char mqttClientId[64];
 extern char mqttRequestTopic[64];
+extern char mqttBroadcastTopic[64];
 extern char mqttResponseTopic[64];
 extern volatile unsigned long lastDebounceTime;
 extern volatile unsigned long lastReadTime;

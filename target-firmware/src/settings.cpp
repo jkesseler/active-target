@@ -16,7 +16,7 @@ void Settings::begin() {
   this->cache = cache;
 }
 
-String Settings::readStringFromFlash(String key, String defaultValue) {
+String Settings::readStringFromFlash(String key) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, true);
   String value = settingsPrefs.getString(key.c_str(), "");
   
@@ -30,9 +30,9 @@ String Settings::readStringFromFlash(String key, String defaultValue) {
   return value;
 }
 
-int Settings::readIntFromFlash(String key, int defaultValue) {
+int Settings::readIntFromFlash(String key) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, true);
-  int value = settingsPrefs.getInt(key.c_str(), defaultValue);
+  int value = settingsPrefs.getInt(key.c_str(), -1);
 
   if(value != -1) {
     this->cache[key] = String(value);
