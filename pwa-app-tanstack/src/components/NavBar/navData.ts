@@ -25,13 +25,13 @@ export const navLinks: NavItem[] = [
     link: '/users'
   },
   {
-    label: 'Matches',
+    label: 'Stages',
     icon: IconReport,
-    link: '/matches'
-  },
-  {
-    label: 'ScoreSheet',
-    icon: IconFileCertificate,
-    link: '/scoresheet'
+    link: '/stages'
   }
+  // {
+  //   label: 'ScoreSheet',
+  //   icon: IconFileCertificate,
+  //   link: '/scoresheet'
+  // }
 ];

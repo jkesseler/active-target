@@ -7,11 +7,13 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { deserializeError } from 'serialize-error';
 import { rememberReducer, rememberEnhancer } from 'redux-remember';
+import { timestampMiddleware } from './timestampMiddleware';
 import { devicesSlice } from '@/features/devices/devicesSlice';
 import { devicesMiddleware } from '@/features/devices/devicesMiddleware';
 import { mqttSlice } from '@/features/mqtt/mqttSlice';
 import { mqttMiddleware } from '@/features/mqtt/mqttMiddleware';
 import { usersSlice } from '@/features/users/usersSlice';
+import { stagesSlice } from '@/features/stages/stagesSlice';
 
 import type { TypedUseSelectorHook } from 'react-redux';
 import type {
@@ -23,7 +25,8 @@ import type {
 export const rootReducer = combineReducers({
   [devicesSlice.name]: devicesSlice.reducer,
   [mqttSlice.name]: mqttSlice.reducer,
-  [usersSlice.name]: usersSlice.reducer
+  [usersSlice.name]: usersSlice.reducer,
+  [stagesSlice.name]: stagesSlice.reducer
 });
 
 const reducer = rememberReducer(rootReducer);
@@ -33,8 +36,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: true
-    })
-      .concat(
+    }).concat(
+        timestampMiddleware,
         mqttMiddleware,
         devicesMiddleware.middleware
       ),
@@ -65,3 +68,4 @@ const listenerMiddlewareInstance = createListenerMiddleware({
 
 export const startAppListening = listenerMiddlewareInstance.startListening as AppStartListening;
 export const addAppListener = addListener as AppAddListener;
+

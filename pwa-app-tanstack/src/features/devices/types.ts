@@ -1,24 +1,24 @@
-export type DEVICE_TYPE_TARGET = 'TARGET'
-export type DEVICE_TYPE_POPPER = 'POPPER'
-export type DEVICE_TYPE_NOSHOOT = 'NOSHOOT'
-export type DEVICE_TYPE_STOP_PLATE = 'STOP_PLATE'
-export type DEVICE_TYPE_TRIGGER = 'TRIGGER'
-export type DEVICE_TYPE_ACTUATOR = 'ACTUATOR'
+export const DEVICE_TYPE_TARGET = 'TARGET' as const;
+export const DEVICE_TYPE_POPPER = 'POPPER' as const;
+export const DEVICE_TYPE_NOSHOOT = 'NOSHOOT' as const;
+export const DEVICE_TYPE_STOP_PLATE = 'STOP_PLATE' as const;
+export const DEVICE_TYPE_TRIGGER = 'TRIGGER' as const;
+export const DEVICE_TYPE_ACTUATOR = 'ACTUATOR' as const;
 
 export type DeviceType =
-  | DEVICE_TYPE_TARGET
-  | DEVICE_TYPE_POPPER
-  | DEVICE_TYPE_NOSHOOT
-  | DEVICE_TYPE_STOP_PLATE
-  | DEVICE_TYPE_TRIGGER
-  | DEVICE_TYPE_ACTUATOR;
+  | typeof DEVICE_TYPE_TARGET
+  | typeof DEVICE_TYPE_POPPER
+  | typeof DEVICE_TYPE_NOSHOOT
+  | typeof DEVICE_TYPE_STOP_PLATE
+  | typeof DEVICE_TYPE_TRIGGER
+  | typeof DEVICE_TYPE_ACTUATOR;
 
 export interface Device {
   id: string;
   name: string;
   type: DeviceType; // one of DEVICE_TYPE_*
   status?: 'online' | 'offline';
-  lastUpdated: Date | string;
+  lastUpdated?: Date | string;
   responses: string[];
   sideEffects?: SideEffect[];
 }

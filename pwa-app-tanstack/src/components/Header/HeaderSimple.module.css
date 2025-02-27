@@ -7,3 +7,8 @@
   display: flex;
   justify-content: flex-start;
 }
+
+
+.stageButton {
+  border-radius: 100%;
+}

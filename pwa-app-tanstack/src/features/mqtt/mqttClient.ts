@@ -1,10 +1,9 @@
 import mqtt from 'mqtt';
-import { type PayloadAction } from '@reduxjs/toolkit';
+import { type Action } from '@reduxjs/toolkit';
 
 import { DEVICE_ID, MQTT_SEVRVER_URL, MQTT_MIDDLEWARE_TOPICS, MQTT_BROADCAST_TOPIC } from '@/constants';
 
 const options: mqtt.IClientOptions = {
-  manualConnect: true,
   // keepalive: 999,
   clientId: `controller_${DEVICE_ID}`
   // will: {
@@ -15,20 +14,32 @@ const options: mqtt.IClientOptions = {
   // }
 };
 
-const mqttClient = mqtt.connect(MQTT_SEVRVER_URL, options);
-mqttClient.subscribe(MQTT_MIDDLEWARE_TOPICS);
+let mqttClient: mqtt.MqttClient | null = null;
 
-function broadcast(action: PayloadAction) {
-  mqttClient.publish(MQTT_BROADCAST_TOPIC, JSON.stringify(action));
+export const connect = () => {
+  mqttClient = mqtt.connect(MQTT_SEVRVER_URL, options);
+  mqttClient.subscribe(MQTT_MIDDLEWARE_TOPICS);  
 }
 
-function publish(topic: string, action: PayloadAction) {
-  mqttClient.publish(topic, JSON.stringify(action));
-} 
-
-
-export { 
-  mqttClient, 
-  broadcast,
-  publish
+export const disconnect = () => {
+  if (mqttClient) {
+    mqttClient.end(() => {
+      console.log('🔒 Connection closed manually');
+    });
+    mqttClient = null;
+  }
 };
+
+export const getClient = () => mqttClient;
+
+export const broadcast = (action: Action) => {
+  if (mqttClient?.connected) {
+    mqttClient.publish(MQTT_BROADCAST_TOPIC, JSON.stringify(action));
+  }
+}
+
+export const publish = (topic: string, action: Action) => {
+  if (mqttClient?.connected) {
+    mqttClient.publish(topic, JSON.stringify(action));
+  }
+} 

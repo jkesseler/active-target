@@ -1,10 +1,11 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import type { AppRootState } from '@/configureStore';
+import type { AppRootState } from '@/store';
+import { mockUsers } from './mock-data';
 import type * as Types from './types';
 
 export const usersSlice = createSlice({
   name: 'users',
-  initialState: [] as Types.User[],
+  initialState: [...mockUsers] as Types.User[],
   reducers: {
     userAdded: (state, { payload }) => {
       const idx = state.findIndex(user => user.id === payload.id);

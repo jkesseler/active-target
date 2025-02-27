@@ -5,7 +5,7 @@ import { MantineProvider } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
-import { store } from '@/configureStore';
+import { store } from '@/store';
 import { useThemes } from './hooks/useThemes';
 
 import { routeTree } from './routes.gen';

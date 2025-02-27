@@ -7,7 +7,7 @@ import { pluginReact } from '@rsbuild/plugin-react';
 export default defineConfig({
   plugins: [pluginReact()],
   output: {
-    js: 'cheap-module-source-map',
+    js: 'cheap-eval-source-map',
     css: true
   },
   html: {

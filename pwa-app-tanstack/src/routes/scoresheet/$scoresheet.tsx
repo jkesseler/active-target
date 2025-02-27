@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/users')({
-  component: RouteComponent
+export const Route = createFileRoute('/scoresheet/$scoresheet')({
+  component: ScoreSheetPage,
 });
 
-function RouteComponent() {
+function ScoreSheetPage() {
   return (
     <>
-      <h1>Users</h1>
+      <h1>ScoreSheet</h1>
       <Outlet />
     </>
   );

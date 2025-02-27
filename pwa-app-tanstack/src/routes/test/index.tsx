@@ -5,6 +5,11 @@ export const Route = createFileRoute('/test/')({
   component: TestPage,
 });
 
+
+// To test a Stage:
+// Grab devices from state
+// Create a timed sequence on wich to fire mqtt messages for each device
+
 function TestPage() {
   return (
     <div className="p-2">

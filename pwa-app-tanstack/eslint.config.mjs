@@ -17,7 +17,10 @@ const config = tseslint.config(
                 project: './tsconfig.json',
             },
         },
-        extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
+        extends: [
+            'next/core-web-vitals', 
+            importPlugin.flatConfigs.recommended, 
+            importPlugin.flatConfigs.typescript],
         plugins: {
             'import/typescript': importPlugin,
             '@stylistic': stylistic,

@@ -1,8 +1,10 @@
 import { Middleware } from 'redux';
 import { camelCase, kebabCase } from 'change-case';
 import { createAction } from '@reduxjs/toolkit';
-import { mqttClient } from './mqttClient';
+import { getClient, connect, disconnect } from './mqttClient';
 import { mqttSlice } from './mqttSlice';
+
+const mqttClient = getClient();
 
 /**
  * @param topic `DEVICES/ADDED` or 'USERS/UPDATED'
@@ -37,24 +39,23 @@ function parseMqttMessage(message: string): MqttMessageObject {
 }
 
 export const mqttMiddleware: Middleware = ({ dispatch }) => {
-  const isConnected = mqttClient.connected;
-  console.log('isConnected: ', mqttClient.connected);
+  const isConnected = mqttClient?.connected;
+  console.log('isConnected: ', mqttClient?.connected);
 
   return next => action => {
-
     if (actions.startConnecting.match(action) && !isConnected) {
-      mqttClient.connect();
+      // connect();
       dispatch(mqttSlice.actions.connected());
     }
 
     if (actions.startDisconnecting.match(action)) {
       // TODO: the mqtt lib has a memeory leak when a listener is bound to `.end()`
       // ideally we'd dispatch the action in `client.on('end', () => dispatch... );
-      mqttClient.end();
+      // disconnect();
       dispatch(mqttSlice.actions.disconnected());
     }
-
-    if(actions.connected.match(action)) {
+    // Ensures both the mqttClient and Redux store are setup
+    if (isConnected && actions.connected.match(action)) {
       mqttClient.on('message', (topic, message) => {
         console.log('topic: ', topic);
         const mqttMessage = message.toString();

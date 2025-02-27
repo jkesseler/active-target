@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": [],
     "strict": true,
     "noEmit": true,
     "jsx": "react-jsx",

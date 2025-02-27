@@ -1,7 +1,6 @@
-import * as React from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { Button, Switch, Table } from '@mantine/core';
-import { useAppSelector, useAppDispatch } from '@/configureStore';
+import { useAppSelector, useAppDispatch } from '@/store';
 import { selectDeviceById } from '@/features/devices/devicesSlice';
 import { setDeviceOffline, setDeviceOnline } from '@/features/devices/utils';
 

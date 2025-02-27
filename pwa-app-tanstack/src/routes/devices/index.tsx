@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Switch, Table } from '@mantine/core';
-import { useAppSelector, useAppDispatch } from '@/configureStore';
+import { useAppSelector, useAppDispatch } from '@/store';
 import { selectDevices } from '@/features/devices/devicesSlice';
 import { setDeviceOffline, setDeviceOnline } from '@/features/devices/utils';
 
 export const Route = createFileRoute('/devices/')({
-  component: DevicesPage
+  component: DevicesPage,
 });
 
 function DevicesPage() {
@@ -32,34 +32,31 @@ function DevicesPage() {
         </Table.Thead>
         <Table.Tbody>
           {devices.map((device) => (
-            <Table.Tr
-              key={device.id}
-              role="button"
-            >
-              <Table.Td
-                onClick={() => handleDeviceClick(device.id)}
-              >{device.name}</Table.Td>
-              <Table.Td
-                onClick={() => handleDeviceClick(device.id)}
-              >{device.type}</Table.Td>
+            <Table.Tr key={device.id} role="button">
+              <Table.Td onClick={() => handleDeviceClick(device.id)}>
+                {device.name}
+              </Table.Td>
+              <Table.Td onClick={() => handleDeviceClick(device.id)}>
+                {device.type}
+              </Table.Td>
               <Table.Td>
                 <Switch
                   {...(device.status === 'online'
                     ? {
-                      checked: true,
-                      onChange: () =>
-                        setDeviceOffline({ deviceId: device.id })(dispatch)
-                    }
+                        checked: true,
+                        onChange: () =>
+                          setDeviceOffline({ deviceId: device.id })(dispatch),
+                      }
                     : {
-                      checked: false,
-                      onChange: () =>
-                        setDeviceOnline({ deviceId: device.id })(dispatch)
-                    })}
+                        checked: false,
+                        onChange: () =>
+                          setDeviceOnline({ deviceId: device.id })(dispatch),
+                      })}
                 />
               </Table.Td>
-              <Table.Td
-                onClick={() => handleDeviceClick(device.id)}
-              >{device.lastUpdated?.toLocaleString('nl-NL')}</Table.Td>
+              <Table.Td onClick={() => handleDeviceClick(device.id)}>
+                {device.lastUpdated?.toLocaleString('nl-NL')}
+              </Table.Td>
             </Table.Tr>
           ))}
         </Table.Tbody>
