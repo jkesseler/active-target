@@ -1,11 +1,7 @@
-import { createSlice, createSelector, createAction } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import type { AppRootState } from '@/store';
 import * as Types from './types';
 import mockData from './mock-data.json';
-
-const externalActions = {
-  deviceHit: createAction('DEVICE/HIT')
-}
 
 export const stagesSlice = createSlice({
   name: 'stages',
@@ -72,18 +68,23 @@ export const stagesSlice = createSlice({
         ...state,
         list: nextList
       };
+    },
+    scoreAdded: (state, { payload }) => {
+      const currentStage = state.list.find(stage => stage.id === payload.stageId);
+      const scoresTabe = currentStage?.scoresTable.find(table.shooterId === payload.shooterId);
+      
+      const nextList = state.list.map((stage: Types.Stage) =>
+        stage.id === payload.id ? { 
+          ...stage, 
+          scoresTable: {
+            ...stage.scoresTable,
+            scores: nextScores
+          }
+        } : stage
+      );
+
+
     }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(externalActions.deviceHit, (state, action) => {
-        const { id, timeMillies } = action.meta;
-        const { targetZone } = action.payload;
-        // TODO: Update state
-      })
-      .addDefaultCase((state, action) => {
-        console.log('defaultCase Action: ', action);
-      })
   }
 });
 
@@ -106,7 +107,7 @@ export function selectStageById(state: AppRootState, id: string) {
 
 export function selectCurrentStage(state: AppRootState) {
   const currentStageId = state.stages.currentStage;
-  return state.stages.list.find((stage: Types.Stage) => stage.id === currentStageId);
+  return state.stages.list.find((stage: Types.Stage) => stage.id === currentStageId); 
 }
 
 export function selectCurrentScores(state: AppRootState) {

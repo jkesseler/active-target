@@ -17,7 +17,7 @@ export interface MqttState {
 }
 
 const initialState: MqttState = {
-  messages:[],
+  messages: [],
   isConnecting: false,
   isConnected: false,
   isDisconnecting: false

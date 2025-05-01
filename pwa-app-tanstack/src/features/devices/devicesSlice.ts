@@ -1,7 +1,7 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import type { AppRootState } from '@/store';
 import mockDevices from './mock-data';
-import type * as Types from './types';
+import * as Types from './types';
 
 export const devicesSlice = createSlice({
   name: 'devices',
@@ -30,12 +30,12 @@ export const devicesSlice = createSlice({
     },
     deviceOnline: (state, { payload }) => {
       return state.map((device: Types.Device) =>
-        device.id === payload.id ? { ...device, status: 'online' } : device
+        device.id === payload.id ? { ...device, status: Types.STATUS.ONLINE } : device
       );
     },
     deviceOffline: (state, { payload }) => {
       return state.map((device: Types.Device) =>
-        device.id === payload.id ? { ...device, status: 'offline' } : device
+        device.id === payload.id ? { ...device, status: Types.STATUS.OFFLINE } : device
       );
     },
     deviceResponseAdded: (state, { payload }) => {

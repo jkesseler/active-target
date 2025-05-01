@@ -13,11 +13,16 @@ export type DeviceType =
   | typeof DEVICE_TYPE_TRIGGER
   | typeof DEVICE_TYPE_ACTUATOR;
 
+export enum STATUS {
+  ONLINE = 'online',
+  OFFLINE = 'offline'
+}
+
 export interface Device {
   id: string;
   name: string;
   type: DeviceType; // one of DEVICE_TYPE_*
-  status?: 'online' | 'offline';
+  status?: STATUS;
   lastUpdated?: Date | string;
   responses: string[];
   sideEffects?: SideEffect[];

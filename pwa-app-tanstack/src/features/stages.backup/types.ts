@@ -4,6 +4,16 @@ export interface Stage {
   currentShooterId?: string;
   status: STATUS; // active on buzzer, not active on stop plate
   devices: string[];
+  scoresTable: {
+    shooterId: string;
+    scores?: [{
+      deviceId: string;
+      results: [{
+        timeMillies: string;
+        targetZone: 'A' | 'C' | 'D';
+      }]
+    }]
+  }[]
 }
 
 export enum STATUS {

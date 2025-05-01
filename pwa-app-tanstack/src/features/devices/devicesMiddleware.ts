@@ -1,14 +1,19 @@
-import { createListenerMiddleware } from '@reduxjs/toolkit';
+import { createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';
+// import { publish } from '@/features/mqtt/mqttClient';
 import { deviceOffline, deviceOnline } from './devicesSlice';
 
 const devicesMiddleware = createListenerMiddleware();
 
 devicesMiddleware.startListening({
-  actionCreator: deviceOffline,
+  matcher: isAnyOf(deviceOffline, deviceOnline),
   effect: (action, listenerApi) => {
-    console.log('action: ', action);
-    console.log('listenerApi: ', listenerApi);
-    // TODO: publish mqtt message to '/at/devices/{deviceId}/status' with payload 'offline'
+
+    console.log('devicesMiddleware action: ', action);
+    console.log('devicesMiddleware listenerApi: ', listenerApi);
+
+    //@ts-expect-error: unknown
+    const { id } = action.payload;
+    // publish(`at/devices/${id}/status`, action);
   }
 });
 

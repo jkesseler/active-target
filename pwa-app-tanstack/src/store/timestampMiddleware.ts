@@ -1,21 +1,22 @@
-import { Middleware, MiddlewareAPI, Dispatch, UnknownAction } from '@reduxjs/toolkit';
-import type { AppDispatch, AppRootState } from './configureStore';
 
-interface ActionWithMeta extends UnknownAction {
-  meta?: Record<string, any>;
-}
-// Because of the way RTK infers it types this causes a circular dependncy if we use AppRootState
+// Because of the way RTK infers it types we cannot type this
 export const timestampMiddleware = (store: any) => 
   (next: any) => 
   (action: any) => {
     if (typeof action.type === 'string' && !action.type.startsWith('@@')) {
+      const addTimestamp = !action?.meta?.timestamp;
+      
       action = {
         ...action,
         meta: {
           ...action.meta,
-          timestamp: new Date().toISOString(),
+          ...(!addTimestamp && {
+            timestamp: new Date().toISOString(),
+            timeMillies: Date.now()
+          })
         },
       };
     }
+    
     return next(action);
   };

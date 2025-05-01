@@ -2,8 +2,8 @@ import * as React from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Switch, Table } from '@mantine/core';
 import { useAppSelector, useAppDispatch } from '@/store';
-import { selectDevices } from '@/features/devices/devicesSlice';
-import { setDeviceOffline, setDeviceOnline } from '@/features/devices/utils';
+import { deviceOffline, deviceOnline, selectDevices } from '@/features/devices/devicesSlice';
+import * as Types from '@/features/devices/types';
 
 export const Route = createFileRoute('/devices/')({
   component: DevicesPage,
@@ -41,17 +41,15 @@ function DevicesPage() {
               </Table.Td>
               <Table.Td>
                 <Switch
-                  {...(device.status === 'online'
+                  {...(device.status === Types.STATUS.ONLINE
                     ? {
-                        checked: true,
-                        onChange: () =>
-                          setDeviceOffline({ deviceId: device.id })(dispatch),
-                      }
+                      checked: true,
+                      onChange: () => dispatch(deviceOffline({ deviceId: device.id }))
+                    }
                     : {
-                        checked: false,
-                        onChange: () =>
-                          setDeviceOnline({ deviceId: device.id })(dispatch),
-                      })}
+                      checked: false,
+                      onChange: () => dispatch(deviceOnline({ deviceId: device.id }))
+                    })}
                 />
               </Table.Td>
               <Table.Td onClick={() => handleDeviceClick(device.id)}>

@@ -44,7 +44,6 @@
     "mqtt": "^5.10.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-use-precision-timer": "^3.5.6",
     "recharts": "^2.15.0",
     "redux-remember": "^5.2.0",
     "serialize-error": "^11.0.0"

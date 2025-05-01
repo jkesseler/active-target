@@ -1,10 +1,9 @@
-import { Button,  Group, Switch } from '@mantine/core';
+import { Button, Group, Switch } from '@mantine/core';
 import { Howl } from 'howler'
 import { useTranslation } from '@/hooks/useTranslation';
 import { useAppSelector, useAppDispatch } from '@/store';
-import { getClient, connect, disconnect } from '@/features/mqtt/mqttClient';
 import { selectIsConnected, selectIsConnecting, startConnecting, startDisconnecting } from '@/features/mqtt/mqttSlice';
-import { selectCurrentStage, stageActivated, stageDeactivated } from '@/features/stages/stagesSlice';
+import { selectCurrentStage } from '@/features/stages/stagesSlice';
 import * as StageTypes from '@/features/stages/types';
 import { ToggleStageButton } from './ToggleStageButton';
 import { Stopwatch } from './Stopwatch'
@@ -14,16 +13,17 @@ import { useEffect } from 'react';
 export function HeaderSimple() {
   const { t } = useTranslation('header')
   const isConnecting = useAppSelector(state => selectIsConnecting(state));
+  const isConnected = useAppSelector(state => selectIsConnected(state));
   const currentStage = useAppSelector(state => selectCurrentStage(state));
   const isStageActive = currentStage?.status === StageTypes.STATUS.STAGE_ACTIVE;
   const dispatch = useAppDispatch();
-  const beep = new Howl({ 
+  const beep = new Howl({
     src: ['/sounds/2800-hz-433ms.wav'],
     preload: true
 
   });
 
-  useEffect(() => { 
+  useEffect(() => {
     if (isStageActive) {
       beep.play();
     } else {
@@ -33,12 +33,10 @@ export function HeaderSimple() {
 
 
   const toggleConnect = () => {
-    if (getClient()?.connected) {
-      dispatch(startConnecting());
-      disconnect();
-    } else {
+    if (isConnected) {
       dispatch(startDisconnecting());
-      connect();
+    } else {
+      dispatch(startConnecting());
     }
   };
 
@@ -46,8 +44,8 @@ export function HeaderSimple() {
     <header className={styles.header}>
       <Group>
         <h3>{currentStage?.name}</h3>
-        <Switch 
-          label={getClient()?.connected ? 'turn off' : 'turn on'} 
+        <Switch
+          label={isConnected ? 'turn off' : 'turn on'}
           size="lg"
           radius="md"
           onChange={toggleConnect}

@@ -15,12 +15,10 @@ import { Route as IndexImport } from './routes/index';
 import { Route as UsersIndexImport } from './routes/users/index';
 import { Route as TestIndexImport } from './routes/test/index';
 import { Route as StagesIndexImport } from './routes/stages/index';
-import { Route as ScoresheetIndexImport } from './routes/scoresheet/index';
 import { Route as DevicesIndexImport } from './routes/devices/index';
 import { Route as DashboardIndexImport } from './routes/dashboard/index';
 import { Route as StagesCurrentImport } from './routes/stages/current';
 import { Route as StagesStageIdImport } from './routes/stages/$stageId';
-import { Route as ScoresheetScoresheetImport } from './routes/scoresheet/$scoresheet';
 import { Route as DevicesDeviceIdImport } from './routes/devices/$deviceId';
 
 // Create/Update Routes
@@ -49,12 +47,6 @@ const StagesIndexRoute = StagesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
-const ScoresheetIndexRoute = ScoresheetIndexImport.update({
-  id: '/scoresheet/',
-  path: '/scoresheet/',
-  getParentRoute: () => rootRoute,
-} as any);
-
 const DevicesIndexRoute = DevicesIndexImport.update({
   id: '/devices/',
   path: '/devices/',
@@ -76,12 +68,6 @@ const StagesCurrentRoute = StagesCurrentImport.update({
 const StagesStageIdRoute = StagesStageIdImport.update({
   id: '/stages/$stageId',
   path: '/stages/$stageId',
-  getParentRoute: () => rootRoute,
-} as any);
-
-const ScoresheetScoresheetRoute = ScoresheetScoresheetImport.update({
-  id: '/scoresheet/$scoresheet',
-  path: '/scoresheet/$scoresheet',
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -107,13 +93,6 @@ declare module '@tanstack/react-router' {
       path: '/devices/$deviceId';
       fullPath: '/devices/$deviceId';
       preLoaderRoute: typeof DevicesDeviceIdImport;
-      parentRoute: typeof rootRoute;
-    };
-    '/scoresheet/$scoresheet': {
-      id: '/scoresheet/$scoresheet';
-      path: '/scoresheet/$scoresheet';
-      fullPath: '/scoresheet/$scoresheet';
-      preLoaderRoute: typeof ScoresheetScoresheetImport;
       parentRoute: typeof rootRoute;
     };
     '/stages/$stageId': {
@@ -142,13 +121,6 @@ declare module '@tanstack/react-router' {
       path: '/devices';
       fullPath: '/devices';
       preLoaderRoute: typeof DevicesIndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    '/scoresheet/': {
-      id: '/scoresheet/';
-      path: '/scoresheet';
-      fullPath: '/scoresheet';
-      preLoaderRoute: typeof ScoresheetIndexImport;
       parentRoute: typeof rootRoute;
     };
     '/stages/': {
@@ -180,12 +152,10 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/scoresheet/$scoresheet': typeof ScoresheetScoresheetRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
   '/dashboard': typeof DashboardIndexRoute;
   '/devices': typeof DevicesIndexRoute;
-  '/scoresheet': typeof ScoresheetIndexRoute;
   '/stages': typeof StagesIndexRoute;
   '/test': typeof TestIndexRoute;
   '/users': typeof UsersIndexRoute;
@@ -194,12 +164,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/scoresheet/$scoresheet': typeof ScoresheetScoresheetRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
   '/dashboard': typeof DashboardIndexRoute;
   '/devices': typeof DevicesIndexRoute;
-  '/scoresheet': typeof ScoresheetIndexRoute;
   '/stages': typeof StagesIndexRoute;
   '/test': typeof TestIndexRoute;
   '/users': typeof UsersIndexRoute;
@@ -209,12 +177,10 @@ export interface FileRoutesById {
   __root__: typeof rootRoute;
   '/': typeof IndexRoute;
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/scoresheet/$scoresheet': typeof ScoresheetScoresheetRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
   '/dashboard/': typeof DashboardIndexRoute;
   '/devices/': typeof DevicesIndexRoute;
-  '/scoresheet/': typeof ScoresheetIndexRoute;
   '/stages/': typeof StagesIndexRoute;
   '/test/': typeof TestIndexRoute;
   '/users/': typeof UsersIndexRoute;
@@ -225,12 +191,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/devices/$deviceId'
-    | '/scoresheet/$scoresheet'
     | '/stages/$stageId'
     | '/stages/current'
     | '/dashboard'
     | '/devices'
-    | '/scoresheet'
     | '/stages'
     | '/test'
     | '/users';
@@ -238,12 +202,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/devices/$deviceId'
-    | '/scoresheet/$scoresheet'
     | '/stages/$stageId'
     | '/stages/current'
     | '/dashboard'
     | '/devices'
-    | '/scoresheet'
     | '/stages'
     | '/test'
     | '/users';
@@ -251,12 +213,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/devices/$deviceId'
-    | '/scoresheet/$scoresheet'
     | '/stages/$stageId'
     | '/stages/current'
     | '/dashboard/'
     | '/devices/'
-    | '/scoresheet/'
     | '/stages/'
     | '/test/'
     | '/users/';
@@ -266,12 +226,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute;
-  ScoresheetScoresheetRoute: typeof ScoresheetScoresheetRoute;
   StagesStageIdRoute: typeof StagesStageIdRoute;
   StagesCurrentRoute: typeof StagesCurrentRoute;
   DashboardIndexRoute: typeof DashboardIndexRoute;
   DevicesIndexRoute: typeof DevicesIndexRoute;
-  ScoresheetIndexRoute: typeof ScoresheetIndexRoute;
   StagesIndexRoute: typeof StagesIndexRoute;
   TestIndexRoute: typeof TestIndexRoute;
   UsersIndexRoute: typeof UsersIndexRoute;
@@ -280,12 +238,10 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DevicesDeviceIdRoute: DevicesDeviceIdRoute,
-  ScoresheetScoresheetRoute: ScoresheetScoresheetRoute,
   StagesStageIdRoute: StagesStageIdRoute,
   StagesCurrentRoute: StagesCurrentRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DevicesIndexRoute: DevicesIndexRoute,
-  ScoresheetIndexRoute: ScoresheetIndexRoute,
   StagesIndexRoute: StagesIndexRoute,
   TestIndexRoute: TestIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
@@ -303,12 +259,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/devices/$deviceId",
-        "/scoresheet/$scoresheet",
         "/stages/$stageId",
         "/stages/current",
         "/dashboard/",
         "/devices/",
-        "/scoresheet/",
         "/stages/",
         "/test/",
         "/users/"
@@ -319,9 +273,6 @@ export const routeTree = rootRoute
     },
     "/devices/$deviceId": {
       "filePath": "devices/$deviceId.tsx"
-    },
-    "/scoresheet/$scoresheet": {
-      "filePath": "scoresheet/$scoresheet.tsx"
     },
     "/stages/$stageId": {
       "filePath": "stages/$stageId.tsx"
@@ -334,9 +285,6 @@ export const routeTree = rootRoute
     },
     "/devices/": {
       "filePath": "devices/index.tsx"
-    },
-    "/scoresheet/": {
-      "filePath": "scoresheet/index.tsx"
     },
     "/stages/": {
       "filePath": "stages/index.tsx"

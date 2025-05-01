@@ -43,8 +43,8 @@ export const store = configureStore({
       ),
   enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(
     rememberEnhancer(
-      window.localStorage, // or window.sessionStorage, or your own custom storage driver
-      [devicesSlice.name, usersSlice.name]
+      window.localStorage,
+      [devicesSlice.name, usersSlice.name, stagesSlice.name]
     )
   ),
   devTools: true
