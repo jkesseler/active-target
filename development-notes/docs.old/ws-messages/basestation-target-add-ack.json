@@ -1,0 +1,11 @@
+{
+  "deviceId": "{uuid}",
+  "type": "basestation/target-added",
+  "meta": {
+    "orginator": "{mac-adress}",
+    "timestamp": "{timestamp}"
+  },
+  "payload": {
+    "targetId": "{uuid}"
+  }
+}
