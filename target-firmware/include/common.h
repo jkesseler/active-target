@@ -46,8 +46,16 @@ static const char *MQTT_SERVER = "raspberrypi.local";
 static String DEFAULT_DEVICE_NAME = "IPSC Action Air Micro Target";
 static String DEFAULT_DEVICE_TYPE = DEVICE_TYPE_TARGET;
 
+// Forward declarations for core components
+class WiFiManager;
+class Settings;
+class WiFiClient;
+class PubSubClient;
+class Messages;
+class DeviceId;
+
+// Core system references (managed by main.cpp)
 extern WiFiManager wifiManager;
-extern Preferences settingsPrefs;
 extern Settings settings;
 extern WiFiClient wifiClient;
 extern PubSubClient mqttClient;
@@ -55,18 +63,14 @@ extern String uuid;
 extern Messages jsonMessages;
 extern DeviceId deviceId;
 
+// MQTT topic buffers
 extern char mqttClientId[64];
 extern char mqttRequestTopic[64];
 extern char mqttBroadcastTopic[64];
 extern char mqttResponseTopic[64];
-extern volatile unsigned long lastDebounceTime;
-extern volatile unsigned long lastReadTime;
 
+// Device configuration
 extern String deviceName;
 extern String deviceType;
-extern int SENSOR_DEBOUNCE;
-extern int SENSOR_THRESHOLD;
-extern int lastSensorDebounce;
-extern int lastSensorThreshold;
 
 #endif
