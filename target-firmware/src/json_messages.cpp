@@ -2,6 +2,7 @@
 #include "common.h"
 #include "actions.h"
 #include "date_time.h"
+#include "json_pool.h"
 #include <ArduinoJson.h>
 
 Messages::Messages() {
@@ -15,7 +16,12 @@ void Messages::begin(String uuid, String deviceName, String deviceType) {
 }
 
 String Messages::createDeviceOnlineMessage() {
-  StaticJsonDocument<768> doc;
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(MEDIUM);
+  if (!docGuard.isValid()) {
+    return "{}";  // Return empty JSON on allocation failure
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
 
@@ -27,7 +33,7 @@ String Messages::createDeviceOnlineMessage() {
 
   doc["action"] =  ACTIONS_DEVICE_ONLINE;
   doc["payload"] = payload;
-  
+
   String jsonString;
   serializeJson(doc, jsonString);
 
@@ -35,10 +41,15 @@ String Messages::createDeviceOnlineMessage() {
 }
 
 String Messages::createDeviceUpdatedMessage() {
-  StaticJsonDocument<768> doc;
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(SMALL);
+  if (!docGuard.isValid()) {
+    return "{}";
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
-  
+
   meta["timestamp"] = getISODateTime();
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
@@ -52,10 +63,15 @@ String Messages::createDeviceUpdatedMessage() {
 }
 
 String Messages::createTargetHitMessage(const char *targetZone) {
-  StaticJsonDocument<768> doc;
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(MEDIUM);
+  if (!docGuard.isValid()) {
+    return "{}";
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
-    
+
   payload["targetZone"] = targetZone;
   meta["timestamp"] = getISODateTime();
   meta["timeMillies"] = getTimeMillies();
@@ -70,14 +86,19 @@ String Messages::createTargetHitMessage(const char *targetZone) {
 }
 
 String Messages::createMessage(String action) {
-  StaticJsonDocument<768> doc;
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(SMALL);
+  if (!docGuard.isValid()) {
+    return "{}";
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
   JsonObject meta = doc.createNestedObject("meta");
 
   doc["action"] = action;
   meta["timestamp"] = getISODateTime();
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
-  
+
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -86,9 +107,14 @@ String Messages::createMessage(String action) {
 }
 
 String Messages::createMessage(String action, JsonObject payload) {
-  StaticJsonDocument<768> doc;
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(MEDIUM);
+  if (!docGuard.isValid()) {
+    return "{}";
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
   JsonObject meta = doc.createNestedObject("meta");
-  
+
   doc["action"] = action;
   doc["payload"] = payload;
   meta["timestamp"] = getISODateTime();

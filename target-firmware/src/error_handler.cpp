@@ -113,6 +113,8 @@ void ErrorHandler::setSerialLogging(bool enabled) {
 
 const char* ErrorHandler::getSeverityString(Severity severity) const {
     switch (severity) {
+        case Severity::TRACE:   return "TRACE";
+        case Severity::DEBUG:   return "DEBUG";
         case Severity::INFO:    return "INFO";
         case Severity::WARNING: return "WARNING";
         case Severity::ERROR:   return "ERROR";

@@ -11,6 +11,8 @@
 #include "hardware_abstraction.h"
 #include "error_handler.h"
 #include "settings.h"
+#include "string_builder.h"
+#include "memory_monitor.h"
 
 // Core system components
 WiFiManager wifiManager;
@@ -46,11 +48,14 @@ bool initializeSystem() {
 
     LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "System initialization started");
 
+    // Initialize memory monitoring early
+    MemoryMonitor::getInstance().initialize(true, 30000);  // Enable detailed tracking, 30s reporting
+
     // Initialize hardware abstraction layer
     HardwareAbstraction::ErrorCode halResult = hal.initialize();
     if (halResult != HardwareAbstraction::ErrorCode::SUCCESS) {
-        LOG_CRITICAL(ErrorHandler::Category::HARDWARE, 5001,
-                     String("HAL initialization failed: ") + hal.getErrorDescription(halResult));
+        String errorMsg = MessageFormatter::createErrorMessage("HAL initialization failed", 0, hal.getErrorDescription(halResult));
+        LOG_CRITICAL(ErrorHandler::Category::HARDWARE, 5001, errorMsg);
         return false;
     }
 
@@ -91,7 +96,9 @@ void onMessageReceive(char *topic, byte *message, unsigned int length) {
         return;
     }
 
-    LOG_INFO(ErrorHandler::Category::MQTT, 0, String("Message received on topic: ") + String(topic));
+    MEDIUM_STRING() topicMsg;
+    topicMsg.append("Message received on topic: ").append(topic);
+    LOG_INFO(ErrorHandler::Category::MQTT, 0, topicMsg.toString());
 
     String messageTemp;
     messageTemp.reserve(length + 1);
@@ -100,7 +107,9 @@ void onMessageReceive(char *topic, byte *message, unsigned int length) {
         messageTemp += (char)message[i];
     }
 
-    LOG_INFO(ErrorHandler::Category::MQTT, 0, String("Message content: ") + messageTemp);
+    MEDIUM_STRING() contentMsg;
+    contentMsg.append("Message content: ").append(messageTemp.c_str());
+    LOG_INFO(ErrorHandler::Category::MQTT, 0, contentMsg.toString());
 
     // Handle the message with error checking
     handleMqttMessage(messageTemp);
@@ -121,13 +130,17 @@ bool connectToMqttServer() {
 
             // Subscribe to topics
             if (mqttClient.subscribe(mqttRequestTopic)) {
-                LOG_INFO(ErrorHandler::Category::MQTT, 0, String("Subscribed to: ") + String(mqttRequestTopic));
+                MEDIUM_STRING() subMsg;
+                subMsg.append("Subscribed to: ").append(mqttRequestTopic);
+                LOG_INFO(ErrorHandler::Category::MQTT, 0, subMsg.toString());
             } else {
                 LOG_WARNING(ErrorHandler::Category::MQTT, 3005, "Failed to subscribe to request topic");
             }
 
             if (mqttClient.subscribe(mqttBroadcastTopic)) {
-                LOG_INFO(ErrorHandler::Category::MQTT, 0, String("Subscribed to: ") + String(mqttBroadcastTopic));
+                MEDIUM_STRING() subMsg;
+                subMsg.append("Subscribed to: ").append(mqttBroadcastTopic);
+                LOG_INFO(ErrorHandler::Category::MQTT, 0, subMsg.toString());
             } else {
                 LOG_WARNING(ErrorHandler::Category::MQTT, 3006, "Failed to subscribe to broadcast topic");
             }
@@ -140,9 +153,10 @@ bool connectToMqttServer() {
                 currentReconnectDelay *= 2;
             }
 
-            LOG_WARNING(ErrorHandler::Category::MQTT, 3007,
-                        String("MQTT connection failed, rc=") + String(mqttClient.state()) +
-                        String(", retry ") + String(retryCount) + String("/") + String(maxRetries));
+            MEDIUM_STRING() retryMsg;
+            retryMsg.append("MQTT connection failed, rc=").append(mqttClient.state())
+                   .append(", retry ").append(retryCount).append("/").append(maxRetries);
+            LOG_WARNING(ErrorHandler::Category::MQTT, 3007, retryMsg.toString());
 
             delay(currentReconnectDelay);
         }
@@ -173,7 +187,9 @@ void setup() {
 
     // Get gateway and sync time
     IPAddress gateway = WiFi.gatewayIP();
-    LOG_INFO(ErrorHandler::Category::NETWORK, 0, String("Gateway IP: ") + gateway.toString());
+    MEDIUM_STRING() gatewayMsg;
+    gatewayMsg.append("Gateway IP: ").append(gateway.toString().c_str());
+    LOG_INFO(ErrorHandler::Category::NETWORK, 0, gatewayMsg.toString());
 
     timeSync(gateway.toString());
     LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Time synchronization completed");
@@ -184,9 +200,17 @@ void setup() {
     deviceName = settings.getString("deviceName", DEFAULT_DEVICE_NAME);
     deviceType = settings.getString("deviceType", DEFAULT_DEVICE_TYPE);
 
-    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, String("Device UUID: ") + uuid);
-    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, String("Device Name: ") + deviceName);
-    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, String("Device Type: ") + deviceType);
+    MEDIUM_STRING() deviceMsg;
+    deviceMsg.append("Device UUID: ").append(uuid.c_str());
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, deviceMsg.toString());
+
+    deviceMsg.clear();
+    deviceMsg.append("Device Name: ").append(deviceName.c_str());
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, deviceMsg.toString());
+
+    deviceMsg.clear();
+    deviceMsg.append("Device Type: ").append(deviceType.c_str());
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, deviceMsg.toString());
 
     // Initialize JSON messages
     jsonMessages.begin(uuid, deviceName, deviceType);
@@ -267,6 +291,8 @@ void loop() {
     } else if (deviceType == DEVICE_TYPE_ACTUATOR) {
         deviceLoops->actuatorLoop();
     } else {
-        LOG_WARNING(ErrorHandler::Category::SYSTEM, 5007, String("Unknown device type: ") + deviceType);
+        SMALL_STRING() typeMsg;
+        typeMsg.append("Unknown device type: ").append(deviceType.c_str());
+        LOG_WARNING(ErrorHandler::Category::SYSTEM, 5007, typeMsg.toString());
     }
 }

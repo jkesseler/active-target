@@ -15,10 +15,12 @@ public:
      * @brief Error severity levels
      */
     enum class Severity {
-        INFO = 0,
-        WARNING = 1,
-        ERROR = 2,
-        CRITICAL = 3
+        TRACE = -1,
+        DEBUG = 0,
+        INFO = 1,
+        WARNING = 2,
+        ERROR = 3,
+        CRITICAL = 4
     };
 
     /**
@@ -151,6 +153,12 @@ private:
 extern ErrorHandler g_errorHandler;
 
 // Convenience macros for error logging
+#define LOG_TRACE(category, code, message) \
+    g_errorHandler.logError(ErrorHandler::Severity::TRACE, category, code, message)
+
+#define LOG_DEBUG(category, code, message) \
+    g_errorHandler.logError(ErrorHandler::Severity::DEBUG, category, code, message)
+
 #define LOG_INFO(category, code, message) \
     g_errorHandler.logError(ErrorHandler::Severity::INFO, category, code, message)
 

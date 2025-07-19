@@ -3,6 +3,8 @@
 #include "handleMqttMessage.h"
 #include "settings.h"
 #include "error_handler.h"
+#include "json_pool.h"
+#include "string_builder.h"
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
@@ -12,12 +14,25 @@ void handleMqttMessage(const String &jsonString) {
         return;
     }
 
-    DynamicJsonDocument doc(768);
+    // Estimate document size needed based on input size
+    JsonDocumentPool::DocumentSize size = (jsonString.length() < 200) ?
+        JsonDocumentPool::SMALL :
+        (jsonString.length() < 400) ? JsonDocumentPool::MEDIUM : JsonDocumentPool::LARGE;
+
+    auto docGuard = JsonDocumentPool::getInstance().acquireGuarded<768>(size);
+    if (!docGuard.isValid()) {
+        LOG_ERROR(ErrorHandler::Category::MQTT, 3100, "Failed to acquire JSON document from pool");
+        return;
+    }
+
+    StaticJsonDocument<768>& doc = *docGuard;
     DeserializationError error = deserializeJson(doc, jsonString);
 
     if (error) {
-        LOG_ERROR(ErrorHandler::Category::MQTT, 3102,
-                  String("JSON deserialization failed: ") + String(error.f_str()));
+        MEDIUM_STRING() errorMsg;
+        errorMsg.append("JSON deserialization failed: ");
+        errorMsg.append(error.f_str());
+        LOG_ERROR(ErrorHandler::Category::MQTT, 3102, errorMsg.c_str());
         return;
     }
 
@@ -33,7 +48,9 @@ void handleMqttMessage(const String &jsonString) {
         return;
     }
 
-    LOG_INFO(ErrorHandler::Category::MQTT, 0, String("Processing action: ") + String(action));
+    MEDIUM_STRING() actionMsg;
+    actionMsg.append("Processing action: ").append(action);
+    LOG_INFO(ErrorHandler::Category::MQTT, 0, actionMsg.toString());
 
     // Handle different actions
     if (strcmp(action, ACTION_SETTINGS_SET) == 0) {
@@ -41,7 +58,9 @@ void handleMqttMessage(const String &jsonString) {
     } else if (strcmp(action, ACTION_SETTINGS_GET) == 0) {
         handleSettingsGet(doc);
     } else {
-        LOG_WARNING(ErrorHandler::Category::MQTT, 3105, String("Unknown action: ") + String(action));
+        MEDIUM_STRING() unknownMsg;
+        unknownMsg.append("Unknown action: ").append(action);
+        LOG_WARNING(ErrorHandler::Category::MQTT, 3105, unknownMsg.toString());
     }
 }
 
@@ -65,7 +84,9 @@ void handleSettingsSet(const JsonDocument& doc) {
         const char* deviceName = payload["deviceName"];
         if (deviceName && strlen(deviceName) > 0) {
             settings.set("deviceName", deviceName);
-            LOG_INFO(ErrorHandler::Category::SETTINGS, 0, String("Updated device name to: ") + String(deviceName));
+            MEDIUM_STRING() updateMsg;
+            updateMsg.append("Updated device name to: ").append(deviceName);
+            LOG_INFO(ErrorHandler::Category::SETTINGS, 0, updateMsg.toString());
             settingsUpdated = true;
         } else {
             LOG_WARNING(ErrorHandler::Category::SETTINGS, 4101, "Invalid device name value");
@@ -79,12 +100,14 @@ void handleSettingsSet(const JsonDocument& doc) {
             int debounceValue = atoi(sensorDebounceTime);
             if (debounceValue >= 10 && debounceValue <= 1000) {
                 settings.set("sensorDebounceTime", sensorDebounceTime);
-                LOG_INFO(ErrorHandler::Category::SETTINGS, 0,
-                         String("Updated sensor debounce time to: ") + String(sensorDebounceTime));
+                MEDIUM_STRING() updateMsg;
+                updateMsg.append("Updated sensor debounce time to: ").append(sensorDebounceTime);
+                LOG_INFO(ErrorHandler::Category::SETTINGS, 0, updateMsg.toString());
                 settingsUpdated = true;
             } else {
-                LOG_WARNING(ErrorHandler::Category::SETTINGS, 4102,
-                           String("Invalid sensor debounce time value: ") + String(sensorDebounceTime));
+                MEDIUM_STRING() errorMsg;
+                errorMsg.append("Invalid sensor debounce time value: ").append(sensorDebounceTime);
+                LOG_WARNING(ErrorHandler::Category::SETTINGS, 4102, errorMsg.toString());
             }
         }
     }
@@ -96,12 +119,14 @@ void handleSettingsSet(const JsonDocument& doc) {
             int thresholdValue = atoi(sensorThreshold);
             if (thresholdValue >= 100 && thresholdValue <= 2000) {
                 settings.set("sensorThreshold", sensorThreshold);
-                LOG_INFO(ErrorHandler::Category::SETTINGS, 0,
-                         String("Updated sensor threshold to: ") + String(sensorThreshold));
+                MEDIUM_STRING() updateMsg;
+                updateMsg.append("Updated sensor threshold to: ").append(sensorThreshold);
+                LOG_INFO(ErrorHandler::Category::SETTINGS, 0, updateMsg.toString());
                 settingsUpdated = true;
             } else {
-                LOG_WARNING(ErrorHandler::Category::SETTINGS, 4103,
-                           String("Invalid sensor threshold value: ") + String(sensorThreshold));
+                MEDIUM_STRING() errorMsg;
+                errorMsg.append("Invalid sensor threshold value: ").append(sensorThreshold);
+                LOG_WARNING(ErrorHandler::Category::SETTINGS, 4103, errorMsg.toString());
             }
         }
     }
@@ -135,8 +160,9 @@ void handleSettingsGet(const JsonDocument& doc) {
         const char* settingName = payload["setting"];
         if (settingName) {
             String settingValue = settings.getString(settingName);
-            LOG_INFO(ErrorHandler::Category::SETTINGS, 0,
-                     String("Retrieved setting ") + String(settingName) + ": " + settingValue);
+            MEDIUM_STRING() retrieveMsg;
+            retrieveMsg.append("Retrieved setting ").append(settingName).append(": ").append(settingValue.c_str());
+            LOG_INFO(ErrorHandler::Category::SETTINGS, 0, retrieveMsg.toString());
 
             // TODO: Send setting value back via MQTT
             LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Settings response implementation pending");

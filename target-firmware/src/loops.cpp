@@ -4,6 +4,9 @@
 #include "common.h"
 #include "actions.h"
 #include "json_messages.h"
+#include "json_pool.h"
+#include "string_builder.h"
+#include "memory_monitor.h"
 #include <PubSubClient.h>
 
 DeviceLoops::DeviceLoops(HardwareAbstraction* hal, Messages* messages, Settings* settings,
@@ -29,8 +32,8 @@ void DeviceLoops::checkSensor(int pin, const char* targetZone) {
     HardwareAbstraction::ErrorCode result = m_hal->readSensor(pin, sensorValue);
 
     if (result != HardwareAbstraction::ErrorCode::SUCCESS) {
-        LOG_ERROR(ErrorHandler::Category::SENSOR, 2002,
-                  String("Sensor read failed on pin ") + String(pin) + ": " + m_hal->getErrorDescription(result));
+        String errorMsg = MessageFormatter::createErrorMessage("Sensor read failed on pin", pin, m_hal->getErrorDescription(result));
+        LOG_ERROR(ErrorHandler::Category::SENSOR, 2002, errorMsg);
         return;
     }
 
@@ -43,18 +46,20 @@ void DeviceLoops::checkSensor(int pin, const char* targetZone) {
 }
 
 void DeviceLoops::handleSensorTrigger(const char* targetZone, int sensorValue) {
-    LOG_INFO(ErrorHandler::Category::SENSOR, 0,
-             String("Sensor triggered on zone ") + String(targetZone) + " with value: " + String(sensorValue));
+    String triggerMsg = MessageFormatter::createSensorMessage("Sensor triggered", targetZone, sensorValue);
+    LOG_INFO(ErrorHandler::Category::SENSOR, 0, triggerMsg);
 
     // Generate and publish result message for the triggered sensor
     String resultMessage = m_messages->createTargetHitMessage(targetZone);
 
     if (!m_mqttClient->publish(m_responseTopic, resultMessage.c_str())) {
-        LOG_ERROR(ErrorHandler::Category::MQTT, 3001,
-                  String("Failed to publish sensor trigger message for zone ") + String(targetZone));
+        MEDIUM_STRING() errorMsg;
+        errorMsg.append("Failed to publish sensor trigger message for zone ").append(targetZone);
+        LOG_ERROR(ErrorHandler::Category::MQTT, 3001, errorMsg.toString());
     } else {
-        LOG_INFO(ErrorHandler::Category::MQTT, 0,
-                 String("Successfully published sensor trigger for zone ") + String(targetZone));
+        MEDIUM_STRING() successMsg;
+        successMsg.append("Successfully published sensor trigger for zone ").append(targetZone);
+        LOG_INFO(ErrorHandler::Category::MQTT, 0, successMsg.toString());
     }
 }
 
@@ -79,8 +84,8 @@ bool DeviceLoops::stopPlateLoop() {
     // Visual indication that the stop plate has been hit
     HardwareAbstraction::ErrorCode ledResult = m_hal->setLedState(0, true);
     if (ledResult != HardwareAbstraction::ErrorCode::SUCCESS) {
-        LOG_WARNING(ErrorHandler::Category::HARDWARE, 4001,
-                    String("Failed to set LED state: ") + m_hal->getErrorDescription(ledResult));
+        String errorMsg = MessageFormatter::createErrorMessage("Failed to set LED state", 0, m_hal->getErrorDescription(ledResult));
+        LOG_WARNING(ErrorHandler::Category::HARDWARE, 4001, errorMsg);
     }
 
     return result;
@@ -92,8 +97,8 @@ bool DeviceLoops::triggerLoop() {
     // Visual indication that the trigger has been triggered
     HardwareAbstraction::ErrorCode ledResult = m_hal->setLedState(1, true);
     if (ledResult != HardwareAbstraction::ErrorCode::SUCCESS) {
-        LOG_WARNING(ErrorHandler::Category::HARDWARE, 4002,
-                    String("Failed to set trigger LED state: ") + m_hal->getErrorDescription(ledResult));
+        String errorMsg = MessageFormatter::createErrorMessage("Failed to set trigger LED state", 0, m_hal->getErrorDescription(ledResult));
+        LOG_WARNING(ErrorHandler::Category::HARDWARE, 4002, errorMsg);
     }
 
     return result;
@@ -107,6 +112,12 @@ void DeviceLoops::actuatorLoop() {
 
 void DeviceLoops::checkSettingsLoop() {
     updateSettings();
+
+    // Check JSON pool health periodically
+    JsonDocumentPool::getInstance().checkPoolHealth();
+
+    // Update memory monitoring
+    MemoryMonitor::getInstance().update();
 }
 
 bool DeviceLoops::publishMessage(const String& action) {
@@ -119,8 +130,9 @@ bool DeviceLoops::publishMessage(const String& action) {
     bool isPublished = m_mqttClient->publish(m_responseTopic, message.c_str());
 
     if (!isPublished) {
-        LOG_ERROR(ErrorHandler::Category::MQTT, 3002,
-                  String("Failed to publish message with action: ") + action);
+        MEDIUM_STRING() errorMsg;
+        errorMsg.append("Failed to publish message with action: ").append(action.c_str());
+        LOG_ERROR(ErrorHandler::Category::MQTT, 3002, errorMsg.toString());
     }
 
     return isPublished;
@@ -136,15 +148,15 @@ void DeviceLoops::updateSettings() {
     if (m_lastSensorDebounce != newSensorDebounce) {
         m_lastSensorDebounce = newSensorDebounce;
         m_sensorDebounce = newSensorDebounce;
-        LOG_INFO(ErrorHandler::Category::SETTINGS, 0,
-                 String("Updated sensor debounce to: ") + String(newSensorDebounce));
+        String updateMsg = MessageFormatter::createStatusMessage("Updated sensor debounce to", "", newSensorDebounce);
+        LOG_INFO(ErrorHandler::Category::SETTINGS, 0, updateMsg);
     }
 
     int newSensorThreshold = m_settings->getInt("sensorThreshold", DEFAULT_SENSOR_THRESHOLD);
     if (m_lastSensorThreshold != newSensorThreshold) {
         m_lastSensorThreshold = newSensorThreshold;
         m_sensorThreshold = newSensorThreshold;
-        LOG_INFO(ErrorHandler::Category::SETTINGS, 0,
-                 String("Updated sensor threshold to: ") + String(newSensorThreshold));
+        String updateMsg = MessageFormatter::createStatusMessage("Updated sensor threshold to", "", newSensorThreshold);
+        LOG_INFO(ErrorHandler::Category::SETTINGS, 0, updateMsg);
     }
 }
