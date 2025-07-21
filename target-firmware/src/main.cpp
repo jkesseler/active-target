@@ -33,7 +33,7 @@ char mqttResponseTopic[64];
 
 // Device configuration
 String deviceName;
-String deviceType;
+String deviceRole;
 
 // Timing variables
 volatile unsigned long lastReadTime;
@@ -68,7 +68,7 @@ bool initializeSystem() {
 
     lastReadTime = 0;
     deviceName = DEFAULT_DEVICE_NAME;
-    deviceType = DEVICE_TYPE_TARGET;
+    deviceRole = DEVICE_ROLE_TARGET;
 
     // Create device loops instance with dependency injection
     deviceLoops = new DeviceLoops(&hal, &jsonMessages, &settings, &mqttClient, mqttResponseTopic);
@@ -198,7 +198,7 @@ void setup() {
     settings.begin();
     uuid = deviceId.get();
     deviceName = settings.getString("deviceName", DEFAULT_DEVICE_NAME);
-    deviceType = settings.getString("deviceType", DEFAULT_DEVICE_TYPE);
+    deviceRole = settings.getString("deviceRole", DEFAULT_DEVICE_ROLE);
 
     MEDIUM_STRING() deviceMsg;
     deviceMsg.append("Device UUID: ").append(uuid.c_str());
@@ -209,11 +209,11 @@ void setup() {
     LOG_INFO(ErrorHandler::Category::SYSTEM, 0, deviceMsg.toString());
 
     deviceMsg.clear();
-    deviceMsg.append("Device Type: ").append(deviceType.c_str());
+    deviceMsg.append("Device Role: ").append(deviceRole.c_str());
     LOG_INFO(ErrorHandler::Category::SYSTEM, 0, deviceMsg.toString());
 
     // Initialize JSON messages
-    jsonMessages.begin(uuid, deviceName, deviceType);
+    jsonMessages.begin(uuid, deviceName, deviceRole);
 
     // Setup MQTT
     mqttClient.setServer(MQTT_SERVER, 1883);
@@ -278,21 +278,21 @@ void loop() {
         return;
     }
 
-    if (deviceType == DEVICE_TYPE_TARGET) {
+    if (deviceRole == DEVICE_ROLE_TARGET) {
         deviceLoops->targetLoop();
-    } else if (deviceType == DEVICE_TYPE_POPPER) {
+    } else if (deviceRole == DEVICE_ROLE_POPPER) {
         deviceLoops->popperLoop();
-    } else if (deviceType == DEVICE_TYPE_NOSHOOT) {
+    } else if (deviceRole == DEVICE_ROLE_NOSHOOT) {
         deviceLoops->noShootLoop();
-    } else if (deviceType == DEVICE_TYPE_STOP_PLATE) {
+    } else if (deviceRole == DEVICE_ROLE_STOP_PLATE) {
         deviceLoops->stopPlateLoop();
-    } else if (deviceType == DEVICE_TYPE_TRIGGER) {
+    } else if (deviceRole == DEVICE_ROLE_TRIGGER) {
         deviceLoops->triggerLoop();
-    } else if (deviceType == DEVICE_TYPE_ACTUATOR) {
+    } else if (deviceRole == DEVICE_ROLE_ACTUATOR) {
         deviceLoops->actuatorLoop();
     } else {
         SMALL_STRING() typeMsg;
-        typeMsg.append("Unknown device type: ").append(deviceType.c_str());
+        typeMsg.append("Unknown device role: ").append(deviceRole.c_str());
         LOG_WARNING(ErrorHandler::Category::SYSTEM, 5007, typeMsg.toString());
     }
 }

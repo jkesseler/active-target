@@ -6,7 +6,7 @@ class Messages
 {
   public:
     Messages();
-    void begin(String uuid, String deviceName, String deviceType);
+    void begin(String uuid, String deviceName, String deviceRole);
     String createDeviceOnlineMessage();
     String createTargetHitMessage(const char *targetZone);
     String createMessage(String action);
@@ -15,7 +15,7 @@ class Messages
 
   private: String UUID;
   private: String deviceName;
-  private: String deviceType;
+  private: String deviceRole;
 };
 
 

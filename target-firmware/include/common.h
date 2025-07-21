@@ -31,12 +31,12 @@
 #define TARGET_ZONE_POPPER "POPPER"
 
 // These values are shared with PWA app
-#define DEVICE_TYPE_TARGET "TARGET"
-#define DEVICE_TYPE_POPPER "POPPER"
-#define DEVICE_TYPE_NOSHOOT "NOSHOOT"
-#define DEVICE_TYPE_STOP_PLATE "STOP_PLATE"
-#define DEVICE_TYPE_TRIGGER "TRIGGER"
-#define DEVICE_TYPE_ACTUATOR "ACTUATOR"
+#define DEVICE_ROLE_TARGET "TARGET"
+#define DEVICE_ROLE_POPPER "POPPER"
+#define DEVICE_ROLE_NOSHOOT "NOSHOOT"
+#define DEVICE_ROLE_STOP_PLATE "STOP_PLATE"
+#define DEVICE_ROLE_TRIGGER "TRIGGER"
+#define DEVICE_ROLE_ACTUATOR "ACTUATOR"
 
 // TODO: Get and Set from Settings
 static const char *EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
@@ -44,7 +44,7 @@ static const char *ssid = "pewpewpew";
 static const char *password = "pewpewpew";
 static const char *MQTT_SERVER = "raspberrypi.local";
 static String DEFAULT_DEVICE_NAME = "IPSC Action Air Micro Target";
-static String DEFAULT_DEVICE_TYPE = DEVICE_TYPE_TARGET;
+static String DEFAULT_DEVICE_ROLE = DEVICE_ROLE_TARGET;
 
 // Forward declarations for core components
 class WiFiManager;
@@ -71,6 +71,6 @@ extern char mqttResponseTopic[64];
 
 // Device configuration
 extern String deviceName;
-extern String deviceType;
+extern String deviceRole;
 
 #endif

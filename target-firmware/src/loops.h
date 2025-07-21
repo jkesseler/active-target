@@ -10,9 +10,9 @@ class Settings;
 class PubSubClient;
 
 /**
- * @brief Device loop controller handling different device types
+ * @brief Device loop controller handling different device roles
  *
- * This class manages the main loop functions for different device types
+ * This class manages the main loop functions for different device roles
  * including targets, poppers, no-shoot zones, stop plates, triggers, and actuators.
  */
 class DeviceLoops {
@@ -28,7 +28,7 @@ public:
     DeviceLoops(HardwareAbstraction* hal, Messages* messages, Settings* settings,
                 PubSubClient* mqttClient, const char* responseTopic);
 
-    // Main loop functions for different device types
+    // Main loop functions for different device roles
     void targetLoop();
     void popperLoop();
     bool noShootLoop();

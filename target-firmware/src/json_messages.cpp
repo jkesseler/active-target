@@ -9,10 +9,10 @@ Messages::Messages() {
 
 }
 
-void Messages::begin(String uuid, String deviceName, String deviceType) {
+void Messages::begin(String uuid, String deviceName, String deviceRole) {
   this->UUID = uuid;
   this->deviceName = deviceName;
-  this->deviceType = deviceType;
+  this->deviceRole = deviceRole;
 }
 
 String Messages::createDeviceOnlineMessage() {
@@ -29,7 +29,7 @@ String Messages::createDeviceOnlineMessage() {
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
   payload["name"] = this->deviceName;
-  payload["type"] = this->deviceType;
+  payload["role"] = this->deviceRole;
 
   doc["action"] =  ACTIONS_DEVICE_ONLINE;
   doc["payload"] = payload;
