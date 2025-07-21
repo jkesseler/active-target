@@ -3,8 +3,8 @@
 
 // Static pin definitions
 const int HardwareAbstraction::SENSOR_PINS[] = {SENSOR_PIN_A, SENSOR_PIN_B, SENSOR_PIN_C, SENSOR_PIN_D};
-const int HardwareAbstraction::LED_PINS[] = {2, 8, 9, 10}; // Example LED pins
-const int HardwareAbstraction::ACTUATOR_PINS[] = {5, 6, 7, 18}; // Example actuator pins
+// const int HardwareAbstraction::LED_PINS[] = {2, 8, 9, 10}; // Example LED pins
+const int HardwareAbstraction::LED_PINS[] = {8}; // Internal LED pin
 
 HardwareAbstraction::HardwareAbstraction() {
     // Constructor implementation
@@ -39,21 +39,6 @@ HardwareAbstraction::ErrorCode HardwareAbstraction::setLedState(int ledId, bool 
     return ErrorCode::SUCCESS;
 }
 
-HardwareAbstraction::ErrorCode HardwareAbstraction::activateActuator(int actuatorId, unsigned long duration) {
-    if (actuatorId < 0 || actuatorId >= MAX_ACTUATORS) {
-        return ErrorCode::INVALID_PIN;
-    }
-
-    digitalWrite(ACTUATOR_PINS[actuatorId], HIGH);
-
-    if (duration > 0) {
-        delay(duration);
-        digitalWrite(ACTUATOR_PINS[actuatorId], LOW);
-    }
-
-    return ErrorCode::SUCCESS;
-}
-
 unsigned long HardwareAbstraction::getCurrentTime() const {
     return millis();
 }
@@ -70,8 +55,6 @@ const char* HardwareAbstraction::getErrorDescription(ErrorCode error) const {
             return "Invalid pin number";
         case ErrorCode::SENSOR_FAULT:
             return "Sensor fault or read error";
-        case ErrorCode::ACTUATOR_FAULT:
-            return "Actuator fault or write error";
         case ErrorCode::TIMEOUT:
             return "Operation timeout";
         default:
@@ -98,11 +81,5 @@ void HardwareAbstraction::initializePins() {
     for (int i = 0; i < MAX_LEDS; i++) {
         pinMode(LED_PINS[i], OUTPUT);
         digitalWrite(LED_PINS[i], LOW);
-    }
-
-    // Initialize actuator pins
-    for (int i = 0; i < MAX_ACTUATORS; i++) {
-        pinMode(ACTUATOR_PINS[i], OUTPUT);
-        digitalWrite(ACTUATOR_PINS[i], LOW);
     }
 }

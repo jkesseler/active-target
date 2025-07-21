@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 /**
- * @brief Hardware abstraction layer for sensors and actuators
+ * @brief Hardware abstraction layer for sensors
  *
  * This class provides a clean interface for hardware operations,
  * abstracting away direct GPIO access and enabling easier testing.
@@ -18,7 +18,6 @@ public:
         SUCCESS = 0,
         INVALID_PIN = 1,
         SENSOR_FAULT = 2,
-        ACTUATOR_FAULT = 3,
         TIMEOUT = 4
     };
 
@@ -50,14 +49,6 @@ public:
     ErrorCode setLedState(int ledId, bool state);
 
     /**
-     * @brief Activate actuator (solenoid, horn, etc.)
-     * @param actuatorId Actuator identifier
-     * @param duration Duration in milliseconds (0 for toggle)
-     * @return ErrorCode indicating success or failure
-     */
-    ErrorCode activateActuator(int actuatorId, unsigned long duration = 0);
-
-    /**
      * @brief Get current system time in milliseconds
      * @return Current time in milliseconds
      */
@@ -81,10 +72,8 @@ private:
     // Hardware configuration
     static const int SENSOR_PINS[];
     static const int LED_PINS[];
-    static const int ACTUATOR_PINS[];
     static const int MAX_SENSORS = 4;
-    static const int MAX_LEDS = 4;
-    static const int MAX_ACTUATORS = 4;
+    static const int MAX_LEDS = 1;
 
     // Private helper functions
     bool validatePin(int pin, const int* validPins, int maxPins) const;

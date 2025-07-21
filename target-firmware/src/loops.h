@@ -13,7 +13,7 @@ class PubSubClient;
  * @brief Device loop controller handling different device roles
  *
  * This class manages the main loop functions for different device roles
- * including targets, poppers, no-shoot zones, stop plates, triggers, and actuators.
+ * including targets, poppers, no-shoot zones and stop plates
  */
 class DeviceLoops {
 public:
