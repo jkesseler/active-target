@@ -53,6 +53,7 @@ String Messages::createDeviceUpdatedMessage() {
   meta["timestamp"] = getISODateTime();
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
+  meta["role"] = this->deviceRole;
   doc["payload"] = payload;
   doc["action"] = ACTIONS_DEVICE_UPDATED;
 
@@ -76,8 +77,9 @@ String Messages::createTargetHitMessage(const char *targetZone) {
   meta["timestamp"] = getISODateTime();
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
+  meta["role"] = this->deviceRole;
   doc["payload"] = payload;
-  doc["action"] = ACTIONS_DEVICE_TARGET_HIT;
+  doc["action"] = SENSOR_TRIGGERED;
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -98,7 +100,7 @@ String Messages::createMessage(String action) {
   meta["timestamp"] = getISODateTime();
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
-
+  meta["role"] = this->deviceRole;
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -120,6 +122,7 @@ String Messages::createMessage(String action, JsonObject payload) {
   meta["timestamp"] = getISODateTime();
   meta["timeMillies"] = getTimeMillies();
   meta["id"] = this->UUID;
+  meta["role"] = this->deviceRole;
 
   String jsonString;
   serializeJson(doc, jsonString);

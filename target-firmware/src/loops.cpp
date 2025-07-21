@@ -74,40 +74,12 @@ void DeviceLoops::popperLoop() {
     checkSensor(SENSOR_PIN_A, TARGET_ZONE_POPPER);
 }
 
-bool DeviceLoops::noShootLoop() {
-    return publishMessage(ACTION_DEVICE_NOSHOOT_HIT);
+void DeviceLoops::noShootLoop() {
+  checkSensor(SENSOR_PIN_A, TARGET_ZONE_NO_SHOOT);
 }
 
-bool DeviceLoops::stopPlateLoop() {
-    bool result = publishMessage(ACTION_DEVICE_NOSHOOT_HIT);
-
-    // Visual indication that the stop plate has been hit
-    HardwareAbstraction::ErrorCode ledResult = m_hal->setLedState(0, true);
-    if (ledResult != HardwareAbstraction::ErrorCode::SUCCESS) {
-        String errorMsg = MessageFormatter::createErrorMessage("Failed to set LED state", 0, m_hal->getErrorDescription(ledResult));
-        LOG_WARNING(ErrorHandler::Category::HARDWARE, 4001, errorMsg);
-    }
-
-    return result;
-}
-
-bool DeviceLoops::triggerLoop() {
-    bool result = publishMessage(ACTION_DEVICE_TRIGGERED);
-
-    // Visual indication that the trigger has been triggered
-    HardwareAbstraction::ErrorCode ledResult = m_hal->setLedState(1, true);
-    if (ledResult != HardwareAbstraction::ErrorCode::SUCCESS) {
-        String errorMsg = MessageFormatter::createErrorMessage("Failed to set trigger LED state", 0, m_hal->getErrorDescription(ledResult));
-        LOG_WARNING(ErrorHandler::Category::HARDWARE, 4002, errorMsg);
-    }
-
-    return result;
-}
-
-void DeviceLoops::actuatorLoop() {
-    // TODO: Implement actuator message handling
-    // This will be implemented in a future phase
-    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Actuator loop running - implementation pending");
+void DeviceLoops::stopPlateLoop() {
+  checkSensor(SENSOR_PIN_A, TARGET_ZONE_STOP_PLATE);
 }
 
 void DeviceLoops::checkSettingsLoop() {

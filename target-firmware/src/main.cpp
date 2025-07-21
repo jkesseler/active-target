@@ -277,10 +277,6 @@ void loop() {
         deviceLoops->noShootLoop();
     } else if (deviceRole == DEVICE_ROLE_STOP_PLATE) {
         deviceLoops->stopPlateLoop();
-    } else if (deviceRole == DEVICE_ROLE_TRIGGER) {
-        deviceLoops->triggerLoop();
-    } else if (deviceRole == DEVICE_ROLE_ACTUATOR) {
-        deviceLoops->actuatorLoop();
     } else {
         SMALL_STRING() typeMsg;
         typeMsg.append("Unknown device role: ").append(deviceRole.c_str());

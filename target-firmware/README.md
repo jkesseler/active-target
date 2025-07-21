@@ -51,7 +51,7 @@ The project uses PlatformIO for build management. Use the full path to the Platf
 
 ```powershell
 # For Windows PowerShell (recommended):
-& "C:\Users\Jorgen\.platformio\penv\Scripts\platformio.exe" run
+& "platformio.exe" run
 
 # Alternative commands:
 platformio run                    # If PlatformIO is in PATH
@@ -62,16 +62,16 @@ pio run                           # Short alias if available
 
 ```powershell
 # Clean build
-& "C:\Users\Jorgen\.platformio\penv\Scripts\platformio.exe" run -t clean
+& "platformio.exe" run -t clean
 
 # Upload to device
-& "C:\Users\Jorgen\.platformio\penv\Scripts\platformio.exe" run -t upload
+& "platformio.exe" run -t upload
 
 # Monitor serial output
-& "C:\Users\Jorgen\.platformio\penv\Scripts\platformio.exe" device monitor
+& "platformio.exe" device monitor
 
 # Build with verbose output
-& "C:\Users\Jorgen\.platformio\penv\Scripts\platformio.exe" run -v
+& "platformio.exe" run -v
 ```
 
 ### VS Code Integration
@@ -253,7 +253,5 @@ Configuration is managed through:
 
 **Build Command Reference:**
 ```powershell
-& "C:\Users\Jorgen\.platformio\penv\Scripts\platformio.exe" run
+& "platformio.exe" run
 ```
-
-For the most up-to-date build and memory usage information, see `PHASE_2A_IMPLEMENTATION_STATUS.md`.

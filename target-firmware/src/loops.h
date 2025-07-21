@@ -31,10 +31,8 @@ public:
     // Main loop functions for different device roles
     void targetLoop();
     void popperLoop();
-    bool noShootLoop();
-    bool stopPlateLoop();
-    bool triggerLoop();
-    void actuatorLoop();
+    void noShootLoop();
+    void stopPlateLoop();
     void checkSettingsLoop();
 
 private:

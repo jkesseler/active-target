@@ -11,7 +11,7 @@ param(
 )
 
 # PlatformIO executable path
-$PlatformIOPath = "C:\Users\Jorgen\.platformio\penv\Scripts\platformio.exe"
+$PlatformIOPath = "platformio.exe"
 
 # Check if PlatformIO exists
 if (-not (Test-Path $PlatformIOPath)) {
