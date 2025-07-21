@@ -207,15 +207,6 @@ public:
      * @return Formatted status message
      */
     static String createStatusMessage(const char* component, const char* status, int value = -1);
-
-    /**
-     * @brief Create a connection message
-     * @param protocol Protocol name (MQTT, WiFi, etc.)
-     * @param endpoint Endpoint or address
-     * @param status Connection status
-     * @return Formatted connection message
-     */
-    static String createConnectionMessage(const char* protocol, const char* endpoint, const char* status);
 };
 
 /**

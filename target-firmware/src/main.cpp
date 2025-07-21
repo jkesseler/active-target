@@ -81,15 +81,6 @@ bool initializeSystem() {
     return true;
 }
 
-void cleanupSystem() {
-    if (deviceLoops) {
-        delete deviceLoops;
-        deviceLoops = nullptr;
-    }
-    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "System cleanup completed");
-}
-
-
 void onMessageReceive(char *topic, byte *message, unsigned int length) {
     if (!topic || !message || length == 0) {
         LOG_ERROR(ErrorHandler::Category::MQTT, 3003, "Invalid MQTT message received");

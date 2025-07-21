@@ -155,9 +155,3 @@ String MessageFormatter::createStatusMessage(const char* component, const char* 
     }
     return sb.toString();
 }
-
-String MessageFormatter::createConnectionMessage(const char* protocol, const char* endpoint, const char* status) {
-    StringBuilder sb(128);
-    sb.append(protocol).append(" connection to ").append(endpoint).append(": ").append(status);
-    return sb.toString();
-}
