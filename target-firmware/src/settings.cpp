@@ -11,7 +11,7 @@ Settings::Settings() {
 
 }
 
-void Settings::begin() {
+void Settings::initialize() {
   std::map<String, String> cache;
   this->cache = cache;
 }
@@ -19,7 +19,7 @@ void Settings::begin() {
 String Settings::readStringFromFlash(String key) {
   settingsPrefs.begin(SETTINGS_NAMESPACE, true);
   String value = settingsPrefs.getString(key.c_str(), "");
-  
+
   settingsPrefs.end();
 
   if (value != "") {

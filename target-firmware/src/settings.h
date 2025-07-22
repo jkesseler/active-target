@@ -6,9 +6,9 @@
 
 class Settings {
 public:
-  
+
   Settings();
-  void begin();
+  void initialize();
   // Methods for String type
   String getString(String key, String defaultValue = "");
   void set(String key, String value);

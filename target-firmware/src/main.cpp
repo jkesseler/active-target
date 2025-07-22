@@ -2,27 +2,29 @@
 #include <PubSubClient.h>
 #include <WiFiManager.h>
 
-#include "DeviceId.h"
+#include "deviceId.h"
 #include "common.h"
+#include "string_builder.h"
 #include "date_time.h"
+#include "error_handler.h"
+#include "hardware_abstraction.h"
+#include "memory_monitor.h"
+#include "string_builder.h"
+#include "settings.h"
 #include "handleMqttMessage.h"
 #include "json_messages.h"
 #include "loops.h"
-#include "hardware_abstraction.h"
-#include "error_handler.h"
-#include "settings.h"
-#include "string_builder.h"
-#include "memory_monitor.h"
 
-// Core system components
+// // Core system components
 WiFiManager wifiManager;
+HardwareAbstraction hal;
 Settings settings;
 DeviceId deviceId;
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
 String uuid;
 Messages jsonMessages;
-HardwareAbstraction hal;
+
 DeviceLoops* deviceLoops = nullptr;
 
 // MQTT configuration
@@ -186,7 +188,8 @@ void setup() {
     LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Time synchronization completed");
 
     // Initialize settings and device ID
-    settings.begin();
+    settings.initialize();
+    deviceId.initialize();
     uuid = deviceId.get();
     deviceName = settings.getString("deviceName", DEFAULT_DEVICE_NAME);
     deviceRole = settings.getString("deviceRole", DEFAULT_DEVICE_ROLE);

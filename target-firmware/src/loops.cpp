@@ -5,8 +5,8 @@
 #include "actions.h"
 #include "json_messages.h"
 #include "json_pool.h"
-#include "string_builder.h"
 #include "memory_monitor.h"
+#include "string_builder.h"
 #include <PubSubClient.h>
 
 DeviceLoops::DeviceLoops(HardwareAbstraction* hal, Messages* messages, Settings* settings,
@@ -89,7 +89,7 @@ void DeviceLoops::checkSettingsLoop() {
     JsonDocumentPool::getInstance().checkPoolHealth();
 
     // Update memory monitoring
-    MemoryMonitor::getInstance().update();
+    // MemoryMonitor::getInstance().update();
 }
 
 bool DeviceLoops::publishMessage(const String& action) {

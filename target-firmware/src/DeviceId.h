@@ -6,6 +6,7 @@
 class DeviceId {
 public:
   DeviceId();
+  void initialize();
   String get();
 
 private:

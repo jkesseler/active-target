@@ -2,6 +2,8 @@
 #define AT_COMMON
 #include "DeviceId.h"
 #include "date_time.h"
+#include "memory_monitor.h"
+#include "string_builder.h"
 #include "handleMqttMessage.h"
 #include "json_messages.h"
 #include "settings.h"
