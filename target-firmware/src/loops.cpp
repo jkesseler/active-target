@@ -7,6 +7,7 @@
 #include "json_pool.h"
 #include "memory_monitor.h"
 #include "string_builder.h"
+#include "date_time.h"
 #include <PubSubClient.h>
 
 DeviceLoops::DeviceLoops(HardwareAbstraction* hal, Messages* messages, Settings* settings,
@@ -89,7 +90,26 @@ void DeviceLoops::checkSettingsLoop() {
     JsonDocumentPool::getInstance().checkPoolHealth();
 
     // Update memory monitoring
-    // MemoryMonitor::getInstance().update();
+    MemoryMonitor::getInstance().update();
+
+    // Monitor time sync status
+    static unsigned long lastTimeSyncCheck = 0;
+    unsigned long currentTime = millis();
+
+    // Check time sync status every 5 minutes
+    if (currentTime - lastTimeSyncCheck > 300000) {
+        lastTimeSyncCheck = currentTime;
+
+        if (!isTimeSynced()) {
+            unsigned long timeSinceSync = getTimeSinceLastSync();
+            if (timeSinceSync == ULONG_MAX) {
+                LOG_WARNING(ErrorHandler::Category::SYSTEM, 4004, "Time has never been synchronized");
+            } else {
+                String warnMsg = String("Time sync lost - ") + String(timeSinceSync / 1000) + " seconds since last sync";
+                LOG_WARNING(ErrorHandler::Category::SYSTEM, 4005, warnMsg);
+            }
+        }
+    }
 }
 
 bool DeviceLoops::publishMessage(const String& action) {

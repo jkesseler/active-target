@@ -42,8 +42,8 @@ volatile unsigned long lastReadTime;
 
 
 bool initializeSystem() {
-    // Initialize error handler first
-    if (!g_errorHandler.initialize(true, false)) {
+    // Initialize error handler first with LED indicator enabled
+    if (!g_errorHandler.initialize(true, false, true)) {
         Serial.println("ERROR: Failed to initialize error handler");
         return false;
     }
@@ -60,6 +60,9 @@ bool initializeSystem() {
         LOG_CRITICAL(ErrorHandler::Category::HARDWARE, 5001, errorMsg);
         return false;
     }
+
+    // Set hardware abstraction for error handler LED control
+    g_errorHandler.setHardwareAbstraction(&hal);
 
     // Initialize core components
     uuid = EMPTY_UUID;
@@ -178,14 +181,19 @@ void setup() {
         LOG_ERROR(ErrorHandler::Category::NETWORK, 6001, "Failed to connect to WiFi");
     }
 
-    // Get gateway and sync time
+    // Get gateway for initial time sync
     IPAddress gateway = WiFi.gatewayIP();
     MEDIUM_STRING() gatewayMsg;
     gatewayMsg.append("Gateway IP: ").append(gateway.toString().c_str());
     LOG_INFO(ErrorHandler::Category::NETWORK, 0, gatewayMsg.toString());
 
-    timeSync(gateway.toString());
-    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Time synchronization completed");
+    // Perform initial time synchronization (blocking)
+    bool initialSyncResult = timeSync(gateway.toString());
+    if (initialSyncResult) {
+        LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Initial time synchronization completed successfully");
+    } else {
+        LOG_ERROR(ErrorHandler::Category::SYSTEM, 4008, "Initial time synchronization failed");
+    }
 
     // Initialize settings and device ID
     settings.initialize();
@@ -209,6 +217,17 @@ void setup() {
     // Initialize JSON messages
     jsonMessages.begin(uuid, deviceName, deviceRole);
 
+    // Initialize time synchronization with gateway IP
+    if (gateway != IPAddress(0, 0, 0, 0)) {
+        initializeTimeSync(gateway.toString());
+        LOG_INFO(ErrorHandler::Category::SYSTEM, 0, String("Time sync initialized with gateway: ") + gateway.toString());
+    } else {
+        LOG_ERROR(ErrorHandler::Category::SYSTEM, 4006, "Cannot initialize time sync - invalid gateway IP");
+        // Fallback to public NTP server
+        initializeTimeSync("pool.ntp.org");
+        LOG_WARNING(ErrorHandler::Category::SYSTEM, 4007, "Time sync fallback to pool.ntp.org");
+    }
+
     // Setup MQTT
     mqttClient.setServer(MQTT_SERVER, 1883);
     mqttClient.setCallback(onMessageReceive);
@@ -230,6 +249,13 @@ void setup() {
     }
 
     LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Setup completed successfully");
+
+    // Test LED error signaling (remove these lines after testing)
+    // LOG_WARNING(ErrorHandler::Category::SYSTEM, 9001, "Test WARNING - LED should flash 2 times");
+    // delay(2000);
+    // LOG_ERROR(ErrorHandler::Category::SYSTEM, 9002, "Test ERROR - LED should flash 3 times");
+    // delay(2000);
+    // LOG_CRITICAL(ErrorHandler::Category::SYSTEM, 9003, "Test CRITICAL - LED should flash 4 times");
 }
 
 void loop() {
@@ -257,6 +283,9 @@ void loop() {
 
     // Process MQTT messages
     mqttClient.loop();
+
+    // Periodic time synchronization (non-blocking)
+    periodicTimeSync();
 
     // Check settings periodically
     if (currentTime - lastReadTime > 500) {

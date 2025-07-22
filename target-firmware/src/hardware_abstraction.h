@@ -73,7 +73,7 @@ private:
     static const int SENSOR_PINS[];
     static const int LED_PINS[];
     static const int MAX_SENSORS = 4;
-    static const int MAX_LEDS = 1;
+    static const int MAX_LEDS = 4;
 
     // Private helper functions
     bool validatePin(int pin, const int* validPins, int maxPins) const;

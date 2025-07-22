@@ -3,8 +3,7 @@
 
 // Static pin definitions
 const int HardwareAbstraction::SENSOR_PINS[] = {SENSOR_PIN_A, SENSOR_PIN_B, SENSOR_PIN_C, SENSOR_PIN_D};
-// const int HardwareAbstraction::LED_PINS[] = {2, 8, 9, 10}; // Example LED pins
-const int HardwareAbstraction::LED_PINS[] = {8}; // Internal LED pin
+const int HardwareAbstraction::LED_PINS[] = {2, 8, 9, 10}; // Example LED pins
 
 HardwareAbstraction::HardwareAbstraction() {
     // Constructor implementation

@@ -1,4 +1,5 @@
 #include "error_handler.h"
+#include "hardware_abstraction.h"
 #include <PubSubClient.h>
 
 // Global error handler instance
@@ -9,7 +10,9 @@ ErrorHandler::ErrorHandler() :
     m_currentIndex(0),
     m_serialEnabled(true),
     m_mqttEnabled(false),
+    m_ledEnabled(false),
     m_mqttClient(nullptr),
+    m_hardwareAbstraction(nullptr),
     m_criticalErrorCount(0) {
 
     // Initialize error array
@@ -18,12 +21,17 @@ ErrorHandler::ErrorHandler() :
     }
 }
 
-bool ErrorHandler::initialize(bool enableSerial, bool enableMqtt) {
+bool ErrorHandler::initialize(bool enableSerial, bool enableMqtt, bool enableLedIndicator) {
     m_serialEnabled = enableSerial;
     m_mqttEnabled = enableMqtt;
+    m_ledEnabled = enableLedIndicator;
 
     if (m_serialEnabled) {
         Serial.println("[ERROR_HANDLER] Initialized with serial logging enabled");
+    }
+
+    if (m_ledEnabled) {
+        Serial.println("[ERROR_HANDLER] Initialized with LED indicator enabled (pin 8)");
     }
 
     return true;
@@ -56,6 +64,10 @@ bool ErrorHandler::logError(Severity severity, Category category, int code, cons
 
     if (m_mqttEnabled && m_mqttClient) {
         writeToMqtt(error);
+    }
+
+    if (m_ledEnabled && m_hardwareAbstraction) {
+        flashLedForError(severity);
     }
 
     return true;
@@ -109,6 +121,10 @@ void ErrorHandler::setMqttReporting(void* mqttClient, const char* topic) {
 
 void ErrorHandler::setSerialLogging(bool enabled) {
     m_serialEnabled = enabled;
+}
+
+void ErrorHandler::setHardwareAbstraction(void* hal) {
+    m_hardwareAbstraction = hal;
 }
 
 const char* ErrorHandler::getSeverityString(Severity severity) const {
@@ -178,4 +194,52 @@ String ErrorHandler::formatErrorMessage(const Error& error) {
     json += "\"timestamp\":" + String(error.timestamp);
     json += "}";
     return json;
+}
+
+void ErrorHandler::flashLedForError(Severity severity) {
+    if (!m_hardwareAbstraction) {
+        return;
+    }
+
+    int flashCount = 0;
+    switch (severity) {
+        case Severity::WARNING:
+            flashCount = 2;
+            break;
+        case Severity::ERROR:
+            flashCount = 3;
+            break;
+        case Severity::CRITICAL:
+            flashCount = 4;
+            break;
+        default:
+            return; // No LED indication for other severity levels
+    }
+
+    flashLed(flashCount);
+}
+
+void ErrorHandler::flashLed(int times) {
+    if (!m_hardwareAbstraction) {
+        return;
+    }
+
+    HardwareAbstraction* hal = static_cast<HardwareAbstraction*>(m_hardwareAbstraction);
+
+    // Get current LED state to restore later
+    // Since we can't read the current state, we'll assume it's OFF
+    // and restore to OFF after flashing
+
+    for (int i = 0; i < times; i++) {
+        // Turn LED on
+        hal->setLedState(ERROR_LED_ID, true);
+        delay(200); // 200ms on
+
+        // Turn LED off
+        hal->setLedState(ERROR_LED_ID, false);
+        delay(200); // 200ms off between flashes
+    }
+
+    // Ensure LED is returned to OFF state
+    hal->setLedState(ERROR_LED_ID, false);
 }

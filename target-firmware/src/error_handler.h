@@ -55,9 +55,10 @@ public:
      * @brief Initialize error handler
      * @param enableSerial Enable serial logging
      * @param enableMqtt Enable MQTT error reporting
+     * @param enableLedIndicator Enable LED indicator for errors (pin 8)
      * @return true if initialization successful
      */
-    bool initialize(bool enableSerial = true, bool enableMqtt = false);
+    bool initialize(bool enableSerial = true, bool enableMqtt = false, bool enableLedIndicator = true);
 
     /**
      * @brief Log an error
@@ -117,6 +118,12 @@ public:
     void setSerialLogging(bool enabled);
 
     /**
+     * @brief Set hardware abstraction for LED control
+     * @param hal Hardware abstraction instance
+     */
+    void setHardwareAbstraction(void* hal);
+
+    /**
      * @brief Get severity string
      * @param severity Error severity
      * @return String representation of severity
@@ -132,19 +139,24 @@ public:
 
 private:
     static const int MAX_ERRORS = 10;
+    static const int ERROR_LED_ID = 1; // LED on pin 8
 
     Error m_errors[MAX_ERRORS];
     int m_errorCount;
     int m_currentIndex;
     bool m_serialEnabled;
     bool m_mqttEnabled;
+    bool m_ledEnabled;
     void* m_mqttClient;
+    void* m_hardwareAbstraction;
     String m_mqttTopic;
     int m_criticalErrorCount;
 
     // Private helper functions
     void writeToSerial(const Error& error);
     void writeToMqtt(const Error& error);
+    void flashLedForError(Severity severity);
+    void flashLed(int times);
     void incrementErrorCount(Severity severity);
     String formatErrorMessage(const Error& error);
 };
