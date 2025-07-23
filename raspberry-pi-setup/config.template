@@ -1,0 +1,54 @@
+# Active Target Configuration Template
+#
+# Copy this file to config.env and modify as needed
+# Source: source config.env
+
+# Network Configuration
+export HOTSPOT_SSID="active-target"
+export HOTSPOT_PASSWORD="active-target"
+export HOSTNAME="active-target"
+
+# User Configuration
+export DEFAULT_USER="pi"
+export DEFAULT_PASSWORD="active-target"
+
+# Network Range
+export HOTSPOT_IP="192.168.4.1"
+export DHCP_START="192.168.4.2"
+export DHCP_END="192.168.4.20"
+export DHCP_NETMASK="255.255.255.0"
+
+# Docker Configuration
+export COMPOSE_PROJECT_NAME="active-target"
+
+# Service Ports
+export WEB_PORT="3000"
+export NODERED_PORT="1880"
+export MQTT_PORT="1883"
+export MQTT_WS_PORT="9001"
+export NTP_PORT="123"
+export CADDY_HTTP_PORT="80"
+export CADDY_HTTPS_PORT="443"
+
+# NTP Configuration
+export NTP_SERVERS="0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org,3.pool.ntp.org"
+export NTP_SYNC_INTERVAL="300"  # 5 minutes
+
+# MQTT Configuration
+export MQTT_ANONYMOUS="true"
+export MQTT_PERSISTENCE="true"
+export MQTT_RETAIN="true"
+
+# Security (change in production)
+export NODERED_ADMIN_USER="admin"
+export NODERED_ADMIN_PASS="admin"  # Will be hashed automatically
+export MQTT_USERNAME=""           # Empty = anonymous
+export MQTT_PASSWORD=""           # Empty = no auth
+
+# Logging
+export LOG_LEVEL="info"
+export LOG_TO_FILE="false"
+
+# Development vs Production
+export NODE_ENV="production"
+export DEBUG_MODE="false"

@@ -1,0 +1,71 @@
+# Active Target Caddy Configuration
+# Handles routing for all services in the Active Target system
+
+# Main web interface
+active-target.local {
+    reverse_proxy nodejs-web:3000
+
+    # Enable compression
+    encode gzip
+
+    # Security headers
+    header {
+        # Security headers
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+
+        # Remove server information
+        -Server
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/access.log
+    }
+}
+
+# Node-RED interface
+flow.active-target.local {
+    reverse_proxy node-red:1880
+
+    # Enable compression
+    encode gzip
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -Server
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/node-red.log
+    }
+}
+
+# Global options
+{
+    # Disable automatic HTTPS for local development
+    auto_https off
+
+    # Admin API (optional, for debugging)
+    admin 0.0.0.0:2019
+
+    # Global logging
+    log {
+        level INFO
+        format console
+    }
+}
+
+# Catch-all for other subdomains - redirect to main site
+*.active-target.local {
+    redir https://active-target.local{uri} permanent
+}
