@@ -19,10 +19,15 @@
 // https://www.studiopieters.nl/esp32-c3-pinout/
 // https://docs.espressif.com/projects/esp-idf/en/v5.2/esp32c3/hw-reference/esp32c3/user-guide-devkitm-1.html
 // GPIO<n>  | // Physical pin number
-#define SENSOR_PIN_A 4 // 11
-#define SENSOR_PIN_B 3 // 5
-#define SENSOR_PIN_C 0 // 9
-#define SENSOR_PIN_D 1 // 10
+#define SENSOR_PIN_A 0 // GPIO0 (ADC1_CH0)
+#define SENSOR_PIN_B 1 // GPIO1 (ADC1_CH1)
+#define SENSOR_PIN_C 2 // GPIO2 (ADC1_CH2)
+#define SENSOR_PIN_D 3 // GPIO3 (ADC1_CH3)
+
+#define LED_PIN_RGB LED_BUILTIN
+#define LED_PIN_2 8 // 15
+#define LED_PIN_3 9 // 16
+#define LED_PIN_4 10 // 17
 
 // MQTT Topics for each target zone
 #define TARGET_ZONE_A "A"
