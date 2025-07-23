@@ -46,8 +46,7 @@
 
 // TODO: Get and Set from Settings
 static const char *EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
-static const char *ssid = "pewpewpew";
-static const char *password = "pewpewpew";
+static const char *DEFAULT_SSID = "active-target";
 static const char *MQTT_SERVER = "raspberrypi.local";
 static String DEFAULT_DEVICE_NAME = "IPSC Action Air Micro Target";
 static String DEFAULT_DEVICE_ROLE = DEVICE_ROLE_TARGET;

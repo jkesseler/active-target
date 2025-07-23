@@ -175,10 +175,10 @@ void setup() {
 
     // Initialize WiFi connection
     WiFi.mode(WIFI_STA);
-    if (wifiManager.autoConnect("AT-Device")) {
-        LOG_INFO(ErrorHandler::Category::NETWORK, 0, "WiFi connected successfully");
+    if (wifiManager.autoConnect(DEFAULT_SSID)) {
+      LOG_INFO(ErrorHandler::Category::NETWORK, 0, "WiFi connected successfully");
     } else {
-        LOG_ERROR(ErrorHandler::Category::NETWORK, 6001, "Failed to connect to WiFi");
+      LOG_ERROR(ErrorHandler::Category::NETWORK, 6001, "Failed to connect to WiFi");
     }
 
     // Get gateway for initial time sync
