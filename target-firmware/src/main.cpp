@@ -1,120 +1,317 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include "include.h"
-#include "DeviceId.h"
-#include "wifi_utils.h"
+#include <WiFiManager.h>
+
+#include "deviceId.h"
+#include "common.h"
+#include "string_builder.h"
 #include "date_time.h"
+#include "error_handler.h"
+#include "hardware_abstraction.h"
+#include "memory_monitor.h"
+#include "string_builder.h"
+#include "settings.h"
+#include "handleMqttMessage.h"
 #include "json_messages.h"
+#include "loops.h"
 
+// // Core system components
+WiFiManager wifiManager;
+HardwareAbstraction hal;
+Settings settings;
+DeviceId deviceId;
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient);
+String uuid;
+Messages jsonMessages;
 
-WiFiClient espClient;
-PubSubClient client(espClient);
-String uuid = EMPTY_UUID;
-Messages jsonMessages(uuid);
+DeviceLoops* deviceLoops = nullptr;
 
-char mqttTopic[64];
+// MQTT configuration
 char mqttClientId[64];
-volatile unsigned long lastInterruptTime = 0;
+char mqttRequestTopic[64];
+char mqttBroadcastTopic[64];
+char mqttResponseTopic[64];
+
+// Device configuration
+String deviceName;
+String deviceRole;
+
+// Timing variables
+volatile unsigned long lastReadTime;
 
 
-void onMessageReceive(char *topic, byte *message, unsigned int length)
-{
-  Serial.print("Message arrived on topic: ");
-  Serial.print(topic);
-  Serial.print(". Message: ");
-  String messageTemp;
+bool initializeSystem() {
+    // Initialize error handler first with LED indicator enabled
+    if (!g_errorHandler.initialize(true, false, true)) {
+        Serial.println("ERROR: Failed to initialize error handler");
+        return false;
+    }
 
-  for (int i = 0; i < length; i++)
-  {
-    Serial.print((char)message[i]);
-    messageTemp += (char)message[i];
-  }
-  Serial.println(messageTemp);
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "System initialization started");
+
+    // Initialize memory monitoring early
+    MemoryMonitor::getInstance().initialize(true, 30000);  // Enable detailed tracking, 30s reporting
+
+    // Initialize hardware abstraction layer
+    HardwareAbstraction::ErrorCode halResult = hal.initialize();
+    if (halResult != HardwareAbstraction::ErrorCode::SUCCESS) {
+        String errorMsg = MessageFormatter::createErrorMessage("HAL initialization failed", 0, hal.getErrorDescription(halResult));
+        LOG_CRITICAL(ErrorHandler::Category::HARDWARE, 5001, errorMsg);
+        return false;
+    }
+
+    // Set hardware abstraction for error handler LED control
+    g_errorHandler.setHardwareAbstraction(&hal);
+
+    // Initialize core components
+    uuid = EMPTY_UUID;
+    sprintf(mqttClientId, "DEVICE/{%s}", uuid.c_str());
+    sprintf(mqttRequestTopic, "at/device/%s/commands", uuid.c_str());
+    sprintf(mqttResponseTopic, "at/device/%s/response", uuid.c_str());
+    sprintf(mqttBroadcastTopic, "at/devices/broadcast");
+
+    lastReadTime = 0;
+    deviceName = DEFAULT_DEVICE_NAME;
+    deviceRole = DEVICE_ROLE_TARGET;
+
+    // Create device loops instance with dependency injection
+    deviceLoops = new DeviceLoops(&hal, &jsonMessages, &settings, &mqttClient, mqttResponseTopic);
+    if (!deviceLoops) {
+        LOG_CRITICAL(ErrorHandler::Category::SYSTEM, 5002, "Failed to create DeviceLoops instance");
+        return false;
+    }
+
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "System initialization completed successfully");
+    return true;
 }
 
-void connectToMqttServer()
-{
-  int initialReconnectDelay = 1000;
-  int currentReconnectDelay = initialReconnectDelay;
-  int maxReconnectDelay = 16000;
-
-  while (!client.connected())
-  {
-    Serial.print("Attempting MQTT connection...");
-
-    if (client.connect(mqttClientId))
-    {
-      Serial.println("connected");
-
-      char topic[50];
-      sprintf(topic, "/at/%s/actions", uuid.c_str());
-      client.subscribe(topic);
+void onMessageReceive(char *topic, byte *message, unsigned int length) {
+    if (!topic || !message || length == 0) {
+        LOG_ERROR(ErrorHandler::Category::MQTT, 3003, "Invalid MQTT message received");
+        return;
     }
-    else
-    {
-      if (currentReconnectDelay < maxReconnectDelay)
-      {
-        currentReconnectDelay *= 2;
-      }
-      int sec = ((currentReconnectDelay + 500) / 1000);
-      char delayString[20];
-      sprintf(delayString, "%s seconds", sec / 1000);
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.print("Reconn. in ");
-      Serial.println(delayString);
 
-      delay(currentReconnectDelay);
+    MEDIUM_STRING() topicMsg;
+    topicMsg.append("Message received on topic: ").append(topic);
+    LOG_INFO(ErrorHandler::Category::MQTT, 0, topicMsg.toString());
+
+    String messageTemp;
+    messageTemp.reserve(length + 1);
+
+    for (unsigned int i = 0; i < length; i++) {
+        messageTemp += (char)message[i];
     }
-  }
+
+    MEDIUM_STRING() contentMsg;
+    contentMsg.append("Message content: ").append(messageTemp.c_str());
+    LOG_INFO(ErrorHandler::Category::MQTT, 0, contentMsg.toString());
+
+    // Handle the message with error checking
+    handleMqttMessage(messageTemp);
+}
+
+bool connectToMqttServer() {
+    const int initialReconnectDelay = 1000;
+    int currentReconnectDelay = initialReconnectDelay;
+    const int maxReconnectDelay = 16000;
+    const int maxRetries = 5;
+    int retryCount = 0;
+
+    while (!mqttClient.connected() && retryCount < maxRetries) {
+        LOG_INFO(ErrorHandler::Category::MQTT, 0, "Attempting MQTT connection...");
+
+        if (mqttClient.connect(mqttClientId)) {
+            LOG_INFO(ErrorHandler::Category::MQTT, 0, "MQTT connected successfully");
+
+            // Subscribe to topics
+            if (mqttClient.subscribe(mqttRequestTopic)) {
+                MEDIUM_STRING() subMsg;
+                subMsg.append("Subscribed to: ").append(mqttRequestTopic);
+                LOG_INFO(ErrorHandler::Category::MQTT, 0, subMsg.toString());
+            } else {
+                LOG_WARNING(ErrorHandler::Category::MQTT, 3005, "Failed to subscribe to request topic");
+            }
+
+            if (mqttClient.subscribe(mqttBroadcastTopic)) {
+                MEDIUM_STRING() subMsg;
+                subMsg.append("Subscribed to: ").append(mqttBroadcastTopic);
+                LOG_INFO(ErrorHandler::Category::MQTT, 0, subMsg.toString());
+            } else {
+                LOG_WARNING(ErrorHandler::Category::MQTT, 3006, "Failed to subscribe to broadcast topic");
+            }
+
+            return true;
+        } else {
+            retryCount++;
+
+            if (currentReconnectDelay < maxReconnectDelay) {
+                currentReconnectDelay *= 2;
+            }
+
+            MEDIUM_STRING() retryMsg;
+            retryMsg.append("MQTT connection failed, rc=").append(mqttClient.state())
+                   .append(", retry ").append(retryCount).append("/").append(maxRetries);
+            LOG_WARNING(ErrorHandler::Category::MQTT, 3007, retryMsg.toString());
+
+            delay(currentReconnectDelay);
+        }
+    }
+
+    LOG_ERROR(ErrorHandler::Category::MQTT, 3008, "Failed to connect to MQTT server after maximum retries");
+    return false;
 }
 
 void setup() {
+    Serial.begin(115200);
 
-  Serial.begin(115200);
+    // Initialize system components
+    if (!initializeSystem()) {
+        LOG_CRITICAL(ErrorHandler::Category::SYSTEM, 5003, "System initialization failed - halting");
+        while (true) {
+            delay(1000);
+        }
+    }
 
-  DeviceId deviceId;
-  uuid = deviceId.get();
-  jsonMessages = Messages(uuid);
+    // Initialize WiFi connection
+    WiFi.mode(WIFI_STA);
+    if (wifiManager.autoConnect(DEFAULT_SSID)) {
+      LOG_INFO(ErrorHandler::Category::NETWORK, 0, "WiFi connected successfully");
+    } else {
+      LOG_ERROR(ErrorHandler::Category::NETWORK, 6001, "Failed to connect to WiFi");
+    }
 
+    // Get gateway for initial time sync
+    IPAddress gateway = WiFi.gatewayIP();
+    MEDIUM_STRING() gatewayMsg;
+    gatewayMsg.append("Gateway IP: ").append(gateway.toString().c_str());
+    LOG_INFO(ErrorHandler::Category::NETWORK, 0, gatewayMsg.toString());
 
-  sprintf(mqttClientId, "TARGET{%s}", uuid.c_str());  
-  sprintf(mqttTopic, "at/target/%s/actions", uuid.c_str());
+    // Perform initial time synchronization (blocking)
+    bool initialSyncResult = timeSync(gateway.toString());
+    if (initialSyncResult) {
+        LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Initial time synchronization completed successfully");
+    } else {
+        LOG_ERROR(ErrorHandler::Category::SYSTEM, 4008, "Initial time synchronization failed");
+    }
 
-  connectToWiFi(ssid, password);
+    // Initialize settings and device ID
+    settings.initialize();
+    deviceId.initialize();
+    uuid = deviceId.get();
+    deviceName = settings.getString("deviceName", DEFAULT_DEVICE_NAME);
+    deviceRole = settings.getString("deviceRole", DEFAULT_DEVICE_ROLE);
 
-  timeSync();
+    MEDIUM_STRING() deviceMsg;
+    deviceMsg.append("Device UUID: ").append(uuid.c_str());
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, deviceMsg.toString());
 
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(onMessageReceive);
-  connectToMqttServer();
+    deviceMsg.clear();
+    deviceMsg.append("Device Name: ").append(deviceName.c_str());
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, deviceMsg.toString());
 
-  
+    deviceMsg.clear();
+    deviceMsg.append("Device Role: ").append(deviceRole.c_str());
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, deviceMsg.toString());
 
-  String addTargetMessage = jsonMessages.createAddTargetMessage();
-  client.publish(mqttTopic, addTargetMessage.c_str());
-  
-  delay(500);
-  String updateTargetMessage = jsonMessages.createUpdateTargetMessage();
-  client.publish(mqttTopic, updateTargetMessage.c_str());
+    // Initialize JSON messages
+    jsonMessages.begin(uuid, deviceName, deviceRole);
+
+    // Initialize time synchronization with gateway IP
+    if (gateway != IPAddress(0, 0, 0, 0)) {
+        initializeTimeSync(gateway.toString());
+        LOG_INFO(ErrorHandler::Category::SYSTEM, 0, String("Time sync initialized with gateway: ") + gateway.toString());
+    } else {
+        LOG_ERROR(ErrorHandler::Category::SYSTEM, 4006, "Cannot initialize time sync - invalid gateway IP");
+        // Fallback to public NTP server
+        initializeTimeSync("pool.ntp.org");
+        LOG_WARNING(ErrorHandler::Category::SYSTEM, 4007, "Time sync fallback to pool.ntp.org");
+    }
+
+    // Setup MQTT
+    mqttClient.setServer(MQTT_SERVER, 1883);
+    mqttClient.setCallback(onMessageReceive);
+    mqttClient.setBufferSize(1024);
+
+    // Setup error handler MQTT reporting
+    g_errorHandler.setMqttReporting(&mqttClient, "at/errors");
+
+    if (!connectToMqttServer()) {
+        LOG_CRITICAL(ErrorHandler::Category::MQTT, 3009, "Failed to establish MQTT connection");
+    }
+
+    // Send device online message
+    String onlineMessage = jsonMessages.createDeviceOnlineMessage();
+    if (mqttClient.publish(mqttResponseTopic, onlineMessage.c_str())) {
+        LOG_INFO(ErrorHandler::Category::MQTT, 0, "Device online message sent successfully");
+    } else {
+        LOG_ERROR(ErrorHandler::Category::MQTT, 3010, "Failed to send device online message");
+    }
+
+    LOG_INFO(ErrorHandler::Category::SYSTEM, 0, "Setup completed successfully");
+
+    // Test LED error signaling (remove these lines after testing)
+    // LOG_WARNING(ErrorHandler::Category::SYSTEM, 9001, "Test WARNING - LED should flash 2 times");
+    // delay(2000);
+    // LOG_ERROR(ErrorHandler::Category::SYSTEM, 9002, "Test ERROR - LED should flash 3 times");
+    // delay(2000);
+    // LOG_CRITICAL(ErrorHandler::Category::SYSTEM, 9003, "Test CRITICAL - LED should flash 4 times");
 }
 
 void loop() {
-  if (!client.connected()) {
-    connectToMqttServer();
-  }
+    // Check for critical errors and handle them
+    if (g_errorHandler.hasCriticalErrors()) {
+        LOG_CRITICAL(ErrorHandler::Category::SYSTEM, 5005, "Critical errors detected - entering safe mode");
+        delay(5000);
+        return;
+    }
 
-  int piezoVal = analogRead(BUTTON_PIN);
+    unsigned long currentTime = millis();
 
-  unsigned long currentTime = millis();
-  if (piezoVal > THRESHOLD && currentTime - lastInterruptTime > DEBOUNCE_TIME)
-  {
-    Serial.println(piezoVal);
-    lastInterruptTime = currentTime;
+    // Process WiFi manager
+    wifiManager.process();
 
-    Serial.println("Pew Pew");
-    // TODO: Add number of millies since last trigger to the message
-    String resultMessage = jsonMessages.createAddResultMessage();
-    client.publish(mqttTopic, resultMessage.c_str());
-  }
+    // Ensure MQTT connection
+    if (!mqttClient.connected()) {
+        LOG_WARNING(ErrorHandler::Category::MQTT, 3011, "MQTT connection lost, attempting reconnection");
+        if (!connectToMqttServer()) {
+            LOG_ERROR(ErrorHandler::Category::MQTT, 3012, "Failed to reconnect to MQTT server");
+            delay(5000);
+            return;
+        }
+    }
+
+    // Process MQTT messages
+    mqttClient.loop();
+
+    // Periodic time synchronization (non-blocking)
+    periodicTimeSync();
+
+    // Check settings periodically
+    if (currentTime - lastReadTime > 500) {
+        lastReadTime = currentTime;
+        if (deviceLoops) {
+            deviceLoops->checkSettingsLoop();
+        }
+    }
+
+    // Execute device-specific loops
+    if (!deviceLoops) {
+        LOG_ERROR(ErrorHandler::Category::SYSTEM, 5006, "DeviceLoops instance is null");
+        return;
+    }
+
+    if (deviceRole == DEVICE_ROLE_TARGET) {
+        deviceLoops->targetLoop();
+    } else if (deviceRole == DEVICE_ROLE_POPPER) {
+        deviceLoops->popperLoop();
+    } else if (deviceRole == DEVICE_ROLE_NOSHOOT) {
+        deviceLoops->noShootLoop();
+    } else if (deviceRole == DEVICE_ROLE_STOP_PLATE) {
+        deviceLoops->stopPlateLoop();
+    } else {
+        SMALL_STRING() typeMsg;
+        typeMsg.append("Unknown device role: ").append(deviceRole.c_str());
+        LOG_WARNING(ErrorHandler::Category::SYSTEM, 5007, typeMsg.toString());
+    }
 }

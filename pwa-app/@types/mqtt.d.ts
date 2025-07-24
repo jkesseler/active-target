@@ -1,4 +1,5 @@
-declare module "mqtt/dist/mqtt" {
-  import MQTT from "mqtt"
+declare module 'mqtt/dist/mqtt' {
+  import MQTT from 'mqtt'
+
   export = MQTT
 }

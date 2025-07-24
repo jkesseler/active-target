@@ -1,3 +1,5 @@
+./OpenMQTTGateway
+
 .vscode
 .pio
 node_modules/

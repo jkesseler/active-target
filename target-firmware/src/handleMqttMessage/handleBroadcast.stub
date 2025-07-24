@@ -1,0 +1,3 @@
+// TODO: handle broadcast messages
+// Currently used by the controller to get status information from all devices
+// Stub should be published on `at/devices/{device-uuid}/response

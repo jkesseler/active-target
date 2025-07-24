@@ -1,0 +1,14 @@
+.header {
+  height: 56px;
+}
+
+.inner {
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+.stageButton {
+  border-radius: 100%;
+}

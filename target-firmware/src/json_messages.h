@@ -5,13 +5,17 @@
 class Messages
 {
   public:
-    Messages(String uuid);
-    String createAddTargetMessage();
-    String createAddResultMessage();
-    String createUpdateTargetMessage();
+    Messages();
+    void begin(String uuid, String deviceName, String deviceRole);
+    String createDeviceOnlineMessage();
+    String createTargetHitMessage(const char *targetZone);
+    String createMessage(String action);
+    String createMessage(String action, JsonObject payload);
+    String createDeviceUpdatedMessage();
 
-  private : String UUID;
-
+  private: String UUID;
+  private: String deviceName;
+  private: String deviceRole;
 };
 
 

@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  # Caddy Reverse Proxy
+  caddy:
+    build: ./caddy
+    container_name: active-target-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - active-target-network
+    depends_on:
+      - nodejs-web
+      - node-red
+    environment:
+      - CADDY_ADMIN=0.0.0.0:2019
+
+  # Chrony NTP Server
+  chrony:
+    build: ./chrony
+    container_name: active-target-chrony
+    restart: unless-stopped
+    ports:
+      - "123:123/udp"
+    volumes:
+      - ./chrony/chrony.conf:/etc/chrony/chrony.conf:ro
+      - chrony_data:/var/lib/chrony
+    networks:
+      - active-target-network
+    cap_add:
+      - SYS_TIME
+    environment:
+      - TZ=UTC
+
+  # NodeJS Web Server
+  nodejs-web:
+    build: ./nodejs-web
+    container_name: active-target-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nodejs-web/app:/app
+    networks:
+      - active-target-network
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+
+  # Node-RED
+  node-red:
+    image: nodered/node-red:latest
+    container_name: active-target-node-red
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    volumes:
+      - node_red_data:/data
+      - ./node-red/settings.js:/data/settings.js
+    networks:
+      - active-target-network
+    environment:
+      - TZ=UTC
+    user: "1000:1000"
+
+  # MQTT Server (Eclipse Mosquitto)
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: active-target-mqtt
+    restart: unless-stopped
+    ports:
+      - "1883:1883"  # MQTT
+      - "9001:9001"  # WebSocket
+    volumes:
+      - ./mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mqtt/passwd:/mosquitto/config/passwd
+      - mqtt_data:/mosquitto/data
+      - mqtt_logs:/mosquitto/log
+    networks:
+      - active-target-network
+
+volumes:
+  caddy_data:
+  caddy_config:
+  chrony_data:
+  node_red_data:
+  mqtt_data:
+  mqtt_logs:
+
+networks:
+  active-target-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

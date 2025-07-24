@@ -1,39 +1,38 @@
-#include <ArduinoJson.h>
 #include "json_messages.h"
+#include "common.h"
+#include "actions.h"
 #include "date_time.h"
-// #include "DeviceId.h"
+#include "json_pool.h"
+#include <ArduinoJson.h>
 
-Messages::Messages(String uuid) {
+Messages::Messages() {
+
+}
+
+void Messages::begin(String uuid, String deviceName, String deviceRole) {
   this->UUID = uuid;
+  this->deviceName = deviceName;
+  this->deviceRole = deviceRole;
 }
 
-String Messages::createAddTargetMessage() {
-  StaticJsonDocument<256> doc;
+String Messages::createDeviceOnlineMessage() {
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(MEDIUM);
+  if (!docGuard.isValid()) {
+    return "{}";  // Return empty JSON on allocation failure
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
-  int64_t isoDateTime = getTimeMillies();
 
-  doc["type"] = "targets/addTarget";
-  meta["timestamp"] = isoDateTime;
-  payload["targetId"] = this->UUID;
-  payload["targetName"] = "My First Target"; // TODO: Get from prefereneces
-  String jsonString;
-  serializeJson(doc, jsonString);
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["id"] = this->UUID;
+  payload["name"] = this->deviceName;
+  payload["role"] = this->deviceRole;
 
-  return jsonString;
-}
-
-
-String Messages::createUpdateTargetMessage() {
-  StaticJsonDocument<256> doc;
-  JsonObject payload = doc.createNestedObject("payload");
-  JsonObject meta = doc.createNestedObject("meta");
-  int64_t isoDateTime = getTimeMillies();
-
-  doc["type"] = "targets/updateTarget";
-  meta["timestamp"] = isoDateTime;
-  payload["targetId"] = this->UUID;
-  payload["targetName"] = "My First Target"; // TODO: Get from prefereneces
+  doc["action"] =  ACTIONS_DEVICE_ONLINE;
+  doc["payload"] = payload;
 
   String jsonString;
   serializeJson(doc, jsonString);
@@ -41,18 +40,89 @@ String Messages::createUpdateTargetMessage() {
   return jsonString;
 }
 
+String Messages::createDeviceUpdatedMessage() {
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(SMALL);
+  if (!docGuard.isValid()) {
+    return "{}";
+  }
 
-String Messages::createAddResultMessage() {
-  StaticJsonDocument<192> doc;
+  StaticJsonDocument<768>& doc = *docGuard;
   JsonObject payload = doc.createNestedObject("payload");
   JsonObject meta = doc.createNestedObject("meta");
-  int64_t isoDateTime = getTimeMillies();
 
-  doc["type"] = "results/addResult";
-  meta["timestamp"] = isoDateTime;
-  payload["targetId"] = this->UUID;
-  payload["targetName"] = "My First Target"; // TODO: Get from prefereneces
-  payload["result"] = "hit";
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["id"] = this->UUID;
+  meta["role"] = this->deviceRole;
+  doc["payload"] = payload;
+  doc["action"] = ACTIONS_DEVICE_UPDATED;
+
+  String jsonString;
+  serializeJson(doc, jsonString);
+
+  return jsonString;
+}
+
+String Messages::createTargetHitMessage(const char *targetZone) {
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(MEDIUM);
+  if (!docGuard.isValid()) {
+    return "{}";
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
+  JsonObject payload = doc.createNestedObject("payload");
+  JsonObject meta = doc.createNestedObject("meta");
+
+  payload["targetZone"] = targetZone;
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["id"] = this->UUID;
+  meta["role"] = this->deviceRole;
+  doc["payload"] = payload;
+  doc["action"] = SENSOR_TRIGGERED;
+
+  String jsonString;
+  serializeJson(doc, jsonString);
+
+  return jsonString;
+}
+
+String Messages::createMessage(String action) {
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(SMALL);
+  if (!docGuard.isValid()) {
+    return "{}";
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
+  JsonObject meta = doc.createNestedObject("meta");
+
+  doc["action"] = action;
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["id"] = this->UUID;
+  meta["role"] = this->deviceRole;
+
+  String jsonString;
+  serializeJson(doc, jsonString);
+
+  return jsonString;
+}
+
+String Messages::createMessage(String action, JsonObject payload) {
+  auto docGuard = JSON_POOL_ACQUIRE_GUARDED(MEDIUM);
+  if (!docGuard.isValid()) {
+    return "{}";
+  }
+
+  StaticJsonDocument<768>& doc = *docGuard;
+  JsonObject meta = doc.createNestedObject("meta");
+
+  doc["action"] = action;
+  doc["payload"] = payload;
+  meta["timestamp"] = getISODateTime();
+  meta["timeMillies"] = getTimeMillies();
+  meta["id"] = this->UUID;
+  meta["role"] = this->deviceRole;
 
   String jsonString;
   serializeJson(doc, jsonString);
