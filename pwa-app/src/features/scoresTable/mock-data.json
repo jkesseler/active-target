@@ -1,0 +1,104 @@
+{
+  "shooterId": "550e8400-e29b-41d4-a716-446655440000",
+  "scores": [
+    {
+      "deviceId": "1e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "results": [
+        {
+          "timeMillies": "1740575555353",
+          "targetZone": "A"
+        },
+        {
+          "timeMillies": "1740575573466",
+          "targetZone": "D"
+        },
+        {
+          "timeMillies": "1740575578734",
+          "targetZone": "C"
+        },
+        {
+          "timeMillies": "1740575584368",
+          "targetZone": "A"
+        }
+      ]
+    },
+    {
+      "deviceId": "7e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "results": [
+        {
+          "timeMillies": "1740575666864",
+          "targetZone": "A"
+        },
+        {
+          "timeMillies": "1740575737120",
+          "targetZone": "C"
+        }
+      ]
+    },
+    {
+      "deviceId": "2e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "results": [
+        {
+          "timeMillies": "1740575652748",
+          "targetZone": "A"
+        }
+      ]
+    },
+    {
+      "deviceId": "2e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "results": [
+        {
+          "timeMillies": "1740575666864",
+          "targetZone": "A"
+        }
+      ]
+    },
+    {
+      "deviceId": "4e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "results": [
+        {
+          "timeMillies": "1740575666864",
+          "targetZone": "A"
+        },
+        {
+          "timeMillies": "1740575737120",
+          "targetZone": "A"
+        }
+      ]
+    },
+    {
+      "deviceId": "817b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "results": [
+        {
+          "timeMillies": "1740575666864",
+          "targetZone": "A"
+        },
+        {
+          "timeMillies": "1740575737120",
+          "targetZone": "A"
+        }
+      ]
+    },
+    {
+      "deviceId": "827b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "results": [
+        {
+          "timeMillies": "1740575666864",
+          "targetZone": "D"
+        },
+        {
+          "timeMillies": "1740575737120",
+          "targetZone": "D"
+        },
+        {
+          "timeMillies": "1740575737120",
+          "targetZone": "C"
+        },
+        {
+          "timeMillies": "1740575737120",
+          "targetZone": "A"
+        }
+      ]
+    }
+  ]
+}

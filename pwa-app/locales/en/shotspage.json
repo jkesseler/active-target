@@ -1,0 +1,11 @@
+{
+  'state.connecting': 'Connecting',
+  'state.connected': 'Connected',
+  'state.not-connected': 'Not Connected',
+  'Total': 'Total',
+  'difference': 'difference',
+  'th.target': 'Target',
+  'th.result': 'Result',
+  'th.time-difference': 'Time diff.',
+  'td.difference': '{{ difference }} sec.'
+}

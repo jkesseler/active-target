@@ -1,0 +1,18 @@
+{
+  "currentStage": "aa2bd694-8d08-479a-81df-d8285e9b310c",
+  "list": [{
+    "id": "aa2bd694-8d08-479a-81df-d8285e9b310c",
+    "name": "Stage 1",
+    "status": "inactive",
+    "currentShooterId": "550e8400-e29b-41d4-a716-446655440000",
+    "devices": [
+      "1e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "2e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "3e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "4e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "5e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "7e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b",
+      "8e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b"
+    ]
+  }]
+}

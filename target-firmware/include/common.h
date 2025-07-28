@@ -1,0 +1,81 @@
+#ifndef AT_COMMON
+#define AT_COMMON
+#include "DeviceId.h"
+#include "date_time.h"
+#include "memory_monitor.h"
+#include "string_builder.h"
+#include "handleMqttMessage.h"
+#include "json_messages.h"
+#include "settings.h"
+#include <Arduino.h>
+#include <Preferences.h>
+#include <PubSubClient.h>
+#include <WiFiManager.h>
+#include <vector>
+
+#define DEFAULT_SENSOR_THRESHOLD 300
+#define DEFAULT_SENSOR_DEBOUNCE 90
+
+// https://www.studiopieters.nl/esp32-c3-pinout/
+// https://docs.espressif.com/projects/esp-idf/en/v5.2/esp32c3/hw-reference/esp32c3/user-guide-devkitm-1.html
+// GPIO<n>  | // Physical pin number
+#define SENSOR_PIN_A 0 // GPIO0 (ADC1_CH0)
+#define SENSOR_PIN_B 1 // GPIO1 (ADC1_CH1)
+#define SENSOR_PIN_C 2 // GPIO2 (ADC1_CH2)
+#define SENSOR_PIN_D 3 // GPIO3 (ADC1_CH3)
+
+#define LED_PIN_RGB LED_BUILTIN
+#define LED_PIN_2 8 // 15
+#define LED_PIN_3 9 // 16
+#define LED_PIN_4 10 // 17
+
+// MQTT Topics for each target zone
+#define TARGET_ZONE_A "A"
+#define TARGET_ZONE_B "B"
+#define TARGET_ZONE_C "C"
+#define TARGET_ZONE_D "D"
+#define TARGET_ZONE_POPPER "POPPER"
+#define TARGET_ZONE_STOP_PLATE "STOP_PLATE"
+#define TARGET_ZONE_NO_SHOOT "NO_SHOOT"
+
+// These values are shared with PWA app
+#define DEVICE_ROLE_TARGET "TARGET"
+#define DEVICE_ROLE_POPPER "POPPER"
+#define DEVICE_ROLE_NOSHOOT "NOSHOOT"
+#define DEVICE_ROLE_STOP_PLATE "STOP_PLATE"
+
+// TODO: Get and Set from Settings
+static const char *EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
+static const char *DEFAULT_SSID = "active-target";
+static const char *MQTT_SERVER = "raspberrypi.local";
+static String DEFAULT_DEVICE_NAME = "IPSC Action Air Micro Target";
+static String DEFAULT_DEVICE_ROLE = DEVICE_ROLE_TARGET;
+
+// Forward declarations for core components
+class WiFiManager;
+class Settings;
+class WiFiClient;
+class PubSubClient;
+class Messages;
+class DeviceId;
+
+// Core system references (managed by main.cpp)
+extern WiFiManager wifiManager;
+extern Settings settings;
+extern WiFiClient wifiClient;
+extern PubSubClient mqttClient;
+extern String uuid;
+extern Messages jsonMessages;
+extern DeviceId deviceId;
+
+// MQTT topic buffers
+extern char mqttClientId[64];
+extern char mqttRequestTopic[64];
+extern char mqttBroadcastTopic[64];
+extern char mqttResponseTopic[64];
+
+// Device configuration
+extern String deviceName;
+extern String deviceRole;
+
+#endif
