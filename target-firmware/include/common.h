@@ -56,7 +56,7 @@
 
 #else
     // Default configuration (fallback to ESP32-S3 as primary)
-    #warning "No board type defined, using ESP32-S3 defaults"
+    #warning "No board type defined. Define a valid board type using a build flag (e.g., -DBOARD_ESP32_C3_DEVKITM1 or -DBOARD_ESP32_S3_DEVKITC1). Falling back to ESP32-S3 defaults."
     #define SENSOR_PIN_A 1
     #define SENSOR_PIN_B 2
     #define SENSOR_PIN_C 3
