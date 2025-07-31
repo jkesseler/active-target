@@ -24,23 +24,12 @@ on:
           - 'esp32-c3-devkitm-1'
 
 jobs:
-  build-matrix:
-    name: Build Firmware (${{ matrix.board }})
+  build-esp32-s3:
+    name: Build Firmware (ESP32-S3 DevKitC-1)
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        board:
-          - esp32-s3-devkitc-1
-          - esp32-c3-devkitm-1
-        include:
-          - board: esp32-s3-devkitc-1
-            display_name: "ESP32-S3 DevKitC-1"
-            platform: "espressif32"
-          - board: esp32-c3-devkitm-1
-            display_name: "ESP32-C3 DevKitM-1"
-            platform: "espressif32"
-
+    outputs:
+      build_status: ${{ steps.build.outcome }}
+      build_result: ${{ steps.build.outcome == 'success' && 'success' || 'failure' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -65,47 +54,116 @@ jobs:
           python -m pip install --upgrade pip
           pip install platformio
 
-      - name: Build firmware for ${{ matrix.display_name }}
+      - name: Build firmware for ESP32-S3 DevKitC-1
+        id: build
         working-directory: target-firmware
         run: |
-          echo "Building firmware for ${{ matrix.display_name }} (environment: ${{ matrix.board }})"
-          pio run -e ${{ matrix.board }}
+          echo "Building firmware for ESP32-S3 DevKitC-1 (environment: esp32-s3-devkitc-1)"
+          pio run -e esp32-s3-devkitc-1
 
       - name: Check firmware size
         working-directory: target-firmware
         run: |
-          echo "=== Firmware Size Report for ${{ matrix.display_name }} ==="
-          pio run -e ${{ matrix.board }} -t size
+          echo "=== Firmware Size Report for ESP32-S3 DevKitC-1 ==="
+          pio run -e esp32-s3-devkitc-1 -t size
 
           # Extract and display memory usage
-          if [ -f ".pio/build/${{ matrix.board }}/firmware.bin" ]; then
+          if [ -f ".pio/build/esp32-s3-devkitc-1/firmware.bin" ]; then
             echo "Firmware binary size:"
-            ls -lh .pio/build/${{ matrix.board }}/firmware.bin
+            ls -lh .pio/build/esp32-s3-devkitc-1/firmware.bin
           fi
 
       - name: Archive firmware binary
         uses: actions/upload-artifact@v3
         with:
-          name: firmware-${{ matrix.board }}-${{ github.sha }}
+          name: firmware-esp32-s3-devkitc-1-${{ github.sha }}
           path: |
-            target-firmware/.pio/build/${{ matrix.board }}/firmware.bin
-            target-firmware/.pio/build/${{ matrix.board }}/firmware.elf
-            target-firmware/.pio/build/${{ matrix.board }}/partitions.bin
+            target-firmware/.pio/build/esp32-s3-devkitc-1/firmware.bin
+            target-firmware/.pio/build/esp32-s3-devkitc-1/firmware.elf
+            target-firmware/.pio/build/esp32-s3-devkitc-1/partitions.bin
           retention-days: 30
 
       - name: Archive build logs
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: build-logs-${{ matrix.board }}-${{ github.sha }}
+          name: build-logs-esp32-s3-devkitc-1-${{ github.sha }}
           path: |
-            target-firmware/.pio/build/${{ matrix.board }}/
+            target-firmware/.pio/build/esp32-s3-devkitc-1/
+          retention-days: 7
+
+  build-esp32-c3:
+    name: Build Firmware (ESP32-C3 DevKitM-1)
+    runs-on: ubuntu-latest
+    outputs:
+      build_status: ${{ steps.build.outcome }}
+      build_result: ${{ steps.build.outcome == 'success' && 'success' || 'failure' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
+          restore-keys: |
+            ${{ runner.os }}-pio-
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Build firmware for ESP32-C3 DevKitM-1
+        id: build
+        working-directory: target-firmware
+        run: |
+          echo "Building firmware for ESP32-C3 DevKitM-1 (environment: esp32-c3-devkitm-1)"
+          pio run -e esp32-c3-devkitm-1
+
+      - name: Check firmware size
+        working-directory: target-firmware
+        run: |
+          echo "=== Firmware Size Report for ESP32-C3 DevKitM-1 ==="
+          pio run -e esp32-c3-devkitm-1 -t size
+
+          # Extract and display memory usage
+          if [ -f ".pio/build/esp32-c3-devkitm-1/firmware.bin" ]; then
+            echo "Firmware binary size:"
+            ls -lh .pio/build/esp32-c3-devkitm-1/firmware.bin
+          fi
+
+      - name: Archive firmware binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware-esp32-c3-devkitm-1-${{ github.sha }}
+          path: |
+            target-firmware/.pio/build/esp32-c3-devkitm-1/firmware.bin
+            target-firmware/.pio/build/esp32-c3-devkitm-1/firmware.elf
+            target-firmware/.pio/build/esp32-c3-devkitm-1/partitions.bin
+          retention-days: 30
+
+      - name: Archive build logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-logs-esp32-c3-devkitm-1-${{ github.sha }}
+          path: |
+            target-firmware/.pio/build/esp32-c3-devkitm-1/
           retention-days: 7
 
   build-summary:
     name: Build Summary
     runs-on: ubuntu-latest
-    needs: build-matrix
+    needs: [build-esp32-s3, build-esp32-c3]
     if: always()
     steps:
       - name: Build Summary
@@ -114,8 +172,8 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Board Environment | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-------------------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| ESP32-S3 DevKitC-1 | ${{ needs.build-matrix.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| ESP32-C3 DevKitM-1 | ${{ needs.build-matrix.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ESP32-S3 DevKitC-1 | ${{ needs.build-esp32-s3.outputs.build_result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ESP32-C3 DevKitM-1 | ${{ needs.build-esp32-c3.outputs.build_result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Artifacts Generated:" >> $GITHUB_STEP_SUMMARY
           echo "- Firmware binaries for all supported boards" >> $GITHUB_STEP_SUMMARY
@@ -125,7 +183,7 @@ jobs:
   memory-analysis:
     name: Memory Usage Analysis
     runs-on: ubuntu-latest
-    needs: build-matrix
+    needs: [build-esp32-s3, build-esp32-c3]
     if: success()
     steps:
       - name: Checkout code

@@ -42,7 +42,8 @@ String deviceRole;
 volatile unsigned long lastReadTime;
 
 // Function to generate unique SSID for WiFi access point
-String generateUniqueSSID() {
+const char* generateUniqueSSID() {
+    static thread_local char ssidBuffer[64]; // Static buffer to persist beyond function scope
     std::vector<uint8_t> random_bytes = ESPRandom::uuid4();
 
     // Use first 4 bytes of UUID to create a short hex string
@@ -50,10 +51,10 @@ String generateUniqueSSID() {
     snprintf(hexBuffer, sizeof(hexBuffer), "%02x%02x%02x%02x",
              random_bytes[0], random_bytes[1], random_bytes[2], random_bytes[3]);
 
-    MEDIUM_STRING() uniqueSSID;
-    uniqueSSID.append("active-target-").append(hexBuffer);
+    // Build SSID directly in static buffer to avoid memory allocation
+    snprintf(ssidBuffer, sizeof(ssidBuffer), "active-target-%s", hexBuffer);
 
-    return uniqueSSID.toString();
+    return ssidBuffer;
 }
 
 
@@ -191,13 +192,13 @@ void setup() {
 
     // Initialize WiFi connection
     WiFi.mode(WIFI_STA);
-    String uniqueSSID = generateUniqueSSID();
+    const char* uniqueSSID = generateUniqueSSID();
 
     MEDIUM_STRING() ssidMsg;
-    ssidMsg.append("Using WiFi AP SSID: ").append(uniqueSSID.c_str());
+    ssidMsg.append("Using WiFi AP SSID: ").append(uniqueSSID);
     LOG_INFO(ErrorHandler::Category::NETWORK, 0, ssidMsg.toString());
 
-    if (wifiManager.autoConnect(uniqueSSID.c_str())) {
+    if (wifiManager.autoConnect(uniqueSSID)) {
       LOG_INFO(ErrorHandler::Category::NETWORK, 0, "WiFi connected successfully");
     } else {
       LOG_ERROR(ErrorHandler::Category::NETWORK, 6001, "Failed to connect to WiFi");

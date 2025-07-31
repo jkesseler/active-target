@@ -1,6 +1,14 @@
 #include "hardware_abstraction.h"
 #include "common.h"
 
+// Compile-time validation to ensure BOARD_NAME is defined for all supported boards
+#ifndef BOARD_NAME
+    #error "BOARD_NAME must be defined for the current board configuration. Please add BOARD_NAME definition in common.h for your board type."
+#endif
+
+// Additional validation to ensure BOARD_NAME is not empty
+static_assert(sizeof(BOARD_NAME) > 1, "BOARD_NAME cannot be empty. Please provide a meaningful board name in common.h");
+
 // Universal pin definitions - these automatically resolve to the correct pins
 // based on the board type defined at compile time in common.h
 const int HardwareAbstraction::SENSOR_PINS[] = {SENSOR_PIN_A, SENSOR_PIN_B, SENSOR_PIN_C, SENSOR_PIN_D};

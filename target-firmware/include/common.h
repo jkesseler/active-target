@@ -17,6 +17,13 @@
 #define DEFAULT_SENSOR_DEBOUNCE 90
 
 // Board-specific GPIO pin configurations
+// CRITICAL: When adding new board support, you MUST define:
+// 1. BOARD_<BOARDTYPE> preprocessor symbol (set in platformio.ini build_flags)
+// 2. All pin assignments (SENSOR_PIN_*, LED_PIN_*)
+// 3. BOARD_NAME string literal (validated at compile time)
+// 4. Hardware specifications (RAM_SIZE, FLASH_SIZE, CPU_FREQ)
+// Failure to define BOARD_NAME will result in compilation error.
+
 #ifdef BOARD_ESP32_C3_DEVKITM1
     // ESP32-C3-DevKitM-1 pin configuration
     // https://www.studiopieters.nl/esp32-c3-pinout/
