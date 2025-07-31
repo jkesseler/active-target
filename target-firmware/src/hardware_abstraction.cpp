@@ -1,15 +1,45 @@
 #include "hardware_abstraction.h"
 #include "common.h"
 
-// Static pin definitions
-const int HardwareAbstraction::SENSOR_PINS[] = {SENSOR_PIN_A, SENSOR_PIN_B, SENSOR_PIN_C, SENSOR_PIN_D};
-const int HardwareAbstraction::LED_PINS[] = {2, 8, 9, 10}; // Example LED pins
+// Compile-time validation to ensure BOARD_NAME is defined for all supported boards
+#ifndef BOARD_NAME
+    #error "BOARD_NAME must be defined for the current board configuration. Please add BOARD_NAME definition in common.h for your board type."
+#endif
 
-HardwareAbstraction::HardwareAbstraction() {
+// Additional validation to ensure BOARD_NAME is not empty
+static_assert(sizeof(BOARD_NAME) > 1, "BOARD_NAME cannot be empty. Please provide a meaningful board name in common.h");
+
+// Universal pin definitions - these automatically resolve to the correct pins
+// based on the board type defined at compile time in common.h
+const int HardwareAbstraction::SENSOR_PINS[] = {SENSOR_PIN_A, SENSOR_PIN_B, SENSOR_PIN_C, SENSOR_PIN_D};
+const int HardwareAbstraction::LED_PINS[] = {LED_PIN_RGB, LED_PIN_2, LED_PIN_3, LED_PIN_4};
+
+// Universal board configuration - automatically adapts to the compiled board
+const HardwareAbstraction::BoardConfig HardwareAbstraction::BOARD_CONFIG = {
+    SENSOR_PINS,
+    LED_PINS,
+    4,  // sensorCount
+    4,  // ledCount
+    BOARD_NAME
+};
+
+HardwareAbstraction::HardwareAbstraction() : currentBoard(BoardType::UNKNOWN) {
     // Constructor implementation
 }
 
 HardwareAbstraction::ErrorCode HardwareAbstraction::initialize() {
+    currentBoard = detectBoardType();
+    return initialize(currentBoard);
+}
+
+HardwareAbstraction::ErrorCode HardwareAbstraction::initialize(BoardType board) {
+    if (board == BoardType::UNKNOWN) {
+        return ErrorCode::UNSUPPORTED_BOARD;
+    }
+
+    currentBoard = board;
+    // Use the universal configuration that automatically adapts to the compiled board
+    config = BOARD_CONFIG;
     initializePins();
     return ErrorCode::SUCCESS;
 }
@@ -30,11 +60,11 @@ HardwareAbstraction::ErrorCode HardwareAbstraction::readSensor(int pin, int& val
 }
 
 HardwareAbstraction::ErrorCode HardwareAbstraction::setLedState(int ledId, bool state) {
-    if (ledId < 0 || ledId >= MAX_LEDS) {
+    if (ledId < 0 || ledId >= config.ledCount) {
         return ErrorCode::INVALID_PIN;
     }
 
-    digitalWrite(LED_PINS[ledId], state ? HIGH : LOW);
+    digitalWrite(config.ledPins[ledId], state ? HIGH : LOW);
     return ErrorCode::SUCCESS;
 }
 
@@ -43,7 +73,11 @@ unsigned long HardwareAbstraction::getCurrentTime() const {
 }
 
 bool HardwareAbstraction::isValidSensorPin(int pin) const {
-    return validatePin(pin, SENSOR_PINS, MAX_SENSORS);
+    return validatePin(pin, config.sensorPins, config.sensorCount);
+}
+
+const char* HardwareAbstraction::getBoardName() const {
+    return config.name;
 }
 
 const char* HardwareAbstraction::getErrorDescription(ErrorCode error) const {
@@ -56,9 +90,21 @@ const char* HardwareAbstraction::getErrorDescription(ErrorCode error) const {
             return "Sensor fault or read error";
         case ErrorCode::TIMEOUT:
             return "Operation timeout";
+        case ErrorCode::UNSUPPORTED_BOARD:
+            return "Unsupported board type";
         default:
             return "Unknown error";
     }
+}
+
+HardwareAbstraction::BoardType HardwareAbstraction::detectBoardType() const {
+#ifdef BOARD_ESP32_C3_DEVKITM1
+    return BoardType::ESP32_C3_DEVKITM1;
+#elif defined(BOARD_ESP32_S3_DEVKITC1)
+    return BoardType::ESP32_S3_DEVKITC1;
+#else
+    return BoardType::UNKNOWN;
+#endif
 }
 
 bool HardwareAbstraction::validatePin(int pin, const int* validPins, int maxPins) const {
@@ -72,13 +118,13 @@ bool HardwareAbstraction::validatePin(int pin, const int* validPins, int maxPins
 
 void HardwareAbstraction::initializePins() {
     // Initialize sensor pins
-    for (int i = 0; i < MAX_SENSORS; i++) {
-        pinMode(SENSOR_PINS[i], INPUT_PULLUP);
+    for (int i = 0; i < config.sensorCount; i++) {
+        pinMode(config.sensorPins[i], INPUT_PULLUP);
     }
 
     // Initialize LED pins
-    for (int i = 0; i < MAX_LEDS; i++) {
-        pinMode(LED_PINS[i], OUTPUT);
-        digitalWrite(LED_PINS[i], LOW);
+    for (int i = 0; i < config.ledCount; i++) {
+        pinMode(config.ledPins[i], OUTPUT);
+        digitalWrite(config.ledPins[i], LOW);
     }
 }

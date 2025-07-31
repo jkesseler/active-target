@@ -16,18 +16,69 @@
 #define DEFAULT_SENSOR_THRESHOLD 300
 #define DEFAULT_SENSOR_DEBOUNCE 90
 
-// https://www.studiopieters.nl/esp32-c3-pinout/
-// https://docs.espressif.com/projects/esp-idf/en/v5.2/esp32c3/hw-reference/esp32c3/user-guide-devkitm-1.html
-// GPIO<n>  | // Physical pin number
-#define SENSOR_PIN_A 0 // GPIO0 (ADC1_CH0)
-#define SENSOR_PIN_B 1 // GPIO1 (ADC1_CH1)
-#define SENSOR_PIN_C 2 // GPIO2 (ADC1_CH2)
-#define SENSOR_PIN_D 3 // GPIO3 (ADC1_CH3)
+// Board-specific GPIO pin configurations
+// CRITICAL: When adding new board support, you MUST define:
+// 1. BOARD_<BOARDTYPE> preprocessor symbol (set in platformio.ini build_flags)
+// 2. All pin assignments (SENSOR_PIN_*, LED_PIN_*)
+// 3. BOARD_NAME string literal (validated at compile time)
+// 4. Hardware specifications (RAM_SIZE, FLASH_SIZE, CPU_FREQ)
+// Failure to define BOARD_NAME will result in compilation error.
 
-#define LED_PIN_RGB LED_BUILTIN
-#define LED_PIN_2 8 // 15
-#define LED_PIN_3 9 // 16
-#define LED_PIN_4 10 // 17
+#ifdef BOARD_ESP32_C3_DEVKITM1
+    // ESP32-C3-DevKitM-1 pin configuration
+    // https://www.studiopieters.nl/esp32-c3-pinout/
+    // https://docs.espressif.com/projects/esp-idf/en/v5.2/esp32c3/hw-reference/esp32c3/user-guide-devkitm-1.html
+    #define SENSOR_PIN_A 0 // GPIO0 (ADC1_CH0)
+    #define SENSOR_PIN_B 1 // GPIO1 (ADC1_CH1)
+    #define SENSOR_PIN_C 2 // GPIO2 (ADC1_CH2)
+    #define SENSOR_PIN_D 3 // GPIO3 (ADC1_CH3)
+
+    #define LED_PIN_RGB LED_BUILTIN // GPIO8 (RGB LED)
+    #define LED_PIN_2 8  // GPIO8
+    #define LED_PIN_3 9  // GPIO9
+    #define LED_PIN_4 10 // GPIO10
+
+    #define BOARD_NAME "ESP32-C3-DevKitM-1"
+    #define BOARD_RAM_SIZE 409600     // 400KB SRAM
+    #define BOARD_FLASH_SIZE 4194304 // 4MB
+    #define BOARD_CPU_FREQ 160000000 // 160MHz
+
+#elif defined(BOARD_ESP32_S3_DEVKITC1)
+    // ESP32-S3-DevKitC-1 pin configuration
+    // https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html
+    #define SENSOR_PIN_A 1  // GPIO1 (ADC1_CH0)
+    #define SENSOR_PIN_B 2  // GPIO2 (ADC1_CH1)
+    #define SENSOR_PIN_C 3  // GPIO3 (ADC1_CH2)
+    #define SENSOR_PIN_D 4  // GPIO4 (ADC1_CH3)
+
+    #define LED_PIN_RGB 38  // GPIO38 (RGB LED or status LED)
+    #define LED_PIN_2 39    // GPIO39
+    #define LED_PIN_3 40    // GPIO40
+    #define LED_PIN_4 41    // GPIO41
+
+    #define BOARD_NAME "ESP32-S3-DevKitC-1"
+    #define BOARD_RAM_SIZE 524288     // 512KB SRAM
+    #define BOARD_FLASH_SIZE 8388608  // 8MB
+    #define BOARD_CPU_FREQ 240000000  // 240MHz
+
+#else
+    // Default configuration (fallback to ESP32-S3 as primary)
+    #warning "No board type defined. Define a valid board type using a build flag (e.g., -DBOARD_ESP32_C3_DEVKITM1 or -DBOARD_ESP32_S3_DEVKITC1). Falling back to ESP32-S3 defaults."
+    #define SENSOR_PIN_A 1
+    #define SENSOR_PIN_B 2
+    #define SENSOR_PIN_C 3
+    #define SENSOR_PIN_D 4
+
+    #define LED_PIN_RGB 38
+    #define LED_PIN_2 39
+    #define LED_PIN_3 40
+    #define LED_PIN_4 41
+
+    #define BOARD_NAME "Unknown Board (ESP32-S3 defaults)"
+    #define BOARD_RAM_SIZE 524288     // 512KB SRAM
+    #define BOARD_FLASH_SIZE 8388608  // 8MB
+    #define BOARD_CPU_FREQ 240000000  // 240MHz
+#endif
 
 // MQTT Topics for each target zone
 #define TARGET_ZONE_A "A"
