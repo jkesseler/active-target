@@ -1,0 +1,183 @@
+name: Build ESP32 Target Firmware
+
+on:
+  # push:
+  #   branches: [ main ]
+  #   paths:
+  #     - 'target-firmware/**'
+  #     - '.github/workflows/build-firmware.yml'
+  # pull_request:
+  #   branches: [ main ]
+  #   paths:
+  #     - 'target-firmware/**'
+  #     - '.github/workflows/build-firmware.yml'
+  workflow_dispatch:
+    inputs:
+      board_environment:
+        description: 'Board environment to build'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - 'all'
+          - 'esp32-s3-devkitc-1'
+          - 'esp32-c3-devkitm-1'
+
+jobs:
+  build-matrix:
+    name: Build Firmware (${{ matrix.board }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        board:
+          - esp32-s3-devkitc-1
+          - esp32-c3-devkitm-1
+        include:
+          - board: esp32-s3-devkitc-1
+            display_name: "ESP32-S3 DevKitC-1"
+            platform: "espressif32"
+          - board: esp32-c3-devkitm-1
+            display_name: "ESP32-C3 DevKitM-1"
+            platform: "espressif32"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
+          restore-keys: |
+            ${{ runner.os }}-pio-
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Build firmware for ${{ matrix.display_name }}
+        working-directory: target-firmware
+        run: |
+          echo "Building firmware for ${{ matrix.display_name }} (environment: ${{ matrix.board }})"
+          pio run -e ${{ matrix.board }}
+
+      - name: Check firmware size
+        working-directory: target-firmware
+        run: |
+          echo "=== Firmware Size Report for ${{ matrix.display_name }} ==="
+          pio run -e ${{ matrix.board }} -t size
+
+          # Extract and display memory usage
+          if [ -f ".pio/build/${{ matrix.board }}/firmware.bin" ]; then
+            echo "Firmware binary size:"
+            ls -lh .pio/build/${{ matrix.board }}/firmware.bin
+          fi
+
+      - name: Archive firmware binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware-${{ matrix.board }}-${{ github.sha }}
+          path: |
+            target-firmware/.pio/build/${{ matrix.board }}/firmware.bin
+            target-firmware/.pio/build/${{ matrix.board }}/firmware.elf
+            target-firmware/.pio/build/${{ matrix.board }}/partitions.bin
+          retention-days: 30
+
+      - name: Archive build logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-logs-${{ matrix.board }}-${{ github.sha }}
+          path: |
+            target-firmware/.pio/build/${{ matrix.board }}/
+          retention-days: 7
+
+  build-summary:
+    name: Build Summary
+    runs-on: ubuntu-latest
+    needs: build-matrix
+    if: always()
+    steps:
+      - name: Build Summary
+        run: |
+          echo "## ESP32 Target Firmware Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Board Environment | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| ESP32-S3 DevKitC-1 | ${{ needs.build-matrix.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ESP32-C3 DevKitM-1 | ${{ needs.build-matrix.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts Generated:" >> $GITHUB_STEP_SUMMARY
+          echo "- Firmware binaries for all supported boards" >> $GITHUB_STEP_SUMMARY
+          echo "- Build logs and debugging information" >> $GITHUB_STEP_SUMMARY
+          echo "- Memory usage reports" >> $GITHUB_STEP_SUMMARY
+
+  memory-analysis:
+    name: Memory Usage Analysis
+    runs-on: ubuntu-latest
+    needs: build-matrix
+    if: success()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Generate Memory Reports
+        working-directory: target-firmware
+        run: |
+          echo "# Memory Usage Analysis Report" > memory-report.md
+          echo "" >> memory-report.md
+          echo "Generated on: $(date)" >> memory-report.md
+          echo "Commit: ${{ github.sha }}" >> memory-report.md
+          echo "" >> memory-report.md
+
+          for board in esp32-s3-devkitc-1 esp32-c3-devkitm-1; do
+            echo "## $board" >> memory-report.md
+            echo "\`\`\`" >> memory-report.md
+            pio run -e $board -t size >> memory-report.md 2>&1 || echo "Build failed for $board" >> memory-report.md
+            echo "\`\`\`" >> memory-report.md
+            echo "" >> memory-report.md
+          done
+
+      - name: Upload Memory Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: memory-analysis-${{ github.sha }}
+          path: target-firmware/memory-report.md
+          retention-days: 30
+
+      - name: Comment Memory Usage on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './target-firmware/memory-report.md';
+            if (fs.existsSync(path)) {
+              const report = fs.readFileSync(path, 'utf8');
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## 📊 Memory Usage Report\n\n${report}`
+              });
+            }

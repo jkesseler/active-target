@@ -1,13 +1,22 @@
 # ESP32 Target Firmware
 
-A high-performance ESP32-C3 firmware for target system management with advanced memory optimization and comprehensive monitoring capabilities.
+A high-performance multi-board ESP32 firmware for target system management with advanced memory optimization and comprehensive monitoring capabilities.
 
 ## Overview
 
-This firmware provides robust target system control with optimized memory usage, efficient string operations, and comprehensive monitoring for ESP32-C3 devices. It features JSON document pooling, string operation optimization, and real-time memory monitoring.
+This firmware provides robust target system control with optimized memory usage, efficient string operations, and comprehensive monitoring. It supports multiple ESP32 development boards with automatic detection and board-specific optimizations.
+
+## Supported Hardware
+
+- **ESP32-S3-DevKitC-1** (Primary) - Feature-rich, more GPIO pins
+- **ESP32-C3-DevKitM-1** - Cost-effective, low power
+- **Automatic Board Detection** - Compile-time optimization for each board
+
+📖 **See [MULTI_BOARD_README.md](MULTI_BOARD_README.md) for detailed multi-board documentation**
 
 ## Features
 
+- **Multi-Board Support**: Hardware abstraction for different ESP32 variants
 - **Target System Control**: Sensor reading, LED control, and trigger management
 - **MQTT Integration**: Real-time messaging and remote configuration
 - **Memory Optimization**: JSON document pooling and efficient string operations
@@ -18,10 +27,12 @@ This firmware provides robust target system control with optimized memory usage,
 
 ## Hardware Requirements
 
-- **Platform**: ESP32-C3-DevKitM-1
-- **Memory**: 320KB RAM, 4MB Flash
-- **Frequency**: 160MHz
+- **Platform**: ESP32-S3-DevKitC-1 (Primary)
+- **Memory**: 512KB RAM, 8MB Flash
+- **Frequency**: 240MHz (dual-core)
 - **Framework**: Arduino ESP32
+
+**Alternative Board**: ESP32-C3-DevKitM-1 (400KB RAM, 4MB Flash, 160MHz)
 
 ## Software Requirements
 
