@@ -1,0 +1,221 @@
+.bigScreen {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  min-height: 100vh;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  height: 100vh;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.grid {
+  height: 100%;
+  margin: 0;
+}
+
+.leftPanel {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.rightPanel {
+  height: 100vh;
+  padding: 0;
+}
+
+.currentShooterCard {
+  background: linear-gradient(135deg, #2a4a7a 0%, #1e3a6f 100%);
+  border: 2px solid #4a90e2;
+  color: white;
+  flex: 0 0 auto;
+  margin-bottom: 1rem;
+}
+
+.targetsCard {
+  background: rgba(42, 74, 122, 0.8);
+  border: 1px solid #4a90e2;
+  color: white;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.leaderboardCard {
+  background: linear-gradient(135deg, #2a4a2a 0%, #1e3a1e 100%);
+  border: 2px solid #4a9e4a;
+  color: white;
+  height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+
+.stageName {
+  color: #4a90e2;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.currentShooter {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.nextShooter {
+  color: #cccccc;
+  font-size: 1.1rem;
+}
+
+.timer {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 120px;
+}
+
+.timer text {
+  color: #4a90e2;
+  font-family: 'Courier New', monospace;
+}
+
+.statCard {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  text-align: center;
+  color: white;
+}
+
+.statCard text:first-child {
+  color: #cccccc;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.currentShooterRow {
+  background: rgba(74, 144, 226, 0.2);
+  border-left: 4px solid #4a90e2;
+}
+
+.currentShooterRow td {
+  font-weight: 600;
+}
+
+.progressSection {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(74, 158, 74, 0.3);
+}
+
+/* Table styling for dark theme */
+.targetsCard table,
+.leaderboardCard table {
+  color: white;
+}
+
+.targetsCard table thead tr,
+.leaderboardCard table thead tr {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.targetsCard table thead th,
+.leaderboardCard table thead th {
+  color: #cccccc;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-bottom: 2px solid rgba(74, 144, 226, 0.5);
+}
+
+.targetsCard table tbody tr:nth-of-type(odd),
+.leaderboardCard table tbody tr:nth-of-type(odd) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.targetsCard table tbody tr:hover,
+.leaderboardCard table tbody tr:hover {
+  background: rgba(74, 144, 226, 0.1);
+}
+
+.targetsCard table td,
+.leaderboardCard table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .stageName {
+    font-size: 1.5rem;
+  }
+
+  .currentShooter {
+    font-size: 1.2rem;
+  }
+
+  .timer {
+    min-width: 100px;
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .leftPanel,
+  .rightPanel {
+    height: auto;
+  }
+
+  .grid {
+    height: auto;
+  }
+
+  .leaderboardCard {
+    height: auto;
+    margin-top: 1rem;
+  }
+}
+
+/* Animation for live updates */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+@keyframes targetHit {
+  0% { background-color: rgba(74, 144, 226, 0.1); }
+  50% { background-color: rgba(46, 204, 113, 0.3); }
+  100% { background-color: rgba(74, 144, 226, 0.1); }
+}
+
+.timer text {
+  animation: pulse 1s infinite;
+}
+
+.currentShooterRow {
+  animation: pulse 2s infinite;
+}
+
+/* Animate target updates */
+.targetsCard table tbody tr[data-status="hit"] {
+  animation: targetHit 0.5s ease-in-out;
+}
+
+/* Status badges custom styling */
+.targetsCard .mantine-Badge-root[data-variant="filled"] {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.leaderboardCard .mantine-Badge-root[data-variant="filled"] {
+  font-weight: 700;
+  font-size: 0.8rem;
+}
