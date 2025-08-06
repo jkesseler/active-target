@@ -20,14 +20,20 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "@/mocks/*": [
+        "mocks/*"
+      ]
     }
   },
   "include": [
     "./*.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "@types/**/*.d.ts"
+    "@types/**/*.d.ts",
+    "./mocks"
   ],
   "exclude": [
     "node_modules"

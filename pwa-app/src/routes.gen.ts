@@ -206,40 +206,40 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-  | '/'
-  | '/devices/$deviceId'
-  | '/stages/$stageId'
-  | '/stages/current'
-  | '/big-screen'
-  | '/dashboard'
-  | '/devices'
-  | '/stages'
-  | '/test'
-  | '/users';
+    | '/'
+    | '/devices/$deviceId'
+    | '/stages/$stageId'
+    | '/stages/current'
+    | '/big-screen'
+    | '/dashboard'
+    | '/devices'
+    | '/stages'
+    | '/test'
+    | '/users';
   fileRoutesByTo: FileRoutesByTo;
   to:
-  | '/'
-  | '/devices/$deviceId'
-  | '/stages/$stageId'
-  | '/stages/current'
-  | '/big-screen'
-  | '/dashboard'
-  | '/devices'
-  | '/stages'
-  | '/test'
-  | '/users';
+    | '/'
+    | '/devices/$deviceId'
+    | '/stages/$stageId'
+    | '/stages/current'
+    | '/big-screen'
+    | '/dashboard'
+    | '/devices'
+    | '/stages'
+    | '/test'
+    | '/users';
   id:
-  | '__root__'
-  | '/'
-  | '/devices/$deviceId'
-  | '/stages/$stageId'
-  | '/stages/current'
-  | '/big-screen/'
-  | '/dashboard/'
-  | '/devices/'
-  | '/stages/'
-  | '/test/'
-  | '/users/';
+    | '__root__'
+    | '/'
+    | '/devices/$deviceId'
+    | '/stages/$stageId'
+    | '/stages/current'
+    | '/big-screen/'
+    | '/dashboard/'
+    | '/devices/'
+    | '/stages/'
+    | '/test/'
+    | '/users/';
   fileRoutesById: FileRoutesById;
 }
 

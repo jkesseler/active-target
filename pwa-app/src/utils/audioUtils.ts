@@ -1,70 +1,87 @@
 /**
- * Audio utilities for generating synthetic audio signals
- * Used for system notifications and stage activation alerts
+ * Audio utility functions for use outside React components
+ * These functions can be safely used in Redux middleware and other non-React contexts
  */
 
 let audioContext: AudioContext | null = null;
+let isAudioInitialized = false;
+let hasUserInteracted = false;
 
 /**
- * Get or create a shared AudioContext instance
- * Browsers limit the number of concurrent audio contexts, so we reuse them
+ * Mark that user has interacted with the page (for browser audio policy compliance)
  */
-function getAudioContext(): AudioContext {
-  if (!audioContext || audioContext.state === 'closed') {
-    audioContext = new AudioContext();
-  }
-  return audioContext;
+export function markUserInteraction(): void {
+  hasUserInteracted = true;
 }
 
 /**
- * Generate a beep sound using Web Audio API
- * @param volume - Volume level (0-100)
- * @param frequency - Frequency in Hz
- * @param duration - Duration in milliseconds
+ * Initialize the audio context
+ * Must be called after user interaction for browsers to allow audio
  */
-export function beep(volume: number, frequency: number, duration: number): void {
+export function initializeAudioContext(): void {
+  if (!hasUserInteracted) {
+    console.warn('Cannot initialize audio context without user interaction');
+    return;
+  }
+
+  if (!audioContext || audioContext.state === 'closed') {
+    try {
+      audioContext = new AudioContext();
+      isAudioInitialized = true;
+      console.log('Audio context initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize audio context:', error);
+      isAudioInitialized = false;
+    }
+  }
+}
+
+/**
+ * Check if audio context is ready to play sounds
+ */
+export function isAudioReady(): boolean {
+  return isAudioInitialized && audioContext !== null && audioContext.state !== 'closed';
+}
+
+/**
+ * Play a beep sound with specified frequency and duration
+ * @param frequency - Frequency in Hz (default: 2800)
+ * @param duration - Duration in milliseconds (default: 433)
+ * @param volume - Volume between 0 and 1 (default: 1)
+ */
+export function playBeep(frequency = 2800, duration = 433, volume = 1): void {
+  if (!isAudioReady()) {
+    console.warn('Audio context not ready. User interaction required to initialize audio.');
+    return;
+  }
+
   try {
-    const context = getAudioContext();
-
-    // Create oscillator for tone generation
-    const oscillator = context.createOscillator();
-    const gainNode = context.createGain();
-
-    // Connect audio nodes
-    oscillator.connect(gainNode);
-    gainNode.connect(context.destination);
+    const oscillator = audioContext!.createOscillator();
+    const gainNode = audioContext!.createGain();
 
     // Configure oscillator
     oscillator.frequency.value = frequency;
     oscillator.type = 'square';
 
-    // Configure gain (volume)
-    gainNode.gain.value = volume * 0.01;
+    // Configure gain
+    gainNode.gain.value = volume * 0.01; // Convert to appropriate volume level
 
-    // Schedule audio playback
-    const currentTime = context.currentTime;
+    // Connect nodes
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext!.destination);
+
+    // Play the beep
+    const currentTime = audioContext!.currentTime;
     oscillator.start(currentTime);
     oscillator.stop(currentTime + duration * 0.001);
   } catch (error) {
-    console.error('Failed to play beep sound:', error);
+    console.error('Failed to play beep:', error);
   }
 }
 
 /**
- * Play the standard stage activation beep
- * 2800Hz square wave for 433ms at moderate volume
+ * Get the current audio context state
  */
-export function playStageActivationBeep(): void {
-  beep(50, 2800, 433);
-}
-
-/**
- * Clean up audio resources
- * Should be called when the application is closing
- */
-export function closeAudioContext(): void {
-  if (audioContext && audioContext.state !== 'closed') {
-    audioContext.close();
-    audioContext = null;
-  }
+export function getAudioContextState(): AudioContextState | null {
+  return audioContext?.state || null;
 }

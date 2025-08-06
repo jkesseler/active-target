@@ -1,7 +1,6 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
 import { stageActivated } from './stagesSlice';
-import { playStageActivationBeep } from '@/utils/audioUtils';
-import type { AppRootState, AppDispatch } from '@/store';
+import { playBeep, isAudioReady, initializeAudioContext } from '@/utils/audioUtils';
 
 // Create listener middleware for stages
 export const stagesMiddleware = createListenerMiddleware();
@@ -9,10 +8,22 @@ export const stagesMiddleware = createListenerMiddleware();
 // Listen for stage activation to trigger beep sound
 stagesMiddleware.startListening({
   actionCreator: stageActivated,
-  effect: (action, listenerApi) => {
+  effect: async (action, listenerApi) => {
     try {
+      // Check if audio is ready, if not try to initialize
+      if (!isAudioReady()) {
+        console.log('Audio not ready, attempting to initialize audio context...');
+        initializeAudioContext();
+
+        // Check again after initialization attempt
+        if (!isAudioReady()) {
+          console.warn('Audio context could not be initialized. Browser may require user interaction first.');
+          return;
+        }
+      }
+
       // Play the activation beep when a stage is activated
-      playStageActivationBeep();
+      playBeep();
       console.log(`Stage activated: ${action.payload.id} - Beep played`);
     } catch (error) {
       console.error('Failed to play stage activation beep:', error);

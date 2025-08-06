@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { simulateTargetHit, simulateTargetMiss, type MockTarget } from '@/routes/big-screen/big-screen-mock-data';
+import { simulateTargetHit, simulateTargetMiss, type MockTarget } from '@/mocks/big-screen-mock-data';
 
 export function useShootingSimulation(targets: MockTarget[], onTargetUpdate: (targets: MockTarget[]) => void) {
   const [isSimulating, setIsSimulating] = useState(false);
