@@ -47,7 +47,7 @@ export function isAudioReady(): boolean {
  * Play a beep sound with specified frequency and duration
  * @param frequency - Frequency in Hz (default: 2800)
  * @param duration - Duration in milliseconds (default: 433)
- * @param volume - Volume between 0 and 1 (default: 1)
+ * @param volume - Volume as a percentage between 0 and 100 (default: 100)
  */
 export function playBeep(frequency = 2800, duration = 433, volume = 100): void {
   if (!isAudioReady()) {
