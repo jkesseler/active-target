@@ -49,7 +49,7 @@ export function isAudioReady(): boolean {
  * @param duration - Duration in milliseconds (default: 433)
  * @param volume - Volume between 0 and 1 (default: 1)
  */
-export function playBeep(frequency = 2800, duration = 433, volume = 1): void {
+export function playBeep(frequency = 2800, duration = 433, volume = 100): void {
   if (!isAudioReady()) {
     console.warn('Audio context not ready. User interaction required to initialize audio.');
     return;

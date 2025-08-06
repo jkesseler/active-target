@@ -38,13 +38,13 @@ export const Route = createFileRoute('/big-screen/')({
 
 function BigScreenPage() {
   const stage = useAppSelector(selectCurrentStage);
-  const users = useAppSelector(selectUsers);
-  const devices = useAppSelector((state) => selectDevicesByType(state, [
-    DevicesTypes.DEVICE_TYPE_TARGET,
-    DevicesTypes.DEVICE_TYPE_POPPER,
-    DevicesTypes.DEVICE_TYPE_NOSHOOT,
-    DevicesTypes.DEVICE_TYPE_STOP_PLATE
-  ]));
+  // const users = useAppSelector(selectUsers);
+  // const devices = useAppSelector((state) => selectDevicesByType(state, [
+  //   DevicesTypes.DEVICE_TYPE_TARGET,
+  //   DevicesTypes.DEVICE_TYPE_POPPER,
+  //   DevicesTypes.DEVICE_TYPE_NOSHOOT,
+  //   DevicesTypes.DEVICE_TYPE_STOP_PLATE
+  // ]));
 
   // Timer management
   const timer = useStageTimer();
