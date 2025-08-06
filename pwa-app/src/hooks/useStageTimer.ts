@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/configureStore';
 import {
   timerStarted,
@@ -37,23 +37,8 @@ export function useStageTimer() {
     return timer.elapsedTime;
   }, [timer.isRunning, timer.isPaused, timer.elapsedTime, timer.startTime]);
 
-  // Force re-render every 10ms for smooth display (but no Redux dispatch!)
-  const [, forceUpdate] = useState({});
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (timer.isRunning && !timer.isPaused) {
-      interval = setInterval(() => {
-        forceUpdate({}); // Just trigger re-render, no Redux action
-      }, 10);
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [timer.isRunning, timer.isPaused]);
+  // No forced re-renders needed - let consumers handle their own update timing
+  // Components using this hook should manage their own update intervals
 
   const start = useCallback(() => {
     const now = Date.now();
@@ -99,6 +84,8 @@ export function useStageTimer() {
     resume,
     stop,
     reset,
-    formatTime: () => formatTime(currentElapsedTime)
+    formatTime: () => formatTime(currentElapsedTime),
+    // Provide access to live time calculation for consumers who need fresh data
+    getCurrentTime: getCurrentElapsedTime
   };
 }
