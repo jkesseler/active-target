@@ -72,6 +72,105 @@ export const stagesSlice = createSlice({
         ...state,
         list: nextList
       };
+    },
+    timerStarted: (state, { payload }) => {
+      const stageId = payload?.stageId || state.currentStage;
+      const nextList = state.list.map((stage: Types.Stage) =>
+        stage.id === stageId ? {
+          ...stage,
+          timer: {
+            ...stage.timer,
+            elapsedTime: stage.timer?.elapsedTime || 0,
+            isRunning: true,
+            isPaused: false,
+            startTime: Date.now() - ((stage.timer?.elapsedTime || 0) * 1000)
+          }
+        } : stage
+      );
+
+      return {
+        ...state,
+        list: nextList
+      };
+    },
+    timerPaused: (state, { payload }) => {
+      const stageId = payload?.stageId || state.currentStage;
+      const nextList = state.list.map((stage: Types.Stage) =>
+        stage.id === stageId ? {
+          ...stage,
+          timer: {
+            ...stage.timer,
+            elapsedTime: stage.timer?.elapsedTime || 0,
+            isRunning: true,
+            isPaused: true,
+            startTime: stage.timer?.startTime
+          }
+        } : stage
+      );
+
+      return {
+        ...state,
+        list: nextList
+      };
+    },
+    timerStopped: (state, { payload }) => {
+      const stageId = payload?.stageId || state.currentStage;
+      const nextList = state.list.map((stage: Types.Stage) =>
+        stage.id === stageId ? {
+          ...stage,
+          timer: {
+            ...stage.timer,
+            elapsedTime: stage.timer?.elapsedTime || 0,
+            isRunning: false,
+            isPaused: false,
+            startTime: undefined
+          }
+        } : stage
+      );
+
+      return {
+        ...state,
+        list: nextList
+      };
+    },
+    timerReset: (state, { payload }) => {
+      const stageId = payload?.stageId || state.currentStage;
+      const nextList = state.list.map((stage: Types.Stage) =>
+        stage.id === stageId ? {
+          ...stage,
+          timer: {
+            elapsedTime: 0,
+            isRunning: false,
+            isPaused: false,
+            startTime: undefined
+          }
+        } : stage
+      );
+
+      return {
+        ...state,
+        list: nextList
+      };
+    },
+    timerUpdated: (state, { payload }) => {
+      const stageId = payload?.stageId || state.currentStage;
+      const nextList = state.list.map((stage: Types.Stage) =>
+        stage.id === stageId ? {
+          ...stage,
+          timer: {
+            ...stage.timer,
+            elapsedTime: payload.elapsedTime,
+            isRunning: stage.timer?.isRunning || false,
+            isPaused: stage.timer?.isPaused || false,
+            startTime: stage.timer?.startTime
+          }
+        } : stage
+      );
+
+      return {
+        ...state,
+        list: nextList
+      };
     }
   },
   extraReducers: (builder) => {
@@ -93,7 +192,12 @@ export const {
   stageRemoved,
   stageActivated,
   stageDeactivated,
-  currentShooterUpdated
+  currentShooterUpdated,
+  timerStarted,
+  timerPaused,
+  timerStopped,
+  timerReset,
+  timerUpdated
 } = stagesSlice.actions;
 
 export function selectStages(state: AppRootState) {

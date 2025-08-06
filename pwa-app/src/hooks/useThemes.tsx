@@ -5,7 +5,7 @@ import type { ThemeName } from '@/themes/types';
 export function useThemes() {
   const [theme, setTheme] = useLocalStorage<ThemeName>({
     key: 'theme',
-    defaultValue: 'corporate',
+    defaultValue: 'dracula',
     serialize: (value) => value,
     deserialize: (value) => {
       if (value !== undefined && Object.keys(themes).includes(value)) {

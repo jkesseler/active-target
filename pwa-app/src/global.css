@@ -1,0 +1,7 @@
+.shell {
+  &[data-navbar-expanded] {
+    @mixin smaller-than $mantine-breakpoint-sm {
+      --app-shell-navbar-offset: rem(80px) !important;
+    }
+  }
+}

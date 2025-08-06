@@ -1,0 +1,12 @@
+.timer {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 120px;
+}
+
+.timer text {
+  color: #4a90e2;
+  font-family: 'Courier New', monospace;
+}

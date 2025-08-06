@@ -4,6 +4,12 @@ export interface Stage {
   currentShooterId?: string;
   status: STATUS; // active on buzzer, not active on stop plate
   devices: string[];
+  timer?: {
+    elapsedTime: number;
+    isRunning: boolean;
+    isPaused: boolean;
+    startTime?: number;
+  };
 }
 
 export enum STATUS {

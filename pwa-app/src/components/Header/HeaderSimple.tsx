@@ -1,5 +1,4 @@
 import { Button, Group, Switch } from '@mantine/core';
-import { Howl } from 'howler'
 import { useTranslation } from '@/hooks/useTranslation';
 import { useAppSelector, useAppDispatch } from '@/store';
 import { selectIsConnected, selectIsConnecting, startConnecting, startDisconnecting } from '@/features/mqtt/mqttSlice';
@@ -8,7 +7,6 @@ import * as StageTypes from '@/features/stages/types';
 import { ToggleStageButton } from './ToggleStageButton';
 import { Stopwatch } from './Stopwatch'
 import styles from './HeaderSimple.module.css';
-import { useEffect } from 'react';
 
 export function HeaderSimple() {
   const { t } = useTranslation('header')
@@ -17,20 +15,6 @@ export function HeaderSimple() {
   const currentStage = useAppSelector(state => selectCurrentStage(state));
   const isStageActive = currentStage?.status === StageTypes.STATUS.STAGE_ACTIVE;
   const dispatch = useAppDispatch();
-  const beep = new Howl({
-    src: ['/sounds/2800-hz-433ms.wav'],
-    preload: true
-
-  });
-
-  useEffect(() => {
-    if (isStageActive) {
-      beep.play();
-    } else {
-      beep.stop();
-    }
-  }, [isStageActive])
-
 
   const toggleConnect = () => {
     if (isConnected) {
@@ -54,10 +38,8 @@ export function HeaderSimple() {
 
         {/* Current stage.name */}
         {/* Current state.status */}
-
-
-        <ToggleStageButton />
-        <Stopwatch />
+        {/* <ToggleStageButton /> */}
+        {/* <Stopwatch /> */}
       </Group>
     </header>
   );

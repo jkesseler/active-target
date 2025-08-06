@@ -9,22 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root';
-import { Route as BigScreenRouteImport } from './routes/big-screen';
 import { Route as IndexRouteImport } from './routes/index';
 import { Route as UsersIndexRouteImport } from './routes/users/index';
 import { Route as TestIndexRouteImport } from './routes/test/index';
 import { Route as StagesIndexRouteImport } from './routes/stages/index';
 import { Route as DevicesIndexRouteImport } from './routes/devices/index';
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index';
+import { Route as BigScreenIndexRouteImport } from './routes/big-screen/index';
 import { Route as StagesCurrentRouteImport } from './routes/stages/current';
 import { Route as StagesStageIdRouteImport } from './routes/stages/$stageId';
 import { Route as DevicesDeviceIdRouteImport } from './routes/devices/$deviceId';
 
-const BigScreenRoute = BigScreenRouteImport.update({
-  id: '/big-screen',
-  path: '/big-screen',
-  getParentRoute: () => rootRouteImport,
-} as any);
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +50,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any);
+const BigScreenIndexRoute = BigScreenIndexRouteImport.update({
+  id: '/big-screen/',
+  path: '/big-screen/',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const StagesCurrentRoute = StagesCurrentRouteImport.update({
   id: '/stages/current',
   path: '/stages/current',
@@ -73,10 +73,10 @@ const DevicesDeviceIdRoute = DevicesDeviceIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
-  '/big-screen': typeof BigScreenRoute;
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
+  '/big-screen': typeof BigScreenIndexRoute;
   '/dashboard': typeof DashboardIndexRoute;
   '/devices': typeof DevicesIndexRoute;
   '/stages': typeof StagesIndexRoute;
@@ -85,10 +85,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
-  '/big-screen': typeof BigScreenRoute;
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
+  '/big-screen': typeof BigScreenIndexRoute;
   '/dashboard': typeof DashboardIndexRoute;
   '/devices': typeof DevicesIndexRoute;
   '/stages': typeof StagesIndexRoute;
@@ -98,10 +98,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
-  '/big-screen': typeof BigScreenRoute;
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
+  '/big-screen/': typeof BigScreenIndexRoute;
   '/dashboard/': typeof DashboardIndexRoute;
   '/devices/': typeof DevicesIndexRoute;
   '/stages/': typeof StagesIndexRoute;
@@ -112,10 +112,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
-    | '/big-screen'
     | '/devices/$deviceId'
     | '/stages/$stageId'
     | '/stages/current'
+    | '/big-screen'
     | '/dashboard'
     | '/devices'
     | '/stages'
@@ -124,10 +124,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
-    | '/big-screen'
     | '/devices/$deviceId'
     | '/stages/$stageId'
     | '/stages/current'
+    | '/big-screen'
     | '/dashboard'
     | '/devices'
     | '/stages'
@@ -136,10 +136,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/big-screen'
     | '/devices/$deviceId'
     | '/stages/$stageId'
     | '/stages/current'
+    | '/big-screen/'
     | '/dashboard/'
     | '/devices/'
     | '/stages/'
@@ -149,10 +149,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
-  BigScreenRoute: typeof BigScreenRoute;
   DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute;
   StagesStageIdRoute: typeof StagesStageIdRoute;
   StagesCurrentRoute: typeof StagesCurrentRoute;
+  BigScreenIndexRoute: typeof BigScreenIndexRoute;
   DashboardIndexRoute: typeof DashboardIndexRoute;
   DevicesIndexRoute: typeof DevicesIndexRoute;
   StagesIndexRoute: typeof StagesIndexRoute;
@@ -162,13 +162,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/big-screen': {
-      id: '/big-screen';
-      path: '/big-screen';
-      fullPath: '/big-screen';
-      preLoaderRoute: typeof BigScreenRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
     '/': {
       id: '/';
       path: '/';
@@ -211,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/big-screen/': {
+      id: '/big-screen/';
+      path: '/big-screen';
+      fullPath: '/big-screen';
+      preLoaderRoute: typeof BigScreenIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/stages/current': {
       id: '/stages/current';
       path: '/stages/current';
@@ -237,10 +237,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BigScreenRoute: BigScreenRoute,
   DevicesDeviceIdRoute: DevicesDeviceIdRoute,
   StagesStageIdRoute: StagesStageIdRoute,
   StagesCurrentRoute: StagesCurrentRoute,
+  BigScreenIndexRoute: BigScreenIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DevicesIndexRoute: DevicesIndexRoute,
   StagesIndexRoute: StagesIndexRoute,
