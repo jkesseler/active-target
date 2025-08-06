@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAppSelector, useAppDispatch } from '@/store';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
 import {
   timerStarted,
   timerPaused,
   timerStopped,
   timerReset,
-  timerUpdated,
   selectCurrentStage
 } from '@/features/stages/stagesSlice';
 

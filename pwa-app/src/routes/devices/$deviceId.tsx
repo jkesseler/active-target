@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Button, Switch, Table } from '@mantine/core';
-import { useAppSelector, useAppDispatch } from '@/store';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
 import { selectDeviceById, deviceOnline, deviceOffline } from '@/features/devices/devicesSlice';
 import * as Types from '@/features/devices/types';
 
@@ -12,7 +12,7 @@ function DeviceDetailsPage() {
   const { deviceId } = Route.useParams();
   const device = useAppSelector((state) => selectDeviceById(state, deviceId));
   const dispatch = useAppDispatch();
-  
+
   return (
     <>
       <Table>
@@ -35,11 +35,11 @@ function DeviceDetailsPage() {
                 {...(device.status === Types.STATUS.ONLINE
                   ? {
                     checked: true,
-                    onChange: () => dispatch(deviceOffline({ deviceId: device.id }))
+                    onChange: () => dispatch(deviceOffline({ id: device.id }))
                   }
                   : {
                     checked: false,
-                    onChange: () => dispatch(deviceOnline({ deviceId: device.id }))
+                    onChange: () => dispatch(deviceOnline({ id: device.id }))
                   })}
               />
             </Table.Td>

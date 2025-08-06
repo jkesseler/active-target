@@ -228,7 +228,54 @@ export const MQTT_TOPICS = {
 };
 ```
 
-### 6. Styling Standards
+### 6. Import/Export Standards
+```typescript
+// REQUIRED: No barrel files - import directly from source
+❌ // Avoid barrel files
+import { DeviceComponent, DeviceList } from './devices';
+
+✅ // Import directly from source files
+import { DeviceComponent } from './devices/DeviceComponent';
+import { DeviceList } from './devices/DeviceList';
+
+// REQUIRED: Use named imports/exports when possible
+❌ // Avoid default exports when not necessary
+export default function DeviceComponent() { /* */ }
+
+✅ // Prefer named exports
+export function DeviceComponent() { /* */ }
+
+// REQUIRED: Use tsconfig path aliases when available
+❌ // Avoid relative paths for deep imports
+import { selectDevices } from '../../../features/devices/devicesSlice';
+
+✅ // Use tsconfig path aliases
+import { selectDevices } from '@/features/devices/devicesSlice';
+
+// REQUIRED: Import grouping and ordering
+import React from 'react'; // 1. Built-in modules
+import { useCallback } from 'react';
+
+import { Button, Paper } from '@mantine/core'; // 2. External libraries
+import { useAppSelector } from 'react-redux';
+
+import { selectDevices } from '@/features/devices/devicesSlice'; // 3. Internal modules
+import { DeviceCard } from '@/components/DeviceCard';
+
+import type { Device, DeviceType } from './types'; // 4. Type-only imports (last)
+
+// REQUIRED: Export patterns
+// Single responsibility exports
+export { DeviceComponent } from './DeviceComponent';
+export { DeviceList } from './DeviceList';
+export type { DeviceProps } from './types';
+
+// Feature module exports (no barrel files)
+// devices/index.ts should NOT exist
+// Import directly: import { DeviceComponent } from '@/features/devices/DeviceComponent';
+```
+
+### 7. Styling Standards
 ```css
 /* REQUIRED: CSS Modules naming */
 .header {
@@ -251,7 +298,7 @@ export const MQTT_TOPICS = {
 }
 ```
 
-### 7. File Organization Standards
+### 8. File Organization Standards
 ```
 src/
 ├── components/           # Reusable UI components
@@ -294,7 +341,10 @@ const QUALITY_STANDARDS = {
   },
   imports: {
     order: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-    grouping: 'By type (React, libraries, internal, types)'
+    grouping: 'By type (React, libraries, internal, types)',
+    exportAll: 'FORBIDDEN - Do not use export *',
+    namedImports: 'REQUIRED - Use named imports/exports only when possible',
+    aliases: 'REQUIRED - Use tsconfig path aliases when available'
   }
 };
 ```

@@ -1,20 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
-import { useAppSelector, useAppDispatch } from '@/store';
-import { useTranslation } from '@/hooks/useTranslation';
-import { selectCurrentStage, stageActivated, stageDeactivated } from '@/features/stages/stagesSlice';
-import * as StageTypes from '@/features/stages/types';
 import {
   Text,
   Group,
-  ActionIcon,
+  ActionIcon
 } from '@mantine/core';
-import { IconPlayerPlay, IconPlayerPause, IconPlayerStop, IconRefresh, IconHelp } from '@tabler/icons-react';
+import { IconPlayerPlay, IconPlayerPause, IconPlayerStop, IconRefresh } from '@tabler/icons-react';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
+import { useTranslation } from '@/hooks/useTranslation';
+import { selectCurrentStage, stageActivated, stageDeactivated } from '@/features/stages/stagesSlice';
+import * as StageTypes from '@/features/stages/types';
 import { useStageTimer } from '@/hooks/useStageTimer';
 
-import classes from './timer.module.css';
+import classes from './Timer.module.css';
 
 export const Timer = () => {
-  const { t } = useTranslation('header')
   const dispatch = useAppDispatch();
   const [time, setTime] = useState(0);
   const intervalId = useRef<number>(0);
@@ -25,12 +24,16 @@ export const Timer = () => {
   // Handle timer intervals
   useEffect(() => {
     if (isStageActive) {
-      // @ts-expect-error: Types of setInterval and clearInterfal are mismatched
+      // @ts-expect-error: Types of setInterval and clearInterval are mismatched
       intervalId.current = setInterval(() => setTime((value) => value + 1), 10);
-    } else {
-      intervalId.current && clearInterval(intervalId.current);
+    } else if (intervalId.current) {
+      clearInterval(intervalId.current);
     }
-    () => intervalId.current && clearInterval(intervalId.current);
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+      }
+    };
   }, [isStageActive]);
 
   // const hour = Math.floor(time / 360000);
@@ -71,4 +74,4 @@ export const Timer = () => {
       </Group>
     </div>
   );
-}
+};

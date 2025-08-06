@@ -1,5 +1,5 @@
 import { createSlice, createSelector, createAction } from '@reduxjs/toolkit';
-import type { AppRootState } from '@/store';
+import type { AppRootState } from '@/store/configureStore';
 import mockDevices from './mock-data';
 import * as Types from './types';
 

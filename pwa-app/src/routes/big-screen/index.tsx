@@ -18,17 +18,17 @@ import {
   Overlay,
   Center
 } from '@mantine/core';
-import { IconPlayerPlay, IconPlayerPause, IconPlayerStop, IconRefresh, IconHelp } from '@tabler/icons-react';
-import { useAppSelector } from '@/store';
+import { IconHelp } from '@tabler/icons-react';
+import { useState, useEffect } from 'react';
+import { useAppSelector } from '@/store/configureStore';
 import { selectCurrentStage } from '@/features/stages/stagesSlice';
-import { selectUsers } from '@/features/users/usersSlice';
-import { selectDevicesByType } from '@/features/devices/devicesSlice';
-import * as DevicesTypes from '@/features/devices/types';
+// import { selectUsers } from '@/features/users/usersSlice';
+// import { selectDevicesByType } from '@/features/devices/devicesSlice';
+// import * as DevicesTypes from '@/features/devices/types';
 import { useStageTimer } from '@/hooks/useStageTimer';
 import { useShootingSimulation } from '@/hooks/useShootingSimulation';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useState, useEffect } from 'react';
-import { Timer } from '@/components/Timer'
+import { Timer } from '@/components/Timer/Timer';
 import { mockStageData, mockShooters, mockTargets, type MockShooter, type MockTarget } from '@/mocks/big-screen-mock-data';
 import classes from './big-screen.module.css';
 
@@ -51,7 +51,7 @@ function BigScreenPage() {
 
   // Current targets and shooters state
   const [currentTargets, setCurrentTargets] = useState<MockTarget[]>(mockTargets);
-  const [currentShooters, setCurrentShooters] = useState<MockShooter[]>(mockShooters);
+  const [currentShooters /*, setCurrentShooters */] = useState<MockShooter[]>(mockShooters);
   const [showHelp, setShowHelp] = useState(false);
 
   // Simulation controls
@@ -76,8 +76,8 @@ function BigScreenPage() {
   }, []);
 
   // Get current and next shooter
-  const currentShooter = currentShooters.find(s => s.userId === mockStageData.currentShooterId);
-  const nextShooter = currentShooters.find(s => s.userId === mockStageData.nextShooterId);
+  const currentShooter = currentShooters.find(shooter => shooter.userId === mockStageData.currentShooterId);
+  const nextShooter = currentShooters.find(shooter => shooter.userId === mockStageData.nextShooterId);
 
   // Calculate live stats
   const hitTargets = currentTargets.filter(t => t.status === 'hit').length;
@@ -207,7 +207,7 @@ function BigScreenPage() {
                       </Table.Td>
                       <Table.Td>{target.zone || '-'}</Table.Td>
                       <Table.Td>{target.points}</Table.Td>
-                      <Table.Td>{target.timeHit ? `${target.timeHit.toFixed(2)}s` : `-`}</Table.Td>
+                      <Table.Td>{target.timeHit ? `${target.timeHit.toFixed(2)}s` : '-'}</Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>
@@ -256,7 +256,7 @@ function BigScreenPage() {
                         </Table.Td>
                         <Table.Td>{shooter.score}</Table.Td>
                         <Table.Td>{shooter.hitFactor}</Table.Td>
-                        <Table.Td>{shooter.time > 0 ? `${shooter.time}s` : `-`}</Table.Td>
+                        <Table.Td>{shooter.time > 0 ? `${shooter.time}s` : '-'}</Table.Td>
                         <Table.Td>
                           <Text c="green" component="span">{shooter.hits}</Text>
                           <Text c="red" component="span">/{shooter.misses}</Text>
@@ -270,12 +270,12 @@ function BigScreenPage() {
               <div className={classes.progressSection}>
                 <Text size="sm" c="dimmed" mb="xs">Stage Progress</Text>
                 <Progress
-                  value={(currentShooters.filter(s => s.status === 'completed').length / currentShooters.length) * 100}
+                  value={(currentShooters.filter(shooter => shooter.status === 'completed').length / currentShooters.length) * 100}
                   size="lg"
                   color="blue"
                 />
                 <Text size="sm" c="dimmed" mt="xs">
-                  {currentShooters.filter(s => s.status === 'completed').length} of {currentShooters.length} shooters completed
+                  {currentShooters.filter(shooter => shooter.status === 'completed').length} of {currentShooters.length} shooters completed
                 </Text>
               </div>
             </Card>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useAppSelector } from '@/store';
+import { useAppSelector } from '@/store/configureStore';
 import { useTranslation } from '@/hooks/useTranslation';
-import { selectCurrentStage, stageActivated, stageDeactivated } from '@/features/stages/stagesSlice';
+import { selectCurrentStage } from '@/features/stages/stagesSlice';
 import * as StageTypes from '@/features/stages/types';
 
 export const Stopwatch = () => {
@@ -13,12 +13,16 @@ export const Stopwatch = () => {
 
   useEffect(() => {
     if (isStageActive) {
-      // @ts-expect-error: Types of setInterval and clearInterfal are mismatched
+      // @ts-expect-error: Types of setInterval and clearInterval are mismatched
       intervalId.current = setInterval(() => setTime((value) => value + 1), 10);
-    } else {
-      intervalId.current && clearInterval(intervalId.current);
+    } else if (intervalId.current) {
+      clearInterval(intervalId.current);
     }
-    () => intervalId.current && clearInterval(intervalId.current);
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+      }
+    };
   }, [isStageActive]);
 
   // const hour = Math.floor(time / 360000);

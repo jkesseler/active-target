@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Switch, Table } from '@mantine/core';
-import { useAppSelector, useAppDispatch } from '@/store';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
 import { deviceOffline, deviceOnline, selectDevices } from '@/features/devices/devicesSlice';
 import * as Types from '@/features/devices/types';
 
 export const Route = createFileRoute('/devices/')({
-  component: DevicesPage,
+  component: DevicesPage
 });
 
 function DevicesPage() {
@@ -44,11 +44,11 @@ function DevicesPage() {
                   {...(device.status === Types.STATUS.ONLINE
                     ? {
                       checked: true,
-                      onChange: () => dispatch(deviceOffline({ deviceId: device.id }))
+                      onChange: () => dispatch(deviceOffline({ id: device.id }))
                     }
                     : {
                       checked: false,
-                      onChange: () => dispatch(deviceOnline({ deviceId: device.id }))
+                      onChange: () => dispatch(deviceOnline({ id: device.id }))
                     })}
                 />
               </Table.Td>

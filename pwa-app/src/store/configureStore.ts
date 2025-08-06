@@ -7,7 +7,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { deserializeError } from 'serialize-error';
 // import { rememberReducer, rememberEnhancer } from 'redux-remember';
-import { timestampMiddleware } from './timestampMiddleware';
 import { devicesSlice } from '@/features/devices/devicesSlice';
 import { devicesMiddleware } from '@/features/devices/devicesMiddleware';
 import { mqttSlice } from '@/features/mqtt/mqttSlice';
@@ -15,6 +14,7 @@ import { mqttMiddleware } from '@/features/mqtt/mqttMiddleware';
 import { usersSlice } from '@/features/users/usersSlice';
 import { stagesSlice } from '@/features/stages/stagesSlice';
 import { stagesMiddleware } from '@/features/stages/stagesMiddleware';
+import { timestampMiddleware } from './timestampMiddleware';
 
 import type { TypedUseSelectorHook } from 'react-redux';
 import type {
@@ -41,7 +41,7 @@ export const store = configureStore({
       timestampMiddleware,
       mqttMiddleware,
       devicesMiddleware.middleware,
-      stagesMiddleware.middleware,
+      stagesMiddleware.middleware
     ),
   // enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(
   //   rememberEnhancer(

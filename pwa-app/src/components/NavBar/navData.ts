@@ -3,7 +3,6 @@ import {
   IconDevicesCog,
   IconReport,
   IconUsers,
-  IconFileCertificate,
   IconDeviceTv
 } from '@tabler/icons-react';
 import type { NavItem } from './types';

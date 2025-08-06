@@ -16,8 +16,8 @@ export const deviceOnline = createAction(actionTypes.DEVICE_ONLINE, function pre
     payload: {
       deviceType: 'POPPER'
     }
-  }
-})
+  };
+});
 
 
 export const targetHit = createAction(actionTypes.ACTIONS_DEVICE_TARGET_HIT, function prepare(deviceId: string, targetZone: string) {
@@ -34,5 +34,5 @@ export const targetHit = createAction(actionTypes.ACTIONS_DEVICE_TARGET_HIT, fun
     payload: {
       targetZone
     }
-  }
+  };
 });

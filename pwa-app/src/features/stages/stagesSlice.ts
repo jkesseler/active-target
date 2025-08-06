@@ -1,11 +1,18 @@
-import { createSlice, createSelector, createAction } from '@reduxjs/toolkit';
-import type { AppRootState } from '@/store';
+import { createSlice, createAction } from '@reduxjs/toolkit';
+import type { AppRootState } from '@/store/configureStore';
+import type { ScoresTable } from '@/features/scoresTable/types';
 import * as Types from './types';
 import mockData from './mock-data.json';
 
-const externalActions = {
-  deviceHit: createAction('DEVICE/HIT')
+interface DeviceHitPayload {
+  targetZone: string;
+  id: string;
+  timeMillies: number;
 }
+
+const externalActions = {
+  deviceHit: createAction<DeviceHitPayload>('DEVICE/HIT')
+};
 
 export const stagesSlice = createSlice({
   name: 'stages',
@@ -176,13 +183,13 @@ export const stagesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(externalActions.deviceHit, (state, action) => {
-        const { id, timeMillies } = action.meta;
-        const { targetZone } = action.payload;
-        // TODO: Update state
+        // Handle device hit action - payload contains id, timeMillies, targetZone
+        // TODO: Update state based on action.payload
+        console.log('Device hit:', action.payload);
       })
       .addDefaultCase((state, action) => {
         console.log('defaultCase Action: ', action);
-      })
+      });
   }
 });
 
@@ -216,5 +223,5 @@ export function selectCurrentStage(state: AppRootState) {
 export function selectCurrentScores(state: AppRootState) {
   const currentStage = selectCurrentStage(state);
   const currentShooterId = currentStage?.currentShooterId;
-  return currentStage?.scoresTable.find(scoreTable => scoreTable.shooterId === currentShooterId)?.scores ?? [];
+  return currentStage?.scoresTable?.find((scoreTable: ScoresTable) => scoreTable.shooterId === currentShooterId)?.scores ?? [];
 }

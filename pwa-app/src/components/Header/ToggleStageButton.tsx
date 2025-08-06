@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useAppSelector, useAppDispatch } from '@/store';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
 import { selectCurrentStage, stageActivated, stageDeactivated } from '@/features/stages/stagesSlice';
 import * as StageTypes from '@/features/stages/types';
 
@@ -22,5 +22,5 @@ export const ToggleStageButton = () => {
     <Button onMouseDown={handleStageStartStop} color={isStageActive ? 'red' : 'green'} disabled={!currentStage}>
       {isStageActive ? t('button:stop') : t('button:start')}
     </Button>
-  )
-}
+  );
+};

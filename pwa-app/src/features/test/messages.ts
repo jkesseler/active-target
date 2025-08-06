@@ -1,4 +1,5 @@
 import * as ActionTypes from './actionTypes';
+
 type ActionType = typeof ActionTypes[keyof typeof ActionTypes];
 
 type Message = {
@@ -26,7 +27,7 @@ export const createTargetHitMessage = ({ deviceId, targetZone = 'A' }: CreateTar
     payload: {
       targetZone  
     }
-  }
+  };
 
   return message;
-}
+};

@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import type { AppRootState } from '@/store';
+import type { AppRootState } from '@/store/configureStore';
 import { mockUsers } from './mock-data';
 import type * as Types from './types';
 
@@ -10,14 +10,14 @@ export const usersSlice = createSlice({
     userAdded: (state, { payload }) => {
       const idx = state.findIndex(user => user.id === payload.id);
 
-      if(idx !== -1) {
+      if (idx !== -1) {
         return state;
       }
 
       return [
         ...state,
         payload
-      ];  
+      ];
     },
     userRemoved: (state, { payload }) => {
       return state.filter(user => user.id !== payload.id);

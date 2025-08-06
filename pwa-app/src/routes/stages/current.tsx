@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Table, TextInput, Container, Grid, Paper } from '@mantine/core';
-import { useAppSelector } from '@/store';
-import { selectDevicesByType, } from '@/features/devices/devicesSlice';
-import { selectStageById, selectCurrentScores, selectCurrentStage } from '@/features/stages/stagesSlice';
+import { Container, Table, Paper } from '@mantine/core';
+import { useAppSelector } from '@/store/configureStore';
+import { selectDevicesByType } from '@/features/devices/devicesSlice';
+import { selectCurrentScores, selectCurrentStage } from '@/features/stages/stagesSlice';
 import * as DevicesTypes from '@/features/devices/types';
+import type { Scores, Result } from '@/features/scoresTable/types';
 import { calculateTotals } from '@/utils/scoreUtils';
 
 const scoreDeviceTypes = [
@@ -18,15 +19,14 @@ export const Route = createFileRoute('/stages/current')({
 });
 
 function StageDetailsPage() {
-  const stage = useAppSelector((state) => selectCurrentStage(state));
   const devices = useAppSelector((state) => selectDevicesByType(state, scoreDeviceTypes));
-  const currentScores = useAppSelector(state => selectCurrentScores(state))
+  const currentScores = useAppSelector(state => selectCurrentScores(state));
   const total = { major: 0, minor: 0 };
 
   devices.forEach((device: DevicesTypes.Device) => {
-    const targetScores = currentScores.find(score => score.deviceId === device.id);
+    const targetScores = currentScores.find((score: Scores) => score.deviceId === device.id);
     if (device.type === DevicesTypes.DEVICE_TYPE_TARGET) {
-      const scores = targetScores?.results.map(result => result.targetZone) || [];
+      const scores = targetScores?.results.map((result: Result) => result.targetZone) || [];
       const [major, minor] = calculateTotals(scores);
       total.major += major;
       total.minor += minor;
@@ -45,7 +45,7 @@ function StageDetailsPage() {
           Total Major: {total.major} / Time: 12.51 = HF: {(total.major / 12.51).toFixed(2)} <br />
           Total Minor: {total.minor} / Time: 12.51 = HF: {(total.minor / 12.51).toFixed(2)} <br />
         </Paper>
-     
+
         <Paper shadow="xs" p="md">
           <Table striped="odd">
             <Table.Thead>
@@ -56,26 +56,26 @@ function StageDetailsPage() {
                 <Table.Th>D</Table.Th>
                 <Table.Th>Mi</Table.Th>
                 <Table.Th>Major</Table.Th>
-                <Table.Th>Minor</Table.Th>                
+                <Table.Th>Minor</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <tbody>
               {devices.map((device: DevicesTypes.Device) => {
-                const targetScores = currentScores.find(score => score.deviceId === device.id);
-                const scoreByZone = (targetZone: string) => targetScores?.results.filter(result => result.targetZone === targetZone);
+                const targetScores = currentScores.find((score: Scores) => score.deviceId === device.id);
+                const scoreByZone = (targetZone: string) => targetScores?.results.filter((result: Result) => result.targetZone === targetZone);
 
                 return (
                   <Table.Tr key={device.id}>
                     <Table.Td>{device.name}</Table.Td>
                     {['A', 'C', 'D'].map((targetZone) => {
                       const zoneScores = scoreByZone(targetZone);
-                      const zoneScoreCount = !!zoneScores?.length ? zoneScores.length : ' ';
+                      const zoneScoreCount = zoneScores?.length ? zoneScores.length : ' ';
 
                       return (
                         <Table.Td key={`${device.id}-${targetZone}`}>
                           {zoneScoreCount}
                         </Table.Td>
-                      )
+                      );
                     })}
                     <Table.Td>
                       {/* Mi */}
@@ -84,7 +84,7 @@ function StageDetailsPage() {
                       {/* Total */}
                       {(() => {
                         if (device.type === DevicesTypes.DEVICE_TYPE_TARGET) {
-                          const scores = targetScores?.results.map(result => result.targetZone) || [];
+                          const scores = targetScores?.results.map((result: Result) => result.targetZone) || [];
                           const [major, minor] = calculateTotals(scores);
 
                           return (
@@ -111,7 +111,7 @@ function StageDetailsPage() {
                       })()}
                     </>
                   </Table.Tr>
-                )
+                );
               })}
             </tbody>
           </Table>
