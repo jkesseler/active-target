@@ -17,6 +17,7 @@ import { Route as TestIndexImport } from './routes/test/index';
 import { Route as StagesIndexImport } from './routes/stages/index';
 import { Route as DevicesIndexImport } from './routes/devices/index';
 import { Route as DashboardIndexImport } from './routes/dashboard/index';
+import { Route as BigScreenIndexImport } from './routes/big-screen/index';
 import { Route as StagesCurrentImport } from './routes/stages/current';
 import { Route as StagesStageIdImport } from './routes/stages/$stageId';
 import { Route as DevicesDeviceIdImport } from './routes/devices/$deviceId';
@@ -56,6 +57,12 @@ const DevicesIndexRoute = DevicesIndexImport.update({
 const DashboardIndexRoute = DashboardIndexImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const BigScreenIndexRoute = BigScreenIndexImport.update({
+  id: '/big-screen/',
+  path: '/big-screen/',
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -109,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StagesCurrentImport;
       parentRoute: typeof rootRoute;
     };
+    '/big-screen/': {
+      id: '/big-screen/';
+      path: '/big-screen';
+      fullPath: '/big-screen';
+      preLoaderRoute: typeof BigScreenIndexImport;
+      parentRoute: typeof rootRoute;
+    };
     '/dashboard/': {
       id: '/dashboard/';
       path: '/dashboard';
@@ -154,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
+  '/big-screen': typeof BigScreenIndexRoute;
   '/dashboard': typeof DashboardIndexRoute;
   '/devices': typeof DevicesIndexRoute;
   '/stages': typeof StagesIndexRoute;
@@ -166,6 +181,7 @@ export interface FileRoutesByTo {
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
+  '/big-screen': typeof BigScreenIndexRoute;
   '/dashboard': typeof DashboardIndexRoute;
   '/devices': typeof DevicesIndexRoute;
   '/stages': typeof StagesIndexRoute;
@@ -179,6 +195,7 @@ export interface FileRoutesById {
   '/devices/$deviceId': typeof DevicesDeviceIdRoute;
   '/stages/$stageId': typeof StagesStageIdRoute;
   '/stages/current': typeof StagesCurrentRoute;
+  '/big-screen/': typeof BigScreenIndexRoute;
   '/dashboard/': typeof DashboardIndexRoute;
   '/devices/': typeof DevicesIndexRoute;
   '/stages/': typeof StagesIndexRoute;
@@ -193,6 +210,7 @@ export interface FileRouteTypes {
     | '/devices/$deviceId'
     | '/stages/$stageId'
     | '/stages/current'
+    | '/big-screen'
     | '/dashboard'
     | '/devices'
     | '/stages'
@@ -204,6 +222,7 @@ export interface FileRouteTypes {
     | '/devices/$deviceId'
     | '/stages/$stageId'
     | '/stages/current'
+    | '/big-screen'
     | '/dashboard'
     | '/devices'
     | '/stages'
@@ -215,6 +234,7 @@ export interface FileRouteTypes {
     | '/devices/$deviceId'
     | '/stages/$stageId'
     | '/stages/current'
+    | '/big-screen/'
     | '/dashboard/'
     | '/devices/'
     | '/stages/'
@@ -228,6 +248,7 @@ export interface RootRouteChildren {
   DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute;
   StagesStageIdRoute: typeof StagesStageIdRoute;
   StagesCurrentRoute: typeof StagesCurrentRoute;
+  BigScreenIndexRoute: typeof BigScreenIndexRoute;
   DashboardIndexRoute: typeof DashboardIndexRoute;
   DevicesIndexRoute: typeof DevicesIndexRoute;
   StagesIndexRoute: typeof StagesIndexRoute;
@@ -240,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   DevicesDeviceIdRoute: DevicesDeviceIdRoute,
   StagesStageIdRoute: StagesStageIdRoute,
   StagesCurrentRoute: StagesCurrentRoute,
+  BigScreenIndexRoute: BigScreenIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DevicesIndexRoute: DevicesIndexRoute,
   StagesIndexRoute: StagesIndexRoute,
@@ -261,6 +283,7 @@ export const routeTree = rootRoute
         "/devices/$deviceId",
         "/stages/$stageId",
         "/stages/current",
+        "/big-screen/",
         "/dashboard/",
         "/devices/",
         "/stages/",
@@ -279,6 +302,9 @@ export const routeTree = rootRoute
     },
     "/stages/current": {
       "filePath": "stages/current.tsx"
+    },
+    "/big-screen/": {
+      "filePath": "big-screen/index.tsx"
     },
     "/dashboard/": {
       "filePath": "dashboard/index.tsx"

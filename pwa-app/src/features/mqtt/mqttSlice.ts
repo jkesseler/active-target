@@ -1,5 +1,5 @@
 import { createSlice /*, PayloadAction */ } from '@reduxjs/toolkit';
-import { AppRootState } from '@/store';
+import { AppRootState } from '@/store/configureStore';
 
 interface MqttMessage {
   topic: string;

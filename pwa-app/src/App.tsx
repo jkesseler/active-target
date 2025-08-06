@@ -5,8 +5,9 @@ import { MantineProvider } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
-import { store } from '@/store';
-import { useThemes } from './hooks/useThemes';
+import { store } from '@/store/configureStore';
+import { useThemes } from '@/hooks/useThemes';
+import { initializeAudioContext, markUserInteraction } from '@/utils/audioUtils';
 
 import { routeTree } from './routes.gen';
 
@@ -29,6 +30,29 @@ declare module '@tanstack/react-router' {
 
 export const App = () => {
   const { themes, currentThemeName } = useThemes();
+
+  // Initialize audio context on first user interaction
+  React.useEffect(() => {
+    const handleUserInteraction = () => {
+      markUserInteraction();
+      initializeAudioContext();
+      // Remove listeners after first interaction
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+      document.removeEventListener('touchstart', handleUserInteraction);
+    };
+
+    document.addEventListener('click', handleUserInteraction);
+    document.addEventListener('keydown', handleUserInteraction);
+    document.addEventListener('touchstart', handleUserInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+      document.removeEventListener('touchstart', handleUserInteraction);
+    };
+  }, []);
+
   return <Provider store={store}>
     <MantineProvider
       theme={themes[currentThemeName].mantineTheme}

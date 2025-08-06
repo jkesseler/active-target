@@ -17,17 +17,17 @@ const config = tseslint.config(
                 project: './tsconfig.json',
             },
         },
-        extends: [
-            'next/core-web-vitals', 
-            importPlugin.flatConfigs.recommended, 
-            importPlugin.flatConfigs.typescript],
+
         plugins: {
-            'import/typescript': importPlugin,
+            'import': importPlugin,
             '@stylistic': stylistic,
             react: reactPlugin,
             'react-hooks': reactHooksPlugin
         },
         "settings": {
+            "react": {
+              "version": "detect",
+            },
             "import/resolver": {
                 "typescript": true,
                 "node": true,
@@ -49,6 +49,12 @@ const config = tseslint.config(
 
             "@stylistic/space-unary-ops": "error",
             "@stylistic/template-curly-spacing": ["error", "never"],
+
+            "@typescript-eslint/no-unused-expressions": ["error", {
+                "allowShortCircuit": true,
+                "allowTernary": true
+            }],
+
             "block-scoped-var": "error",
 
             camelcase: ["error", {
@@ -60,7 +66,7 @@ const config = tseslint.config(
             eqeqeq: "error",
 
             "id-length": ["error", {
-                exceptions: ["t", "q", "e", "i", "j", "_"],
+                exceptions: ["a", "b", "t", "q", "e", "i", "j", "_"],
                 properties: "never",
             }],
 

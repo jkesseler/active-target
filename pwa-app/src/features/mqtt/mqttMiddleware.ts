@@ -1,7 +1,7 @@
-import mqtt from 'mqtt';
 import { Middleware } from 'redux';
 import { createAction } from '@reduxjs/toolkit';
-import { DEVICE_ID, MQTT_SEVRVER_URL, MQTT_MIDDLEWARE_TOPICS, MQTT_BROADCAST_TOPIC } from '@/constants';
+import mqtt from 'mqtt';
+import { DEVICE_ID, MQTT_SEVRVER_URL, MQTT_MIDDLEWARE_TOPICS } from '@/constants';
 import { mqttSlice } from './mqttSlice';
 
 let mqttClient: mqtt.MqttClient;

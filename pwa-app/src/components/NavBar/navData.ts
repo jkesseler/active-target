@@ -3,14 +3,14 @@ import {
   IconDevicesCog,
   IconReport,
   IconUsers,
-  IconFileCertificate
+  IconDeviceTv
 } from '@tabler/icons-react';
 import type { NavItem } from './types';
 
 export const navLinks: NavItem[] = [
-  { 
-    label: 'Dashboard', 
-    icon: IconDashboard, 
+  {
+    label: 'Dashboard',
+    icon: IconDashboard,
     link: '/dashboard'
   },
   {
@@ -28,6 +28,11 @@ export const navLinks: NavItem[] = [
     label: 'Stages',
     icon: IconReport,
     link: '/stages'
+  },
+  {
+    label: 'Big Screen',
+    icon: IconDeviceTv,
+    link: '/big-screen'
   }
   // {
   //   label: 'ScoreSheet',

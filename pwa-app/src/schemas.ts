@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const MessageMetaSchema = z.object({
   timestamp: z.date(),
   timeMillies: z.number().int().positive(),
-  id: z.string().uuid(),
+  id: z.string().uuid()
 });
 
 export const BaseMessageSchema = z.object({

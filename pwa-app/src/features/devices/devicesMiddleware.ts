@@ -12,8 +12,11 @@ devicesMiddleware.startListening({
     console.log('devicesMiddleware listenerApi: ', listenerApi);
 
     //@ts-expect-error: unknown
-    const { id } = action.payload;
-    // publish(`at/devices/${id}/status`, action);
+    if (actions.deviceOnline.match(action)) {
+      const { payload } = action;
+      console.log(`Device online: ${payload}`);
+      // publish(`at/devices/${payload.id}/status`, action);
+    }
   }
 });
 

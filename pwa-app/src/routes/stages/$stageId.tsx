@@ -1,29 +1,25 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Table, TextInput, Container, Grid, Paper } from '@mantine/core';
-import { useAppSelector } from '@/store';
+import { Table, Container, Paper } from '@mantine/core';
+import { useAppSelector } from '@/store/configureStore';
 import { selectDevicesByType } from '@/features/devices/devicesSlice';
-import {
-  selectStageById,
-  selectCurrentScores,
-  selectCurrentStage,
-} from '@/features/stages/stagesSlice';
+import { selectCurrentStage } from '@/features/stages/stagesSlice';
 import * as DevicesTypes from '@/features/devices/types';
 
 const scoreDeviceTypes = [
   DevicesTypes.DEVICE_TYPE_TARGET,
   DevicesTypes.DEVICE_TYPE_POPPER,
   DevicesTypes.DEVICE_TYPE_NOSHOOT,
-  DevicesTypes.DEVICE_TYPE_STOP_PLATE,
+  DevicesTypes.DEVICE_TYPE_STOP_PLATE
 ];
 
 export const Route = createFileRoute('/stages/$stageId')({
-  component: StageDetailsPage,
+  component: StageDetailsPage
 });
 
 function StageDetailsPage() {
   const stage = useAppSelector((state) => selectCurrentStage(state));
   const targets = useAppSelector((state) =>
-    selectDevicesByType(state, scoreDeviceTypes),
+    selectDevicesByType(state, scoreDeviceTypes)
   );
 
   return (
@@ -48,7 +44,7 @@ function StageDetailsPage() {
                   <Table.Td>{target.name}</Table.Td>
                   {[...Array(4)].map((_, i) => (
                     <Table.Td key={i}>
-                      {stage?.scoresTable?.scores?.results}
+                      {stage?.scoresTable?.[0]?.scores?.[0]?.results?.length || 0}
                     </Table.Td>
                   ))}
                 </Table.Tr>
