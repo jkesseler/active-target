@@ -10,7 +10,6 @@ import {
 } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerPause, IconPlayerStop, IconRefresh, IconHelp } from '@tabler/icons-react';
 import { useStageTimer } from '@/hooks/useStageTimer';
-import { useStageAudio } from '@/hooks/useStageAudio';
 
 import classes from './timer.module.css';
 
@@ -22,8 +21,6 @@ export const Timer = () => {
   const currentStage = useAppSelector(state => selectCurrentStage(state));
   const isStageActive = currentStage?.status === StageTypes.STATUS.STAGE_ACTIVE;
 
-  // Initialize stage audio with preloading
-  const stageAudio = useStageAudio('/sounds/2800-hz-433ms.wav', { preload: true });
 
   // Handle timer intervals
   useEffect(() => {
@@ -36,24 +33,6 @@ export const Timer = () => {
     () => intervalId.current && clearInterval(intervalId.current);
   }, [isStageActive]);
 
-  // Handle audio playback separately from timer logic
-  useEffect(() => {
-    if (isStageActive) {
-      // Play stage activation sound
-      stageAudio.playSound();
-    } else {
-      // Stop stage audio when stage becomes inactive
-      stageAudio.stopSound();
-    }
-  }, [isStageActive]); // Remove stageAudio from dependencies to prevent loop
-
-  // Cleanup audio on component unmount
-  useEffect(() => {
-    return () => {
-      stageAudio.stopSound();
-    };
-  }, []); // Run only on mount/unmount
-
   // const hour = Math.floor(time / 360000);
   const minute = Math.floor((time % 360000) / 6000);
   const second = Math.floor((time % 6000) / 100);
@@ -64,9 +43,6 @@ export const Timer = () => {
   };
 
   const tm = (number: number) => number.toString().padStart(2, '0');
-
-
-  // Timer management
   const timer = useStageTimer();
 
   const handleStageStart = () => currentStage && dispatch(stageActivated({ id: currentStage.id }));

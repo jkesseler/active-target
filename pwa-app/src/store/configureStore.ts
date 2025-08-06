@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { deserializeError } from 'serialize-error';
-import { rememberReducer, rememberEnhancer } from 'redux-remember';
+// import { rememberReducer, rememberEnhancer } from 'redux-remember';
 import { timestampMiddleware } from './timestampMiddleware';
 import { devicesSlice } from '@/features/devices/devicesSlice';
 import { devicesMiddleware } from '@/features/devices/devicesMiddleware';
@@ -14,6 +14,7 @@ import { mqttSlice } from '@/features/mqtt/mqttSlice';
 import { mqttMiddleware } from '@/features/mqtt/mqttMiddleware';
 import { usersSlice } from '@/features/users/usersSlice';
 import { stagesSlice } from '@/features/stages/stagesSlice';
+import { stagesMiddleware } from '@/features/stages/stagesMiddleware';
 
 import type { TypedUseSelectorHook } from 'react-redux';
 import type {
@@ -29,24 +30,25 @@ export const rootReducer = combineReducers({
   [stagesSlice.name]: stagesSlice.reducer
 });
 
-const reducer = rememberReducer(rootReducer);
+// const reducer = rememberReducer(rootReducer);
 
 export const store = configureStore({
-  reducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: true
     }).concat(
-        timestampMiddleware,
-        mqttMiddleware,
-        devicesMiddleware.middleware
-      ),
-  enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(
-    rememberEnhancer(
-      window.localStorage,
-      [devicesSlice.name, usersSlice.name, stagesSlice.name]
-    )
-  ),
+      timestampMiddleware,
+      mqttMiddleware,
+      devicesMiddleware.middleware,
+      stagesMiddleware.middleware,
+    ),
+  // enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(
+  //   rememberEnhancer(
+  //     window.localStorage,
+  //     [devicesSlice.name, usersSlice.name, stagesSlice.name]
+  //   )
+  // ),
   devTools: true
 });
 

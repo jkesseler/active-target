@@ -29,7 +29,7 @@ import { useShootingSimulation } from '@/hooks/useShootingSimulation';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useState, useEffect } from 'react';
 import { Timer } from '@/components/Timer'
-import { mockStageData, mockShooters, mockTargets, type MockShooter, type MockTarget } from '@/big-screen-mock-data';
+import { mockStageData, mockShooters, mockTargets, type MockShooter, type MockTarget } from '@/routes/big-screen/big-screen-mock-data';
 import classes from './big-screen.module.css';
 
 export const Route = createFileRoute('/big-screen/')({
