@@ -79,21 +79,29 @@ const TECH_STACK = {
 
 ### Domain Model
 ```typescript
-// Core entities in the system
+// Core entities in the system (Updated August 2025)
 interface CoreEntities {
   Device: {
-    types: ['TARGET', 'POPPER', 'NOSHOOT', 'STOP_PLATE', 'TRIGGER', 'ACTUATOR'];
+    types: ['TARGET', 'POPPER', 'NOSHOOT', 'STOP_PLATE']; // Simplified from 6 to 4 types
     states: ['online', 'offline'];
     communication: 'MQTT';
+    management: 'Full CRUD operations at /manage/devices/';
+  };
+  User: {
+    management: 'Full CRUD operations at /manage/users/';
+    scoring: 'Per-stage tracking';
+    authentication: 'Future implementation';
   };
   Stage: {
     states: ['STAGE_ACTIVE', 'STAGE_INACTIVE'];
     timing: 'Real-time with stopwatch';
     scoring: 'Device hit tracking';
+    management: 'Available at /manage/stages/';
   };
-  User: {
-    management: 'Local state';
-    scoring: 'Per-stage tracking';
+  BigScreen: {
+    status: 'Mock data - ready for Redux integration';
+    simulation: 'useShootingSimulation hook';
+    timer: 'useStageTimer hook integration';
   };
 }
 ```
@@ -412,7 +420,121 @@ function DeviceTable() {
 }
 ```
 
-## PERFORMANCE STANDARDS
+## LEARNED PATTERNS & PROJECT INTELLIGENCE
+
+### Implementation Lessons (August 2025)
+```typescript
+const PROJECT_LEARNINGS = {
+  routeManagement: {
+    pattern: 'File-based routing with TanStack Router',
+    organization: 'Feature-based under /manage/ for admin functions',
+    autoGeneration: 'Route generation happens automatically during dev server',
+    navigation: 'Tab-based navigation for management sections'
+  },
+  deviceTypes: {
+    evolution: 'Simplified from 6 types (including TRIGGER, ACTUATOR) to 4 core types',
+    reasoning: 'Focus on scoring devices, removed auxiliary device types',
+    types: ['TARGET', 'POPPER', 'NOSHOOT', 'STOP_PLATE'],
+    impact: 'Cleaner UI, better focus on core functionality'
+  },
+  crudPatterns: {
+    modals: 'Mantine Modal components for create/edit forms',
+    validation: 'useForm hook with inline validation',
+    notifications: 'Mantine notifications for success/error feedback',
+    search: 'Real-time filtering with local state',
+    redux: 'Direct integration with existing slices, preserve actions'
+  },
+  bigScreenArchitecture: {
+    current: 'Mock data with useShootingSimulation hook',
+    timer: 'useStageTimer hook connects to Redux match state',
+    simulation: 'Simulates device responses without MQTT',
+    nextStep: 'Replace mocks with Redux selectors, dispatch real actions'
+  }
+};
+```
+
+### User Preferences & Workflow
+```typescript
+const USER_WORKFLOW = {
+  taskManagement: {
+    format: 'Detailed task files with progress tracking',
+    updates: 'Real-time progress logging with subtask completion',
+    status: 'Clear status transitions: Pending → In Progress → Complete'
+  },
+  implementationStyle: {
+    preservation: 'Enhance rather than replace existing functionality',
+    consistency: 'Follow established UI patterns',
+    quality: 'Comprehensive error handling and notifications',
+    testing: 'Validate all CRUD operations before completion'
+  },
+  mqttIntegration: {
+    approach: 'Implement simulation first, MQTT integration later',
+    philosophy: 'Redux-first development, MQTT as enhancement',
+    timing: 'Defer real MQTT until UI and state management solid'
+  }
+};
+```
+
+### Critical Implementation Paths
+```typescript
+const CRITICAL_PATHS = {
+  managementCRUD: {
+    structure: '/routes/manage/{feature}/ for all admin functions',
+    patterns: 'Modal forms, table views, search functionality',
+    redux: 'Preserve existing actions, enhance with CRUD operations',
+    validation: 'Client-side validation with server-ready structure'
+  },
+  deviceManagement: {
+    types: 'Simplified to 4 core scoring device types',
+    status: 'Online/offline toggle with visual feedback',
+    details: 'Side effects and responses management',
+    integration: 'MQTT compatibility preserved for future'
+  },
+  bigScreenIntegration: {
+    priority: 'Replace mock data with Redux state',
+    simulation: 'Direct Redux dispatches instead of MQTT',
+    timer: 'Fix useStageTimer integration with match state',
+    leaderboard: 'Connect to real user scores from Redux'
+  }
+};
+```
+
+### Known Challenges & Solutions
+```typescript
+const CHALLENGES_SOLUTIONS = {
+  routeGeneration: {
+    challenge: 'TanStack Router requires route file structure changes',
+    solution: 'Dev server automatically regenerates routes, no manual intervention',
+    timing: 'Route updates happen during file creation/moves'
+  },
+  deviceTypes: {
+    challenge: 'Original 6 device types too complex for current scope',
+    solution: 'Simplified to 4 core types, clean up references',
+    impact: 'Better UI focus, easier device management'
+  },
+  mqttIntegration: {
+    challenge: 'MQTT dependency blocking UI development',
+    solution: 'Simulation-first approach with Redux actions',
+    benefit: 'Parallel development, better testing'
+  },
+  reduxPreservation: {
+    challenge: 'Existing Redux actions and middleware need preservation',
+    solution: 'Enhance existing slices rather than replace',
+    result: 'CRUD operations work with existing MQTT infrastructure'
+  }
+};
+```
+
+### Tool Usage Patterns
+```typescript
+const TOOL_PATTERNS = {
+  semanticSearch: 'Use for understanding codebase structure and finding patterns',
+  grep: 'Use for specific string searches within known file contexts',
+  readFile: 'Read large chunks (50-100 lines) rather than small sections',
+  replaceString: 'Include 3-5 lines context for unique identification',
+  fileCreation: 'Use createFile for new files, edit tools for modifications'
+};
+```
 
 ### Loading & Rendering
 ```typescript
