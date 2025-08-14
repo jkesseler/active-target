@@ -18,3 +18,4 @@ next-env.d.ts
 *.code-workspace
 memory-bank
 .github/*instructions*
+**/.github/*instructions*
