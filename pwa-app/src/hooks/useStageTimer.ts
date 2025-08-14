@@ -5,8 +5,8 @@ import {
   timerPaused,
   timerStopped,
   timerReset,
-  selectCurrentStage
-} from '@/features/stages/stagesSlice';
+  selectCurrentTimer
+} from '@/features/match/matchSlice';
 
 export interface TimerState {
   elapsedTime: number;
@@ -17,8 +17,7 @@ export interface TimerState {
 
 export function useStageTimer() {
   const dispatch = useAppDispatch();
-  const currentStage = useAppSelector(selectCurrentStage);
-  const timer = currentStage?.timer || { elapsedTime: 0, isRunning: false, isPaused: false };
+  const timer = useAppSelector(selectCurrentTimer) || { elapsedTime: 0, isRunning: false, isPaused: false };
 
   // Calculate current elapsed time without Redux dispatches
   const getCurrentElapsedTime = useCallback(() => {

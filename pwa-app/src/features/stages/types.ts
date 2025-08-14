@@ -3,16 +3,9 @@ import type { ScoresTable } from '@/features/scoresTable/types';
 export interface Stage {
   id: string;
   name: string;
-  currentShooterId?: string;
   status: STATUS; // active on buzzer, not active on stop plate
   devices: string[];
   scoresTable?: ScoresTable[];
-  timer?: {
-    elapsedTime: number;
-    isRunning: boolean;
-    isPaused: boolean;
-    startTime?: number;
-  };
 }
 
 export enum STATUS {

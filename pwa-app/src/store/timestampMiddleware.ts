@@ -1,26 +1,37 @@
 
-// Because of the way RTK infers it types we cannot type this
-import type { MiddlewareAPI, Dispatch, Action } from '@reduxjs/toolkit';
+import type { Middleware, UnknownAction } from '@reduxjs/toolkit';
 
-export const timestampMiddleware =
+interface TimestampAction extends UnknownAction {
+  meta?: Record<string, unknown> & {
+    timestamp?: string;
+    timeMillies?: number;
+  };
+}
+
+export const timestampMiddleware: Middleware =
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (_store: MiddlewareAPI) =>
-    (next: Dispatch<Action>) =>
-      (action: Action & { meta?: Record<string, unknown> }) => {
-        if (typeof action.type === 'string' && !action.type.startsWith('@@')) {
-          const addTimestamp = !action?.meta?.timestamp;
+  (_store) => (next) => (action) => {
+    // Type guard to ensure action has the expected shape
+    const isTypedAction = (act: unknown): act is TimestampAction => {
+      return typeof act === 'object' && act !== null && act !== undefined && 'type' in act;
+    };
 
-          action = {
-            ...action,
-            meta: {
-              ...action.meta,
-              ...(addTimestamp && {
-                timestamp: new Date().toISOString(),
-                timeMillies: Date.now()
-              })
-            }
-          };
+    if (isTypedAction(action) && typeof action.type === 'string' && !action.type.startsWith('@@')) {
+      const addTimestamp = !action?.meta?.timestamp;
+
+      const enhancedAction: TimestampAction = {
+        ...action,
+        meta: {
+          ...action.meta,
+          ...(addTimestamp && {
+            timestamp: new Date().toISOString(),
+            timeMillies: Date.now()
+          })
         }
-
-        return next(action);
       };
+
+      return next(enhancedAction);
+    }
+
+    return next(action);
+  };

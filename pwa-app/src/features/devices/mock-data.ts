@@ -64,15 +64,6 @@ const mockDevices: Device[] = [
     responses: ['Response 4', 'Response 5'],
     sideEffects: []
   },
-  // {
-  //   id: '6e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
-  //   name: 'Device 6',
-  //   type: 'ACTUATOR',
-  //   status: 'offline',
-  //   lastUpdated: '2023-10-10T10:00:50.000Z',
-  //   responses: ['Response 9'],
-  //   sideEffects: []
-  // },
   {
     id: '7e7a7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
     name: 'T5',

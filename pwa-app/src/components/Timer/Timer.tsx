@@ -6,7 +6,8 @@ import {
 } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerPause, IconPlayerStop, IconRefresh } from '@tabler/icons-react';
 import { useAppSelector, useAppDispatch } from '@/store/configureStore';
-import { selectCurrentStage, stageActivated, stageDeactivated } from '@/features/stages/stagesSlice';
+import { selectCurrentStage, stageDeactivated } from '@/features/stages/stagesSlice';
+import { selectCurrentMatch, activateStageInMatch } from '@/features/match/matchSlice';
 import * as StageTypes from '@/features/stages/types';
 import { useStageTimer } from '@/hooks/useStageTimer';
 
@@ -17,6 +18,7 @@ export const Timer = () => {
   const [time, setTime] = useState(0);
   const intervalId = useRef<NodeJS.Timeout | null>(null);
   const currentStage = useAppSelector(state => selectCurrentStage(state));
+  const currentMatch = useAppSelector(state => selectCurrentMatch(state));
   const isStageActive = currentStage?.status === StageTypes.STATUS.STAGE_ACTIVE;
 
   // Handle timer intervals with proper TypeScript types and cleanup
@@ -49,10 +51,13 @@ export const Timer = () => {
   const timer = useStageTimer();
 
   const handleStageStart = useCallback(() => {
-    if (currentStage) {
-      dispatch(stageActivated({ id: currentStage.id }));
+    if (currentStage && currentMatch) {
+      dispatch(activateStageInMatch({
+        matchId: currentMatch.id,
+        stageId: currentStage.id
+      }));
     }
-  }, [currentStage, dispatch]);
+  }, [currentStage, currentMatch, dispatch]);
 
   const handleStageStop = useCallback(() => {
     if (currentStage) {

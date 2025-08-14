@@ -13,8 +13,10 @@ import { mqttSlice } from '@/features/mqtt/mqttSlice';
 import { mqttMiddleware } from '@/features/mqtt/mqttMiddleware';
 import { usersSlice } from '@/features/users/usersSlice';
 import { stagesSlice } from '@/features/stages/stagesSlice';
-import { stagesMiddleware } from '@/features/stages/stagesMiddleware';
-import { timestampMiddleware } from './timestampMiddleware';
+import { matchSlice } from '@/features/match/matchSlice';
+import { matchMiddleware } from '@/features/match/matchMiddleware';
+import { beepMiddleware } from '@/store/beepMiddleware';
+import { timestampMiddleware } from '@/store/timestampMiddleware';
 
 import type { TypedUseSelectorHook } from 'react-redux';
 import type {
@@ -27,7 +29,8 @@ export const rootReducer = combineReducers({
   [devicesSlice.name]: devicesSlice.reducer,
   [mqttSlice.name]: mqttSlice.reducer,
   [usersSlice.name]: usersSlice.reducer,
-  [stagesSlice.name]: stagesSlice.reducer
+  [stagesSlice.name]: stagesSlice.reducer,
+  [matchSlice.name]: matchSlice.reducer
 });
 
 // const reducer = rememberReducer(rootReducer);
@@ -41,12 +44,13 @@ export const store = configureStore({
       timestampMiddleware,
       mqttMiddleware,
       devicesMiddleware.middleware,
-      stagesMiddleware.middleware
+      matchMiddleware.middleware,
+      beepMiddleware.middleware
     ),
   // enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(
   //   rememberEnhancer(
   //     window.localStorage,
-  //     [devicesSlice.name, usersSlice.name, stagesSlice.name]
+  //     [devicesSlice.name, usersSlice.name, stagesSlice.name,]
   //   )
   // ),
   devTools: true
