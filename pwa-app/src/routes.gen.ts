@@ -12,15 +12,16 @@
 
 import { Route as rootRoute } from './routes/__root';
 import { Route as IndexImport } from './routes/index';
-import { Route as UsersIndexImport } from './routes/users/index';
 import { Route as TestIndexImport } from './routes/test/index';
-import { Route as StagesIndexImport } from './routes/stages/index';
-import { Route as DevicesIndexImport } from './routes/devices/index';
+import { Route as ManageIndexImport } from './routes/manage/index';
 import { Route as DashboardIndexImport } from './routes/dashboard/index';
 import { Route as BigScreenIndexImport } from './routes/big-screen/index';
-import { Route as StagesCurrentImport } from './routes/stages/current';
-import { Route as StagesStageIdImport } from './routes/stages/$stageId';
-import { Route as DevicesDeviceIdImport } from './routes/devices/$deviceId';
+import { Route as ManageUsersIndexImport } from './routes/manage/users/index';
+import { Route as ManageStagesIndexImport } from './routes/manage/stages/index';
+import { Route as ManageDevicesIndexImport } from './routes/manage/devices/index';
+import { Route as ManageStagesCurrentImport } from './routes/manage/stages/current';
+import { Route as ManageStagesStageIdImport } from './routes/manage/stages/$stageId';
+import { Route as ManageDevicesDeviceIdImport } from './routes/manage/devices/$deviceId';
 
 // Create/Update Routes
 
@@ -30,27 +31,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
-const UsersIndexRoute = UsersIndexImport.update({
-  id: '/users/',
-  path: '/users/',
-  getParentRoute: () => rootRoute,
-} as any);
-
 const TestIndexRoute = TestIndexImport.update({
   id: '/test/',
   path: '/test/',
   getParentRoute: () => rootRoute,
 } as any);
 
-const StagesIndexRoute = StagesIndexImport.update({
-  id: '/stages/',
-  path: '/stages/',
-  getParentRoute: () => rootRoute,
-} as any);
-
-const DevicesIndexRoute = DevicesIndexImport.update({
-  id: '/devices/',
-  path: '/devices/',
+const ManageIndexRoute = ManageIndexImport.update({
+  id: '/manage/',
+  path: '/manage/',
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -66,21 +55,39 @@ const BigScreenIndexRoute = BigScreenIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
-const StagesCurrentRoute = StagesCurrentImport.update({
-  id: '/stages/current',
-  path: '/stages/current',
+const ManageUsersIndexRoute = ManageUsersIndexImport.update({
+  id: '/manage/users/',
+  path: '/manage/users/',
   getParentRoute: () => rootRoute,
 } as any);
 
-const StagesStageIdRoute = StagesStageIdImport.update({
-  id: '/stages/$stageId',
-  path: '/stages/$stageId',
+const ManageStagesIndexRoute = ManageStagesIndexImport.update({
+  id: '/manage/stages/',
+  path: '/manage/stages/',
   getParentRoute: () => rootRoute,
 } as any);
 
-const DevicesDeviceIdRoute = DevicesDeviceIdImport.update({
-  id: '/devices/$deviceId',
-  path: '/devices/$deviceId',
+const ManageDevicesIndexRoute = ManageDevicesIndexImport.update({
+  id: '/manage/devices/',
+  path: '/manage/devices/',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ManageStagesCurrentRoute = ManageStagesCurrentImport.update({
+  id: '/manage/stages/current',
+  path: '/manage/stages/current',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ManageStagesStageIdRoute = ManageStagesStageIdImport.update({
+  id: '/manage/stages/$stageId',
+  path: '/manage/stages/$stageId',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ManageDevicesDeviceIdRoute = ManageDevicesDeviceIdImport.update({
+  id: '/manage/devices/$deviceId',
+  path: '/manage/devices/$deviceId',
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -93,27 +100,6 @@ declare module '@tanstack/react-router' {
       path: '/';
       fullPath: '/';
       preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    '/devices/$deviceId': {
-      id: '/devices/$deviceId';
-      path: '/devices/$deviceId';
-      fullPath: '/devices/$deviceId';
-      preLoaderRoute: typeof DevicesDeviceIdImport;
-      parentRoute: typeof rootRoute;
-    };
-    '/stages/$stageId': {
-      id: '/stages/$stageId';
-      path: '/stages/$stageId';
-      fullPath: '/stages/$stageId';
-      preLoaderRoute: typeof StagesStageIdImport;
-      parentRoute: typeof rootRoute;
-    };
-    '/stages/current': {
-      id: '/stages/current';
-      path: '/stages/current';
-      fullPath: '/stages/current';
-      preLoaderRoute: typeof StagesCurrentImport;
       parentRoute: typeof rootRoute;
     };
     '/big-screen/': {
@@ -130,18 +116,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexImport;
       parentRoute: typeof rootRoute;
     };
-    '/devices/': {
-      id: '/devices/';
-      path: '/devices';
-      fullPath: '/devices';
-      preLoaderRoute: typeof DevicesIndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    '/stages/': {
-      id: '/stages/';
-      path: '/stages';
-      fullPath: '/stages';
-      preLoaderRoute: typeof StagesIndexImport;
+    '/manage/': {
+      id: '/manage/';
+      path: '/manage';
+      fullPath: '/manage';
+      preLoaderRoute: typeof ManageIndexImport;
       parentRoute: typeof rootRoute;
     };
     '/test/': {
@@ -151,11 +130,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TestIndexImport;
       parentRoute: typeof rootRoute;
     };
-    '/users/': {
-      id: '/users/';
-      path: '/users';
-      fullPath: '/users';
-      preLoaderRoute: typeof UsersIndexImport;
+    '/manage/devices/$deviceId': {
+      id: '/manage/devices/$deviceId';
+      path: '/manage/devices/$deviceId';
+      fullPath: '/manage/devices/$deviceId';
+      preLoaderRoute: typeof ManageDevicesDeviceIdImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/manage/stages/$stageId': {
+      id: '/manage/stages/$stageId';
+      path: '/manage/stages/$stageId';
+      fullPath: '/manage/stages/$stageId';
+      preLoaderRoute: typeof ManageStagesStageIdImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/manage/stages/current': {
+      id: '/manage/stages/current';
+      path: '/manage/stages/current';
+      fullPath: '/manage/stages/current';
+      preLoaderRoute: typeof ManageStagesCurrentImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/manage/devices/': {
+      id: '/manage/devices/';
+      path: '/manage/devices';
+      fullPath: '/manage/devices';
+      preLoaderRoute: typeof ManageDevicesIndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/manage/stages/': {
+      id: '/manage/stages/';
+      path: '/manage/stages';
+      fullPath: '/manage/stages';
+      preLoaderRoute: typeof ManageStagesIndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/manage/users/': {
+      id: '/manage/users/';
+      path: '/manage/users';
+      fullPath: '/manage/users';
+      preLoaderRoute: typeof ManageUsersIndexImport;
       parentRoute: typeof rootRoute;
     };
   }
@@ -165,108 +179,116 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
-  '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/stages/$stageId': typeof StagesStageIdRoute;
-  '/stages/current': typeof StagesCurrentRoute;
   '/big-screen': typeof BigScreenIndexRoute;
   '/dashboard': typeof DashboardIndexRoute;
-  '/devices': typeof DevicesIndexRoute;
-  '/stages': typeof StagesIndexRoute;
+  '/manage': typeof ManageIndexRoute;
   '/test': typeof TestIndexRoute;
-  '/users': typeof UsersIndexRoute;
+  '/manage/devices/$deviceId': typeof ManageDevicesDeviceIdRoute;
+  '/manage/stages/$stageId': typeof ManageStagesStageIdRoute;
+  '/manage/stages/current': typeof ManageStagesCurrentRoute;
+  '/manage/devices': typeof ManageDevicesIndexRoute;
+  '/manage/stages': typeof ManageStagesIndexRoute;
+  '/manage/users': typeof ManageUsersIndexRoute;
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
-  '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/stages/$stageId': typeof StagesStageIdRoute;
-  '/stages/current': typeof StagesCurrentRoute;
   '/big-screen': typeof BigScreenIndexRoute;
   '/dashboard': typeof DashboardIndexRoute;
-  '/devices': typeof DevicesIndexRoute;
-  '/stages': typeof StagesIndexRoute;
+  '/manage': typeof ManageIndexRoute;
   '/test': typeof TestIndexRoute;
-  '/users': typeof UsersIndexRoute;
+  '/manage/devices/$deviceId': typeof ManageDevicesDeviceIdRoute;
+  '/manage/stages/$stageId': typeof ManageStagesStageIdRoute;
+  '/manage/stages/current': typeof ManageStagesCurrentRoute;
+  '/manage/devices': typeof ManageDevicesIndexRoute;
+  '/manage/stages': typeof ManageStagesIndexRoute;
+  '/manage/users': typeof ManageUsersIndexRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   '/': typeof IndexRoute;
-  '/devices/$deviceId': typeof DevicesDeviceIdRoute;
-  '/stages/$stageId': typeof StagesStageIdRoute;
-  '/stages/current': typeof StagesCurrentRoute;
   '/big-screen/': typeof BigScreenIndexRoute;
   '/dashboard/': typeof DashboardIndexRoute;
-  '/devices/': typeof DevicesIndexRoute;
-  '/stages/': typeof StagesIndexRoute;
+  '/manage/': typeof ManageIndexRoute;
   '/test/': typeof TestIndexRoute;
-  '/users/': typeof UsersIndexRoute;
+  '/manage/devices/$deviceId': typeof ManageDevicesDeviceIdRoute;
+  '/manage/stages/$stageId': typeof ManageStagesStageIdRoute;
+  '/manage/stages/current': typeof ManageStagesCurrentRoute;
+  '/manage/devices/': typeof ManageDevicesIndexRoute;
+  '/manage/stages/': typeof ManageStagesIndexRoute;
+  '/manage/users/': typeof ManageUsersIndexRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
-    | '/devices/$deviceId'
-    | '/stages/$stageId'
-    | '/stages/current'
     | '/big-screen'
     | '/dashboard'
-    | '/devices'
-    | '/stages'
+    | '/manage'
     | '/test'
-    | '/users';
+    | '/manage/devices/$deviceId'
+    | '/manage/stages/$stageId'
+    | '/manage/stages/current'
+    | '/manage/devices'
+    | '/manage/stages'
+    | '/manage/users';
   fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
-    | '/devices/$deviceId'
-    | '/stages/$stageId'
-    | '/stages/current'
     | '/big-screen'
     | '/dashboard'
-    | '/devices'
-    | '/stages'
+    | '/manage'
     | '/test'
-    | '/users';
+    | '/manage/devices/$deviceId'
+    | '/manage/stages/$stageId'
+    | '/manage/stages/current'
+    | '/manage/devices'
+    | '/manage/stages'
+    | '/manage/users';
   id:
     | '__root__'
     | '/'
-    | '/devices/$deviceId'
-    | '/stages/$stageId'
-    | '/stages/current'
     | '/big-screen/'
     | '/dashboard/'
-    | '/devices/'
-    | '/stages/'
+    | '/manage/'
     | '/test/'
-    | '/users/';
+    | '/manage/devices/$deviceId'
+    | '/manage/stages/$stageId'
+    | '/manage/stages/current'
+    | '/manage/devices/'
+    | '/manage/stages/'
+    | '/manage/users/';
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
-  DevicesDeviceIdRoute: typeof DevicesDeviceIdRoute;
-  StagesStageIdRoute: typeof StagesStageIdRoute;
-  StagesCurrentRoute: typeof StagesCurrentRoute;
   BigScreenIndexRoute: typeof BigScreenIndexRoute;
   DashboardIndexRoute: typeof DashboardIndexRoute;
-  DevicesIndexRoute: typeof DevicesIndexRoute;
-  StagesIndexRoute: typeof StagesIndexRoute;
+  ManageIndexRoute: typeof ManageIndexRoute;
   TestIndexRoute: typeof TestIndexRoute;
-  UsersIndexRoute: typeof UsersIndexRoute;
+  ManageDevicesDeviceIdRoute: typeof ManageDevicesDeviceIdRoute;
+  ManageStagesStageIdRoute: typeof ManageStagesStageIdRoute;
+  ManageStagesCurrentRoute: typeof ManageStagesCurrentRoute;
+  ManageDevicesIndexRoute: typeof ManageDevicesIndexRoute;
+  ManageStagesIndexRoute: typeof ManageStagesIndexRoute;
+  ManageUsersIndexRoute: typeof ManageUsersIndexRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DevicesDeviceIdRoute: DevicesDeviceIdRoute,
-  StagesStageIdRoute: StagesStageIdRoute,
-  StagesCurrentRoute: StagesCurrentRoute,
   BigScreenIndexRoute: BigScreenIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
-  DevicesIndexRoute: DevicesIndexRoute,
-  StagesIndexRoute: StagesIndexRoute,
+  ManageIndexRoute: ManageIndexRoute,
   TestIndexRoute: TestIndexRoute,
-  UsersIndexRoute: UsersIndexRoute,
+  ManageDevicesDeviceIdRoute: ManageDevicesDeviceIdRoute,
+  ManageStagesStageIdRoute: ManageStagesStageIdRoute,
+  ManageStagesCurrentRoute: ManageStagesCurrentRoute,
+  ManageDevicesIndexRoute: ManageDevicesIndexRoute,
+  ManageStagesIndexRoute: ManageStagesIndexRoute,
+  ManageUsersIndexRoute: ManageUsersIndexRoute,
 };
 
 export const routeTree = rootRoute
@@ -280,28 +302,20 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/devices/$deviceId",
-        "/stages/$stageId",
-        "/stages/current",
         "/big-screen/",
         "/dashboard/",
-        "/devices/",
-        "/stages/",
+        "/manage/",
         "/test/",
-        "/users/"
+        "/manage/devices/$deviceId",
+        "/manage/stages/$stageId",
+        "/manage/stages/current",
+        "/manage/devices/",
+        "/manage/stages/",
+        "/manage/users/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/devices/$deviceId": {
-      "filePath": "devices/$deviceId.tsx"
-    },
-    "/stages/$stageId": {
-      "filePath": "stages/$stageId.tsx"
-    },
-    "/stages/current": {
-      "filePath": "stages/current.tsx"
     },
     "/big-screen/": {
       "filePath": "big-screen/index.tsx"
@@ -309,17 +323,29 @@ export const routeTree = rootRoute
     "/dashboard/": {
       "filePath": "dashboard/index.tsx"
     },
-    "/devices/": {
-      "filePath": "devices/index.tsx"
-    },
-    "/stages/": {
-      "filePath": "stages/index.tsx"
+    "/manage/": {
+      "filePath": "manage/index.tsx"
     },
     "/test/": {
       "filePath": "test/index.tsx"
     },
-    "/users/": {
-      "filePath": "users/index.tsx"
+    "/manage/devices/$deviceId": {
+      "filePath": "manage/devices/$deviceId.tsx"
+    },
+    "/manage/stages/$stageId": {
+      "filePath": "manage/stages/$stageId.tsx"
+    },
+    "/manage/stages/current": {
+      "filePath": "manage/stages/current.tsx"
+    },
+    "/manage/devices/": {
+      "filePath": "manage/devices/index.tsx"
+    },
+    "/manage/stages/": {
+      "filePath": "manage/stages/index.tsx"
+    },
+    "/manage/users/": {
+      "filePath": "manage/users/index.tsx"
     }
   }
 }

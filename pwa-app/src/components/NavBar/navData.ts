@@ -17,17 +17,17 @@ export const navLinks: NavItem[] = [
     label: 'Devices',
     icon: IconDevicesCog,
     initiallyOpened: true,
-    link: '/devices'
+    link: '/manage/devices'
   },
   {
     icon: IconUsers,
     label: 'Users',
-    link: '/users'
+    link: '/manage/users'
   },
   {
     label: 'Stages',
     icon: IconReport,
-    link: '/stages'
+    link: '/manage/stages'
   },
   {
     label: 'Big Screen',

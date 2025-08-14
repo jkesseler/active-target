@@ -16,3 +16,5 @@ npm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 *.code-workspace
+memory-bank
+.github/*.instructions.*
