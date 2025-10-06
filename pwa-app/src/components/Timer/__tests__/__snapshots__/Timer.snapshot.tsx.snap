@@ -1,0 +1,111 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Timer > renders without crashing 1`] = `
+<DocumentFragment>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="_timer_f4876f"
+  >
+    <p
+      class="mantine-focus-auto m_b6d8b162 mantine-Text-root"
+      data-size="xl"
+      style="--text-fz: var(--mantine-font-size-xl); --text-lh: var(--mantine-line-height-xl); font-weight: 700;"
+    >
+      00:00:00
+    </p>
+    <div
+      class="m_4081bf90 mantine-Group-root"
+      style="--group-gap: var(--mantine-spacing-xs); --group-align: center; --group-justify: center; --group-wrap: wrap; margin-top: var(--mantine-spacing-xs);"
+    >
+      <button
+        class="mantine-focus-auto mantine-active m_8d3f4000 mantine-ActionIcon-root m_87cf2631 mantine-UnstyledButton-root"
+        data-size="sm"
+        style="--ai-size: var(--ai-size-sm); --ai-bg: var(--mantine-color-green-filled); --ai-hover: var(--mantine-color-green-filled-hover); --ai-color: var(--mantine-color-white); --ai-bd: calc(0.0625rem * var(--mantine-scale)) solid transparent;"
+        type="button"
+      >
+        <span
+          class="m_8d3afb97 mantine-ActionIcon-icon"
+        >
+          <svg
+            class="tabler-icon tabler-icon-player-play "
+            fill="none"
+            height="14"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="14"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 4v16l13 -8z"
+            />
+          </svg>
+        </span>
+      </button>
+      <button
+        class="mantine-focus-auto mantine-active m_8d3f4000 mantine-ActionIcon-root m_87cf2631 mantine-UnstyledButton-root"
+        data-size="sm"
+        style="--ai-size: var(--ai-size-sm); --ai-bg: var(--mantine-color-red-filled); --ai-hover: var(--mantine-color-red-filled-hover); --ai-color: var(--mantine-color-white); --ai-bd: calc(0.0625rem * var(--mantine-scale)) solid transparent;"
+        type="button"
+      >
+        <span
+          class="m_8d3afb97 mantine-ActionIcon-icon"
+        >
+          <svg
+            class="tabler-icon tabler-icon-player-stop "
+            fill="none"
+            height="14"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="14"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"
+            />
+          </svg>
+        </span>
+      </button>
+      <button
+        class="mantine-focus-auto mantine-active m_8d3f4000 mantine-ActionIcon-root m_87cf2631 mantine-UnstyledButton-root"
+        data-size="sm"
+        style="--ai-size: var(--ai-size-sm); --ai-bg: var(--mantine-color-gray-filled); --ai-hover: var(--mantine-color-gray-filled-hover); --ai-color: var(--mantine-color-white); --ai-bd: calc(0.0625rem * var(--mantine-scale)) solid transparent;"
+        type="button"
+      >
+        <span
+          class="m_8d3afb97 mantine-ActionIcon-icon"
+        >
+          <svg
+            class="tabler-icon tabler-icon-refresh "
+            fill="none"
+            height="14"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="14"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"
+            />
+            <path
+              d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
