@@ -28,7 +28,7 @@ export const ToggleStageButton = () => {
   }
 
   return (
-    <Button onMouseDown={handleStageStartStop} color={isStageActive ? 'red' : 'green'} disabled={!currentStage || !currentMatch}>
+    <Button onClick={handleStageStartStop} color={isStageActive ? 'red' : 'green'} disabled={!currentStage || !currentMatch}>
       {isStageActive ? t('button:stop') : t('button:start')}
     </Button>
   )

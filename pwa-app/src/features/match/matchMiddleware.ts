@@ -1,4 +1,3 @@
-import { match } from 'assert'
 import { createListenerMiddleware } from '@reduxjs/toolkit'
 import { stageActivated, stageDeactivated } from '@/features/stages/stagesSlice'
 import { AppRootState } from '@/store/configureStore'
@@ -35,7 +34,7 @@ matchMiddleware.startListening({
 matchMiddleware.startListening({
   actionCreator: startShooterRun,
   effect: async (action, listenerApi) => {
-    const { matchId, shooterId, stageId } = action.payload
+    const { matchId, /* shooterId, */ stageId } = action.payload
 
     // Activate the stage for this run
     listenerApi.dispatch(activateStageInMatch({ matchId, stageId }))

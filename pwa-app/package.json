@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit",
+
     "dev": "rsbuild dev --port=3031",
     "build": "rsbuild  build",
     "serve": "rsbuild  preview",
     "start": "npm run dev",
     "lint": "npx eslint ./src/** --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:prod": "playwright test --config=playwright.prod.config.ts",

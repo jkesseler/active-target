@@ -22,7 +22,7 @@ export default defineConfig({
     setupFiles: './src/test-utils/setup.ts',
     include: ['./src/**/*.{test,spec,snapshot}.{ts,tsx}'],
     coverage: {
-      reporter: process.env.GITHUB_ACTIONS ? ['dot', 'github-actions'] : ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'html'],
       exclude: ['node_modules/', 'test/', 'tests/', 'dist/', 'build/', 'scripts/'],
     },
   },

@@ -1,3 +1,4 @@
+/** This is a very much a test file */
 import { createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit'
 // import { publish } from '@/features/mqtt/mqttClient';
 import { deviceOffline, deviceOnline } from './devicesSlice'
@@ -10,8 +11,7 @@ devicesMiddleware.startListening({
     console.log('devicesMiddleware action: ', action)
     console.log('devicesMiddleware listenerApi: ', listenerApi)
 
-    // @ts-expect-error: unknown
-    if (actions.deviceOnline.match(action)) {
+    if (deviceOnline.match(action)) {
       const { payload } = action
       console.log(`Device online: ${payload}`)
       // publish(`at/devices/${payload.id}/status`, action);

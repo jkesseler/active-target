@@ -34,7 +34,7 @@ export const selectUsers = (state: AppRootState) => state.users
 
 export const selectUserById = createSelector(
   [
-    state => state.devices,
+    state => state.users,
     (_, id) => id,
   ],
   (users, id) => {
