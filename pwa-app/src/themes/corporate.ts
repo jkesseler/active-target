@@ -1,5 +1,5 @@
-import { createMantineTheme } from './createMantineTheme';
-import type { Theme } from './types';
+import { createMantineTheme } from './createMantineTheme'
+import type { Theme } from './types'
 
 export const corporate: Theme = {
   label: '💼 Corporate',
@@ -17,7 +17,7 @@ export const corporate: Theme = {
         '#5474b4',
         '#44639f',
         '#3a5890',
-        '#2c4b80'
+        '#2c4b80',
       ],
       secondary: [
         '#f1f4fe',
@@ -29,7 +29,7 @@ export const corporate: Theme = {
         '#777c91',
         '#656a7e',
         '#595e72',
-        '#4a5167'
+        '#4a5167',
       ],
       tertiary: [
         '#f7f3f2',
@@ -41,11 +41,11 @@ export const corporate: Theme = {
         '#9d766a',
         '#896459',
         '#7b594e',
-        '#6d4b40'
-      ]
+        '#6d4b40',
+      ],
     },
     fontFamily: 'Noto Sans, sans-serif',
     fontFamilyMonospace: 'Monaco, Courier, monospace',
-    headings: { fontFamily: 'Noto Sans, sans-serif' }
-  })
-};
+    headings: { fontFamily: 'Noto Sans, sans-serif' },
+  }),
+}

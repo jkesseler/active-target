@@ -1,26 +1,26 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Table, Container, Paper } from '@mantine/core';
-import { useAppSelector } from '@/store/configureStore';
-import { selectDevicesByType } from '@/features/devices/devicesSlice';
-import { selectCurrentStage } from '@/features/stages/stagesSlice';
-import * as DevicesTypes from '@/features/devices/types';
+import { createFileRoute } from '@tanstack/react-router'
+import { Table, Container, Paper } from '@mantine/core'
+import { useAppSelector } from '@/store/configureStore'
+import { selectDevicesByType } from '@/features/devices/devicesSlice'
+import { selectCurrentStage } from '@/features/stages/stagesSlice'
+import * as DevicesTypes from '@/features/devices/types'
 
 const scoreDeviceTypes = [
   DevicesTypes.DEVICE_TYPE_TARGET,
   DevicesTypes.DEVICE_TYPE_POPPER,
   DevicesTypes.DEVICE_TYPE_NOSHOOT,
-  DevicesTypes.DEVICE_TYPE_STOP_PLATE
-];
+  DevicesTypes.DEVICE_TYPE_STOP_PLATE,
+]
 
 export const Route = createFileRoute('/manage/stages/$stageId')({
-  component: StageDetailsPage
-});
+  component: StageDetailsPage,
+})
 
 function StageDetailsPage() {
-  const stage = useAppSelector((state) => selectCurrentStage(state));
-  const targets = useAppSelector((state) =>
-    selectDevicesByType(state, scoreDeviceTypes)
-  );
+  const stage = useAppSelector(state => selectCurrentStage(state))
+  const targets = useAppSelector(state =>
+    selectDevicesByType(state, scoreDeviceTypes),
+  )
 
   return (
     <>
@@ -100,5 +100,5 @@ function StageDetailsPage() {
         </Paper>
       </Container>
     </>
-  );
+  )
 }

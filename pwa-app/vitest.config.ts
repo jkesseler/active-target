@@ -1,9 +1,8 @@
-/* eslint-disable import/no-extraneous-dependencies */
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import path from 'path';
-import { defineConfig } from 'vitest/config';
+import path from 'path'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   resolve: {
@@ -12,8 +11,8 @@ export default defineConfig({
       { find: '@/mocks', replacement: path.resolve(__dirname, './mocks') },
       {
         // Fix for react-redux ESM/CJS issue in Vitest
-        find: "react-redux/es/exports",
-        replacement: path.resolve(__dirname, "./node_modules/react-redux/lib/exports"),
+        find: 'react-redux/es/exports',
+        replacement: path.resolve(__dirname, './node_modules/react-redux/lib/exports'),
       },
     ],
   },
@@ -23,8 +22,8 @@ export default defineConfig({
     setupFiles: './src/test-utils/setup.ts',
     include: ['./src/**/*.{test,spec,snapshot}.{ts,tsx}'],
     coverage: {
-      reporter: ['text', 'json', 'html'],
+      reporter: process.env.GITHUB_ACTIONS ? ['dot', 'github-actions'] : ['text', 'json', 'html'],
       exclude: ['node_modules/', 'test/', 'tests/', 'dist/', 'build/', 'scripts/'],
     },
   },
-});
+})

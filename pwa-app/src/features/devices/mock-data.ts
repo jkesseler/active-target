@@ -1,4 +1,4 @@
-import { Device, STATUS } from './types';
+import { Device, STATUS } from './types'
 
 const mockDevices: Device[] = [
   {
@@ -8,7 +8,7 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:00:00.000Z',
     responses: ['Response 1', 'Response 2'],
-    sideEffects: []
+    sideEffects: [],
   },
   {
     id: '2e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
@@ -17,7 +17,7 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:00:10.000Z',
     responses: ['Response 3'],
-    sideEffects: []
+    sideEffects: [],
   },
   {
     id: '4e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
@@ -26,7 +26,7 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:00:30.000Z',
     responses: ['Response 6'],
-    sideEffects: []
+    sideEffects: [],
   },
   {
     id: '817b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
@@ -35,7 +35,7 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:01:00.000Z',
     responses: ['Response 10', 'Response 11'],
-    sideEffects: []
+    sideEffects: [],
   },
   {
     id: '827b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
@@ -44,7 +44,7 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:01:00.000Z',
     responses: ['Response 10', 'Response 11'],
-    sideEffects: []
+    sideEffects: [],
   },
   {
     id: '5e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
@@ -53,7 +53,7 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:00:40.000Z',
     responses: ['Response 7', 'Response 8'],
-    sideEffects: []
+    sideEffects: [],
   },
   {
     id: '3e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
@@ -62,7 +62,7 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:00:20.000Z',
     responses: ['Response 4', 'Response 5'],
-    sideEffects: []
+    sideEffects: [],
   },
   {
     id: '7e7a7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
@@ -71,7 +71,7 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:01:00.000Z',
     responses: ['Response 10', 'Response 11'],
-    sideEffects: []
+    sideEffects: [],
   },
   {
     id: '8e7b7c8e-1c2b-4d3a-8e2b-1c2b4d3a8e2b',
@@ -80,8 +80,8 @@ const mockDevices: Device[] = [
     status: STATUS.ONLINE,
     lastUpdated: '2023-10-10T10:01:10.000Z',
     responses: [],
-    sideEffects: []
-  }
-];
+    sideEffects: [],
+  },
+]
 
-export default mockDevices;
+export default mockDevices

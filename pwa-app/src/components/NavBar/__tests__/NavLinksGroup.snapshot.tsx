@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
-import { renderWithProviders } from '@/test-utils';
-import { IconDashboard } from '@tabler/icons-react';
-import { NavLinksGroup } from '../NavLinksGroup';
+import { describe, expect, it } from 'vitest'
+import { IconDashboard } from '@tabler/icons-react'
+import { renderWithProviders } from '@/test-utils'
+import { NavLinksGroup } from '../NavLinksGroup'
 
 describe('NavLinksGroup', () => {
   it('renders without crashing with basic props', () => {
@@ -10,11 +10,11 @@ describe('NavLinksGroup', () => {
         icon={IconDashboard}
         label="Test Label"
         link="/test"
-      />
-    );
+      />,
+    )
 
-    expect(asFragment()).toMatchSnapshot();
-  });
+    expect(asFragment()).toMatchSnapshot()
+  })
 
   it('renders with links and initially opened', () => {
     const { asFragment } = renderWithProviders(
@@ -24,11 +24,11 @@ describe('NavLinksGroup', () => {
         initiallyOpened
         links={[
           { label: 'Sub Link 1', link: '/sub1' },
-          { label: 'Sub Link 2', link: '/sub2' }
+          { label: 'Sub Link 2', link: '/sub2' },
         ]}
-      />
-    );
+      />,
+    )
 
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+    expect(asFragment()).toMatchSnapshot()
+  })
+})

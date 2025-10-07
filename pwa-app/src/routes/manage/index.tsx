@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Container, Title, Tabs } from '@mantine/core';
-import { IconTarget, IconUsers, IconTrophy, IconDeviceDesktop } from '@tabler/icons-react';
+import * as React from 'react'
+import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { Container, Title, Tabs } from '@mantine/core'
+import { IconTarget, IconUsers, IconTrophy, IconDeviceDesktop } from '@tabler/icons-react'
 
 export const Route = createFileRoute('/manage/')({
-  component: ManageLayout
-});
+  component: ManageLayout,
+})
 
 function ManageLayout() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <Container size="xl" py="md">
@@ -19,11 +19,13 @@ function ManageLayout() {
         variant="outline"
         onChange={(value) => {
           if (value === 'stages') {
-            navigate({ to: '/manage/stages' });
-          } else if (value === 'users') {
-            navigate({ to: '/manage/users' });
-          } else if (value === 'devices') {
-            navigate({ to: '/manage/devices' });
+            navigate({ to: '/manage/stages' })
+          }
+          else if (value === 'users') {
+            navigate({ to: '/manage/users' })
+          }
+          else if (value === 'devices') {
+            navigate({ to: '/manage/devices' })
           }
         }}
       >
@@ -59,5 +61,5 @@ function ManageLayout() {
         </Tabs.Panel>
       </Tabs>
     </Container>
-  );
+  )
 }

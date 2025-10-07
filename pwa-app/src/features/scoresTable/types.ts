@@ -1,14 +1,14 @@
 export interface Result {
-  timeMillies: string;
-  targetZone: 'A' | 'C' | 'D';
+  timeMillies: string
+  targetZone: 'A' | 'C' | 'D'
 }
 
 export interface Scores {
-  deviceId: string;
-  results: Result[];
+  deviceId: string
+  results: Result[]
 }
 
 export interface ScoresTable {
-  shooterId: string;
-  scores: Scores[];
+  shooterId: string
+  scores: Scores[]
 }

@@ -1,5 +1,5 @@
-import { createMantineTheme } from './createMantineTheme';
-import type { Theme } from './types';
+import { createMantineTheme } from './createMantineTheme'
+import type { Theme } from './types'
 
 export const dracula: Theme = {
   label: '🧛 Dracula',
@@ -17,7 +17,7 @@ export const dracula: Theme = {
         '#6e07ff',
         '#5d00e5',
         '#5200cd',
-        '#4600b5'
+        '#4600b5',
       ],
       secondary: [
         '#ffe8fa',
@@ -29,7 +29,7 @@ export const dracula: Theme = {
         '#ff0996',
         '#e40083',
         '#cc0074',
-        '#b30065'
+        '#b30065',
       ],
       tertiary: [
         '#fff4e1',
@@ -41,8 +41,8 @@ export const dracula: Theme = {
         '#ff8809',
         '#e37500',
         '#cb6700',
-        '#b15700'
-      ]
-    }
-  })
-};
+        '#b15700',
+      ],
+    },
+  }),
+}

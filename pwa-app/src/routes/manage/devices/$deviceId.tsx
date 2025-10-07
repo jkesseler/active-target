@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
   Container,
   Title,
@@ -13,33 +13,32 @@ import {
   Stack,
   Modal,
   TextInput,
-  Textarea
-} from '@mantine/core';
-import { IconEdit, IconArrowLeft, IconPlus } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
-import { useForm } from '@mantine/form';
-import { notifications } from '@mantine/notifications';
-import { useNavigate } from '@tanstack/react-router';
-import { useAppSelector, useAppDispatch } from '@/store/configureStore';
+  Textarea,
+} from '@mantine/core'
+import { IconEdit, IconArrowLeft, IconPlus } from '@tabler/icons-react'
+import { useDisclosure } from '@mantine/hooks'
+import { useForm } from '@mantine/form'
+import { notifications } from '@mantine/notifications'
+import { useAppSelector, useAppDispatch } from '@/store/configureStore'
 import {
   selectDeviceById,
   deviceOnline,
   deviceOffline,
-  deviceUpdated
-} from '@/features/devices/devicesSlice';
-import * as Types from '@/features/devices/types';
+  deviceUpdated,
+} from '@/features/devices/devicesSlice'
+import * as Types from '@/features/devices/types'
 
 export const Route = createFileRoute('/manage/devices/$deviceId')({
-  component: DeviceDetailsPage
-});
+  component: DeviceDetailsPage,
+})
 
 function DeviceDetailsPage() {
-  const { deviceId } = Route.useParams();
-  const device = useAppSelector((state) => selectDeviceById(state, deviceId));
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
-  const [sideEffectOpened, { open: openSideEffect, close: closeSideEffect }] = useDisclosure(false);
+  const { deviceId } = Route.useParams()
+  const device = useAppSelector(state => selectDeviceById(state, deviceId))
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false)
+  const [sideEffectOpened, { open: openSideEffect, close: closeSideEffect }] = useDisclosure(false)
 
   // Form for editing device basic info
   const editForm = useForm({
@@ -47,9 +46,9 @@ function DeviceDetailsPage() {
       name: device?.name || '',
     },
     validate: {
-      name: (value) => (value.length < 2 ? 'Device name must have at least 2 characters' : null),
+      name: value => (value.length < 2 ? 'Device name must have at least 2 characters' : null),
     },
-  });
+  })
 
   // Form for adding side effects
   const sideEffectForm = useForm({
@@ -58,10 +57,10 @@ function DeviceDetailsPage() {
       payload: '',
     },
     validate: {
-      topic: (value) => (value.length < 1 ? 'Topic is required' : null),
-      payload: (value) => (value.length < 1 ? 'Payload is required' : null),
+      topic: value => (value.length < 1 ? 'Topic is required' : null),
+      payload: value => (value.length < 1 ? 'Payload is required' : null),
     },
-  });
+  })
 
   if (!device) {
     return (
@@ -71,72 +70,73 @@ function DeviceDetailsPage() {
           Back to Devices
         </Button>
       </Container>
-    );
+    )
   }
 
   const handleStatusToggle = () => {
     if (device.status === Types.STATUS.ONLINE) {
-      dispatch(deviceOffline({ id: device.id }));
+      dispatch(deviceOffline({ id: device.id }))
       notifications.show({
         title: 'Device Offline',
         message: `Device "${device.name}" is now offline.`,
         color: 'orange',
-      });
-    } else {
-      dispatch(deviceOnline({ id: device.id }));
+      })
+    }
+    else {
+      dispatch(deviceOnline({ id: device.id }))
       notifications.show({
         title: 'Device Online',
         message: `Device "${device.name}" is now online.`,
         color: 'green',
-      });
+      })
     }
-  };
+  }
 
   const handleEditSubmit = (values: typeof editForm.values) => {
     dispatch(deviceUpdated({
       id: device.id,
       name: values.name,
       lastUpdated: new Date().toISOString(),
-    }));
+    }))
     notifications.show({
       title: 'Device Updated',
       message: `Device "${values.name}" has been successfully updated.`,
       color: 'green',
-    });
-    closeEdit();
-  };
+    })
+    closeEdit()
+  }
 
   const handleSideEffectSubmit = (values: typeof sideEffectForm.values) => {
     const newSideEffect: Types.SideEffect = {
       topic: values.topic,
       payload: values.payload,
-    };
+    }
 
     dispatch(deviceUpdated({
       id: device.id,
       sideEffects: [...(device.sideEffects || []), newSideEffect],
       lastUpdated: new Date().toISOString(),
-    }));
+    }))
 
     notifications.show({
       title: 'Side Effect Added',
       message: 'Side effect has been successfully added.',
       color: 'green',
-    });
-    sideEffectForm.reset();
-    closeSideEffect();
-  };
+    })
+    sideEffectForm.reset()
+    closeSideEffect()
+  }
 
   const getStatusColor = (status: Types.STATUS | undefined) => {
     switch (status) {
       case Types.STATUS.ONLINE:
-        return 'green';
+        return 'green'
       case Types.STATUS.OFFLINE:
-        return 'red';
+        return 'red'
       default:
-        return 'gray';
+        return 'gray'
     }
-  };
+  }
 
   return (
     <Container size="xl" py="md">
@@ -148,13 +148,16 @@ function DeviceDetailsPage() {
         >
           <IconArrowLeft size={20} />
         </ActionIcon>
-        <Title order={2}>Device Details: {device.name}</Title>
+        <Title order={2}>
+          Device Details:
+          {device.name}
+        </Title>
         <ActionIcon
           variant="subtle"
           color="blue"
           onClick={() => {
-            editForm.setValues({ name: device.name });
-            openEdit();
+            editForm.setValues({ name: device.name })
+            openEdit()
           }}
         >
           <IconEdit size={16} />
@@ -211,50 +214,54 @@ function DeviceDetailsPage() {
             </Button>
           </Group>
 
-          {device.sideEffects && device.sideEffects.length > 0 ? (
-            <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Topic</Table.Th>
-                  <Table.Th>Payload</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                {device.sideEffects.map((sideEffect: Types.SideEffect, index: number) => (
-                  <Table.Tr key={index}>
-                    <Table.Td>
-                      <Text size="sm" ff="monospace">{sideEffect.topic}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text size="sm" ff="monospace">{sideEffect.payload}</Text>
-                    </Table.Td>
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          ) : (
-            <Text size="sm" c="dimmed">No side effects configured</Text>
-          )}
+          {device.sideEffects && device.sideEffects.length > 0
+            ? (
+                <Table>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Topic</Table.Th>
+                      <Table.Th>Payload</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {device.sideEffects.map((sideEffect: Types.SideEffect, index: number) => (
+                      <Table.Tr key={index}>
+                        <Table.Td>
+                          <Text size="sm" ff="monospace">{sideEffect.topic}</Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="sm" ff="monospace">{sideEffect.payload}</Text>
+                        </Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              )
+            : (
+                <Text size="sm" c="dimmed">No side effects configured</Text>
+              )}
         </Card>
 
         {/* Responses Section */}
         <Card shadow="sm" padding="lg" radius="md" withBorder style={{ flex: 1 }}>
           <Text fw={500} mb="md">Responses</Text>
 
-          {device.responses && device.responses.length > 0 ? (
-            <Stack gap="xs">
-              {device.responses.slice(-10).map((response: string, index: number) => (
-                <Text key={index} size="sm" ff="monospace" p="xs" bg="gray.1" style={{ borderRadius: 4 }}>
-                  {response}
-                </Text>
-              ))}
-              {device.responses.length > 10 && (
-                <Text size="xs" c="dimmed">Showing last 10 responses</Text>
+          {device.responses && device.responses.length > 0
+            ? (
+                <Stack gap="xs">
+                  {device.responses.slice(-10).map((response: string, index: number) => (
+                    <Text key={index} size="sm" ff="monospace" p="xs" bg="gray.1" style={{ borderRadius: 4 }}>
+                      {response}
+                    </Text>
+                  ))}
+                  {device.responses.length > 10 && (
+                    <Text size="xs" c="dimmed">Showing last 10 responses</Text>
+                  )}
+                </Stack>
+              )
+            : (
+                <Text size="sm" c="dimmed">No responses recorded</Text>
               )}
-            </Stack>
-          ) : (
-            <Text size="sm" c="dimmed">No responses recorded</Text>
-          )}
         </Card>
       </Group>
 
@@ -319,5 +326,5 @@ function DeviceDetailsPage() {
         </form>
       </Modal>
     </Container>
-  );
+  )
 }

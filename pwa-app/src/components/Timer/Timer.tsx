@@ -1,70 +1,70 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react'
 import {
   Text,
   Group,
-  ActionIcon
-} from '@mantine/core';
-import { IconPlayerPlay, IconPlayerPause, IconPlayerStop, IconRefresh } from '@tabler/icons-react';
-import { useAppSelector, useAppDispatch } from '@/store/configureStore';
-import { selectCurrentStage, stageDeactivated } from '@/features/stages/stagesSlice';
-import { selectCurrentMatch, activateStageInMatch } from '@/features/match/matchSlice';
-import * as StageTypes from '@/features/stages/types';
-import { useStageTimer } from '@/hooks/useStageTimer';
+  ActionIcon,
+} from '@mantine/core'
+import { IconPlayerPlay, IconPlayerPause, IconPlayerStop, IconRefresh } from '@tabler/icons-react'
+import { useAppSelector, useAppDispatch } from '@/store/configureStore'
+import { selectCurrentStage, stageDeactivated } from '@/features/stages/stagesSlice'
+import { selectCurrentMatch, activateStageInMatch } from '@/features/match/matchSlice'
+import * as StageTypes from '@/features/stages/types'
+import { useStageTimer } from '@/hooks/useStageTimer'
 
-import classes from './Timer.module.css';
+import classes from './Timer.module.css'
 
 export const Timer = () => {
-  const dispatch = useAppDispatch();
-  const [time, setTime] = useState(0);
-  const intervalId = useRef<NodeJS.Timeout | null>(null);
-  const currentStage = useAppSelector(state => selectCurrentStage(state));
-  const currentMatch = useAppSelector(state => selectCurrentMatch(state));
-  const isStageActive = currentStage?.status === StageTypes.STATUS.STAGE_ACTIVE;
+  const dispatch = useAppDispatch()
+  const [time, setTime] = useState(0)
+  const intervalId = useRef<NodeJS.Timeout | null>(null)
+  const currentStage = useAppSelector(state => selectCurrentStage(state))
+  const currentMatch = useAppSelector(state => selectCurrentMatch(state))
+  const isStageActive = currentStage?.status === StageTypes.STATUS.STAGE_ACTIVE
 
   // Handle timer intervals with proper TypeScript types and cleanup
   useEffect(() => {
     if (isStageActive) {
-      intervalId.current = setInterval(() => setTime((value) => value + 1), 10);
-    } else if (intervalId.current) {
-      clearInterval(intervalId.current);
-      intervalId.current = null;
+      intervalId.current = setInterval(() => setTime(value => value + 1), 10)
+    }
+    else if (intervalId.current) {
+      clearInterval(intervalId.current)
+      intervalId.current = null
     }
 
     return () => {
       if (intervalId.current) {
-        clearInterval(intervalId.current);
-        intervalId.current = null;
+        clearInterval(intervalId.current)
+        intervalId.current = null
       }
-    };
-  }, [isStageActive]);
+    }
+  }, [isStageActive])
 
   // Calculate display values from centisecond counter
-  const minute = Math.floor((time % 360000) / 6000);
-  const second = Math.floor((time % 6000) / 100);
-  const millisecond = time % 100;
+  const minute = Math.floor((time % 360000) / 6000)
+  const second = Math.floor((time % 6000) / 100)
+  const millisecond = time % 100
 
   const handleReset = useCallback(() => {
-    setTime(0);
-  }, []);
+    setTime(0)
+  }, [])
 
-  const tm = (number: number) => number.toString().padStart(2, '0');
-  const timer = useStageTimer();
+  const tm = (number: number) => number.toString().padStart(2, '0')
+  const timer = useStageTimer()
 
   const handleStageStart = useCallback(() => {
     if (currentStage && currentMatch) {
       dispatch(activateStageInMatch({
         matchId: currentMatch.id,
-        stageId: currentStage.id
-      }));
+        stageId: currentStage.id,
+      }))
     }
-  }, [currentStage, currentMatch, dispatch]);
+  }, [currentStage, currentMatch, dispatch])
 
   const handleStageStop = useCallback(() => {
     if (currentStage) {
-      dispatch(stageDeactivated({ id: currentStage.id }));
+      dispatch(stageDeactivated({ id: currentStage.id }))
     }
-  }, [currentStage, dispatch]);
-
+  }, [currentStage, dispatch])
 
   return (
     <div className={classes.timer}>
@@ -87,5 +87,5 @@ export const Timer = () => {
         </ActionIcon>
       </Group>
     </div>
-  );
-};
+  )
+}

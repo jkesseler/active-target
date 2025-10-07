@@ -1,5 +1,5 @@
-import { createMantineTheme } from './createMantineTheme';
-import type { Theme } from './types';
+import { createMantineTheme } from './createMantineTheme'
+import type { Theme } from './types'
 
 export const synthwave: Theme = {
   label: '🌆 Synthwave',
@@ -17,7 +17,7 @@ export const synthwave: Theme = {
         '#f018e8',
         '#d609ce',
         '#bf00b9',
-        '#a700a1'
+        '#a700a1',
       ],
       secondary: [
         '#fdfce4',
@@ -29,7 +29,7 @@ export const synthwave: Theme = {
         '#d9d02f',
         '#c0b820',
         '#aaa317',
-        '#928d03'
+        '#928d03',
       ],
       tertiary: [
         '#fff0e4',
@@ -41,9 +41,9 @@ export const synthwave: Theme = {
         '#f06418',
         '#d6530c',
         '#bf4906',
-        '#a73c00'
-      ]
+        '#a73c00',
+      ],
     },
-    headings: { fontFamily: 'Audiowide' }
-  })
-};
+    headings: { fontFamily: 'Audiowide' },
+  }),
+}

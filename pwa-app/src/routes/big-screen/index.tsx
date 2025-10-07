@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router'
 import {
   Container,
   Grid,
@@ -16,28 +16,28 @@ import {
   ActionIcon,
   Kbd,
   Overlay,
-  Center
-} from '@mantine/core';
-import { IconHelp } from '@tabler/icons-react';
-import { useState, useEffect } from 'react';
-import { useAppSelector } from '@/store/configureStore';
-import { selectCurrentStage } from '@/features/stages/stagesSlice';
+  Center,
+} from '@mantine/core'
+import { IconHelp } from '@tabler/icons-react'
+import { useState, useEffect } from 'react'
+import { useAppSelector } from '@/store/configureStore'
+import { selectCurrentStage } from '@/features/stages/stagesSlice'
 // import { selectUsers } from '@/features/users/usersSlice';
 // import { selectDevicesByType } from '@/features/devices/devicesSlice';
 // import * as DevicesTypes from '@/features/devices/types';
-import { useStageTimer } from '@/hooks/useStageTimer';
-import { useShootingSimulation } from '@/hooks/useShootingSimulation';
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { Timer } from '@/components/Timer/Timer';
-import { mockStageData, mockShooters, mockTargets, type MockShooter, type MockTarget } from '@/mocks/big-screen-mock-data';
-import classes from './big-screen.module.css';
+import { useStageTimer } from '@/hooks/useStageTimer'
+import { useShootingSimulation } from '@/hooks/useShootingSimulation'
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
+import { Timer } from '@/components/Timer/Timer'
+import { mockStageData, mockShooters, mockTargets, type MockShooter, type MockTarget } from '@/mocks/big-screen-mock-data'
+import classes from './big-screen.module.css'
 
 export const Route = createFileRoute('/big-screen/')({
-  component: BigScreenPage
-});
+  component: BigScreenPage,
+})
 
 function BigScreenPage() {
-  const stage = useAppSelector(selectCurrentStage);
+  const stage = useAppSelector(selectCurrentStage)
   // const users = useAppSelector(selectUsers);
   // const devices = useAppSelector((state) => selectDevicesByType(state, [
   //   DevicesTypes.DEVICE_TYPE_TARGET,
@@ -47,15 +47,15 @@ function BigScreenPage() {
   // ]));
 
   // Timer management
-  const timer = useStageTimer();
+  const timer = useStageTimer()
 
   // Current targets and shooters state
-  const [currentTargets, setCurrentTargets] = useState<MockTarget[]>(mockTargets);
-  const [currentShooters /*, setCurrentShooters */] = useState<MockShooter[]>(mockShooters);
-  const [showHelp, setShowHelp] = useState(false);
+  const [currentTargets, setCurrentTargets] = useState<MockTarget[]>(mockTargets)
+  const [currentShooters] = useState<MockShooter[]>(mockShooters)
+  const [showHelp, setShowHelp] = useState(false)
 
   // Simulation controls
-  const simulation = useShootingSimulation(currentTargets, setCurrentTargets);
+  const simulation = useShootingSimulation(currentTargets, setCurrentTargets)
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
@@ -63,46 +63,45 @@ function BigScreenPage() {
     onReset: simulation.resetTargets,
     onSimulateShot: simulation.simulateShot,
     onToggleTimer: () => timer.isRunning ? timer.pause() : timer.start(),
-    onShowHelp: () => setShowHelp(true)
-  });
+    onShowHelp: () => setShowHelp(true),
+  })
 
   // Show help on first load
   useEffect(() => {
-    const hasSeenHelp = localStorage.getItem('big-screen-help-seen');
+    const hasSeenHelp = localStorage.getItem('big-screen-help-seen')
     if (!hasSeenHelp) {
-      setShowHelp(true);
-      localStorage.setItem('big-screen-help-seen', 'true');
+      setShowHelp(true)
+      localStorage.setItem('big-screen-help-seen', 'true')
     }
-  }, []);
+  }, [])
 
   // Get current and next shooter
-  const currentShooter = currentShooters.find(shooter => shooter.userId === mockStageData.currentShooterId);
-  const nextShooter = currentShooters.find(shooter => shooter.userId === mockStageData.nextShooterId);
+  const currentShooter = currentShooters.find(shooter => shooter.userId === mockStageData.currentShooterId)
+  const nextShooter = currentShooters.find(shooter => shooter.userId === mockStageData.nextShooterId)
 
   // Calculate live stats
-  const hitTargets = currentTargets.filter(t => t.status === 'hit').length;
-  const missedTargets = currentTargets.filter(t => t.status === 'missed').length;
-  const totalScore = currentTargets.reduce((sum, t) => sum + t.points, 0);
-  const hitFactor = totalScore > 0 && timer.elapsedTime > 0 ? (totalScore / timer.elapsedTime).toFixed(2) : '0.00';
+  const hitTargets = currentTargets.filter(t => t.status === 'hit').length
+  const missedTargets = currentTargets.filter(t => t.status === 'missed').length
+  const totalScore = currentTargets.reduce((sum, t) => sum + t.points, 0)
+  const hitFactor = totalScore > 0 && timer.elapsedTime > 0 ? (totalScore / timer.elapsedTime).toFixed(2) : '0.00'
 
   const getTargetStatusColor = (status: string) => {
     switch (status) {
-      case 'hit': return 'green';
-      case 'missed': return 'red';
-      default: return 'gray';
+      case 'hit': return 'green'
+      case 'missed': return 'red'
+      default: return 'gray'
     }
-  };
+  }
 
   const getTargetTypeIcon = (type: string) => {
     switch (type) {
-      case 'paper': return '📄';
-      case 'popper': return '🎯';
-      case 'steel': return '🔘';
-      case 'noshoot': return '🚫';
-      default: return '❓';
+      case 'paper': return '📄'
+      case 'popper': return '🎯'
+      case 'steel': return '🔘'
+      case 'noshoot': return '🚫'
+      default: return '❓'
     }
-  };
-
+  }
 
   return (
     <div className={classes.bigScreen}>
@@ -118,10 +117,14 @@ function BigScreenPage() {
                       {stage?.name || mockStageData.stageName}
                     </Title>
                     <Text size="lg" className={classes.currentShooter}>
-                      Current: <strong>{currentShooter?.userName || 'No shooter'}</strong>
+                      Current:
+                      {' '}
+                      <strong>{currentShooter?.userName || 'No shooter'}</strong>
                     </Text>
                     <Text size="md" className={classes.nextShooter}>
-                      Next: {nextShooter?.userName || 'No shooter'}
+                      Next:
+                      {' '}
+                      {nextShooter?.userName || 'No shooter'}
                     </Text>
                   </div>
 
@@ -192,9 +195,13 @@ function BigScreenPage() {
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {currentTargets.map((target) => (
+                  {currentTargets.map(target => (
                     <Table.Tr key={target.id} data-status={target.status}>
-                      <Table.Td>{getTargetTypeIcon(target.type)} {target.name}</Table.Td>
+                      <Table.Td>
+                        {getTargetTypeIcon(target.type)}
+                        {' '}
+                        {target.name}
+                      </Table.Td>
                       <Table.Td>{target.type.toUpperCase()}</Table.Td>
                       <Table.Td>
                         <Badge
@@ -259,7 +266,10 @@ function BigScreenPage() {
                         <Table.Td>{shooter.time > 0 ? `${shooter.time}s` : '-'}</Table.Td>
                         <Table.Td>
                           <Text c="green" component="span">{shooter.hits}</Text>
-                          <Text c="red" component="span">/{shooter.misses}</Text>
+                          <Text c="red" component="span">
+                            /
+                            {shooter.misses}
+                          </Text>
                         </Table.Td>
                       </Table.Tr>
                     ))}
@@ -275,7 +285,12 @@ function BigScreenPage() {
                   color="blue"
                 />
                 <Text size="sm" c="dimmed" mt="xs">
-                  {currentShooters.filter(shooter => shooter.status === 'completed').length} of {currentShooters.length} shooters completed
+                  {currentShooters.filter(shooter => shooter.status === 'completed').length}
+                  {' '}
+                  of
+                  {currentShooters.length}
+                  {' '}
+                  shooters completed
                 </Text>
               </div>
             </Card>
@@ -329,5 +344,5 @@ function BigScreenPage() {
         <IconHelp size={16} />
       </ActionIcon>
     </div>
-  );
+  )
 }
