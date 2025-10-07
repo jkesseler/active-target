@@ -13,7 +13,8 @@ export function HeaderSimple() {
   const toggleConnect = () => {
     if (isConnected) {
       dispatch(startDisconnecting());
-    } else {
+    }
+    else {
       dispatch(startConnecting());
     }
   };

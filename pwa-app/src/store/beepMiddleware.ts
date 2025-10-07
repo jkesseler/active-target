@@ -8,7 +8,7 @@ export const beepMiddleware = createListenerMiddleware();
 // Listen for stage activation to trigger beep sound
 beepMiddleware.startListening({
   actionCreator: stageActivated,
-  effect: async (action /*, listenerApi */) => {
+  effect: async (action /* , listenerApi */) => {
     try {
       // Check if audio is ready, if not try to initialize
       if (!isAudioReady()) {
@@ -25,10 +25,11 @@ beepMiddleware.startListening({
       // Play the activation beep when a stage is activated
       playBeep();
       console.log(`Stage activated: ${action.payload.id} - Beep played`);
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to play stage activation beep:', error);
     }
-  }
+  },
 });
 
 // Type-safe listener API

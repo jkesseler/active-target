@@ -10,24 +10,24 @@ import {
   ActionIcon,
   Paper,
   Title,
-  Badge
+  Badge,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconPlus, IconEdit, IconTrash, IconTarget } from '@tabler/icons-react';
+import { notifications } from '@mantine/notifications';
 import { useAppSelector, useAppDispatch } from '@/store/configureStore';
 import { selectStages, stageAdded, stageUpdated, stageRemoved } from '@/features/stages/stagesSlice';
 import { selectDevices } from '@/features/devices/devicesSlice';
 import * as StageTypes from '@/features/stages/types';
-import { notifications } from '@mantine/notifications';
 
 export const Route = createFileRoute('/manage/stages/')({
-  component: StageManagement
+  component: StageManagement,
 });
 
 interface StageFormData {
-  id?: string;
-  name: string;
-  devices: string[];
+  id?: string
+  name: string
+  devices: string[]
 }
 
 function StageManagement() {
@@ -40,17 +40,17 @@ function StageManagement() {
   const form = useForm<StageFormData>({
     initialValues: {
       name: '',
-      devices: []
+      devices: [],
     },
     validate: {
-      name: (value) => value.length < 2 ? 'Stage name must be at least 2 characters' : null,
-      devices: (value) => value.length === 0 ? 'At least one device must be selected' : null
-    }
+      name: value => value.length < 2 ? 'Stage name must be at least 2 characters' : null,
+      devices: value => value.length === 0 ? 'At least one device must be selected' : null,
+    },
   });
 
   const deviceOptions = devices.map(device => ({
     value: device.id,
-    label: `${device.name} (${device.type})`
+    label: `${device.name} (${device.type})`,
   }));
 
   const handleSubmit = (values: StageFormData) => {
@@ -59,26 +59,27 @@ function StageManagement() {
       dispatch(stageUpdated({
         id: editingStage.id,
         name: values.name,
-        devices: values.devices
+        devices: values.devices,
       }));
       notifications.show({
         title: 'Stage Updated',
         message: `${values.name} has been updated successfully`,
-        color: 'blue'
+        color: 'blue',
       });
-    } else {
+    }
+    else {
       // Create new stage
       const newStage: StageTypes.Stage = {
         id: `stage-${Date.now()}`,
         name: values.name,
         devices: values.devices,
-        status: StageTypes.STATUS.STAGE_INACTIVE
+        status: StageTypes.STATUS.STAGE_INACTIVE,
       };
       dispatch(stageAdded(newStage));
       notifications.show({
         title: 'Stage Created',
         message: `${values.name} has been created successfully`,
-        color: 'green'
+        color: 'green',
       });
     }
 
@@ -91,7 +92,7 @@ function StageManagement() {
     setEditingStage(stage);
     form.setValues({
       name: stage.name,
-      devices: stage.devices
+      devices: stage.devices,
     });
     setModalOpened(true);
   };
@@ -102,7 +103,7 @@ function StageManagement() {
       notifications.show({
         title: 'Stage Deleted',
         message: `${stage.name} has been deleted`,
-        color: 'red'
+        color: 'red',
       });
     }
   };
@@ -140,7 +141,7 @@ function StageManagement() {
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {stages.map((stage) => (
+            {stages.map(stage => (
               <Table.Tr key={stage.id}>
                 <Table.Td>{stage.name}</Table.Td>
                 <Table.Td>
@@ -150,13 +151,15 @@ function StageManagement() {
                 </Table.Td>
                 <Table.Td>
                   <Group gap="xs">
-                    {stage.devices.map(deviceId => {
-                      const device = devices.find(d => d.id === deviceId);
-                      return device ? (
-                        <Badge key={deviceId} size="sm" variant="outline">
-                          {device.name}
-                        </Badge>
-                      ) : null;
+                    {stage.devices.map((deviceId) => {
+                      const device = devices.find(device => device.id === deviceId);
+                      return device
+                        ? (
+                            <Badge key={deviceId} size="sm" variant="outline">
+                              {device.name}
+                            </Badge>
+                          )
+                        : null;
                     })}
                   </Group>
                 </Table.Td>

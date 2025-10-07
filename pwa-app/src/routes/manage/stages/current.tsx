@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Container, Table, Paper } from '@mantine/core';
 import { useAppSelector } from '@/store/configureStore';
 import { selectDevicesByType } from '@/features/devices/devicesSlice';
-import { selectCurrentStage } from '@/features/stages/stagesSlice';
+// import { selectCurrentStage } from '@/features/stages/stagesSlice';
 import * as DevicesTypes from '@/features/devices/types';
 import type { Scores, Result } from '@/features/scoresTable/types';
 import { calculateTotals } from '@/utils/scoreUtils';
@@ -11,15 +11,15 @@ const scoreDeviceTypes = [
   DevicesTypes.DEVICE_TYPE_TARGET,
   DevicesTypes.DEVICE_TYPE_POPPER,
   DevicesTypes.DEVICE_TYPE_NOSHOOT,
-  DevicesTypes.DEVICE_TYPE_STOP_PLATE
+  DevicesTypes.DEVICE_TYPE_STOP_PLATE,
 ];
 
 export const Route = createFileRoute('/manage/stages/current')({
-  component: StageDetailsPage
+  component: StageDetailsPage,
 });
 
 function StageDetailsPage() {
-  const devices = useAppSelector((state) => selectDevicesByType(state, scoreDeviceTypes));
+  const devices = useAppSelector(state => selectDevicesByType(state, scoreDeviceTypes));
   // TODO: Implement scoring system - using empty array for now
   const currentScores: Scores[] = [];
   const total = { major: 0, minor: 0 };
@@ -31,7 +31,8 @@ function StageDetailsPage() {
       const [major, minor] = calculateTotals(scores);
       total.major += major;
       total.minor += minor;
-    } else if (device.type === DevicesTypes.DEVICE_TYPE_POPPER) {
+    }
+    else if (device.type === DevicesTypes.DEVICE_TYPE_POPPER) {
       total.major += 5;
       total.minor += 5;
     }
@@ -43,8 +44,24 @@ function StageDetailsPage() {
         <h1>Current Stage</h1>
 
         <Paper>
-          Total Major: {total.major} / Time: 12.51 = HF: {(total.major / 12.51).toFixed(2)} <br />
-          Total Minor: {total.minor} / Time: 12.51 = HF: {(total.minor / 12.51).toFixed(2)} <br />
+          Total Major:
+          {' '}
+          {total.major}
+          {' '}
+          / Time: 12.51 = HF:
+          {' '}
+          {(total.major / 12.51).toFixed(2)}
+          {' '}
+          <br />
+          Total Minor:
+          {' '}
+          {total.minor}
+          {' '}
+          / Time: 12.51 = HF:
+          {' '}
+          {(total.minor / 12.51).toFixed(2)}
+          {' '}
+          <br />
         </Paper>
 
         <Paper shadow="xs" p="md">

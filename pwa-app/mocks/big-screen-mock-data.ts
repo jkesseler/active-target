@@ -1,34 +1,34 @@
 export interface MockShooter {
-  userId: string;
-  userName: string;
-  score: number;
-  hitFactor: number;
-  hits: number;
-  misses: number;
-  time: number;
-  status: 'completed' | 'shooting' | 'waiting';
-  penalties?: number;
-  procedurals?: number;
+  userId: string
+  userName: string
+  score: number
+  hitFactor: number
+  hits: number
+  misses: number
+  time: number
+  status: 'completed' | 'shooting' | 'waiting'
+  penalties?: number
+  procedurals?: number
 }
 
 export interface MockTarget {
-  id: string;
-  name: string;
-  type: 'paper' | 'popper' | 'steel' | 'noshoot';
-  status: 'hit' | 'missed' | 'default';
-  zone?: 'A' | 'B' | 'C' | 'D' | 'Down' | null;
-  points: number;
-  timeHit?: number;
+  id: string
+  name: string
+  type: 'paper' | 'popper' | 'steel' | 'noshoot'
+  status: 'hit' | 'missed' | 'default'
+  zone?: 'A' | 'B' | 'C' | 'D' | 'Down' | null
+  points: number
+  timeHit?: number
 }
 
 export interface MockStageData {
-  stageName: string;
-  maxScore: number;
-  targetCount: number;
-  minRounds: number;
-  maxTime: number;
-  currentShooterId: string;
-  nextShooterId: string;
+  stageName: string
+  maxScore: number
+  targetCount: number
+  minRounds: number
+  maxTime: number
+  currentShooterId: string
+  nextShooterId: string
 }
 
 export const mockStageData: MockStageData = {
@@ -38,7 +38,7 @@ export const mockStageData: MockStageData = {
   minRounds: 30,
   maxTime: 45,
   currentShooterId: '1',
-  nextShooterId: '2'
+  nextShooterId: '2',
 };
 
 export const mockShooters: MockShooter[] = [
@@ -52,7 +52,7 @@ export const mockShooters: MockShooter[] = [
     time: 20.08,
     status: 'shooting',
     penalties: 0,
-    procedurals: 0
+    procedurals: 0,
   },
   {
     userId: '2',
@@ -62,7 +62,7 @@ export const mockShooters: MockShooter[] = [
     hits: 27,
     misses: 3,
     time: 19.98,
-    status: 'waiting'
+    status: 'waiting',
   },
   {
     userId: '3',
@@ -72,7 +72,7 @@ export const mockShooters: MockShooter[] = [
     hits: 29,
     misses: 1,
     time: 20.45,
-    status: 'completed'
+    status: 'completed',
   },
   {
     userId: '4',
@@ -82,7 +82,7 @@ export const mockShooters: MockShooter[] = [
     hits: 26,
     misses: 4,
     time: 19.12,
-    status: 'completed'
+    status: 'completed',
   },
   {
     userId: '5',
@@ -92,7 +92,7 @@ export const mockShooters: MockShooter[] = [
     hits: 25,
     misses: 5,
     time: 20.01,
-    status: 'completed'
+    status: 'completed',
   },
   {
     userId: '6',
@@ -102,7 +102,7 @@ export const mockShooters: MockShooter[] = [
     hits: 30,
     misses: 0,
     time: 19.89,
-    status: 'completed'
+    status: 'completed',
   },
   {
     userId: '7',
@@ -112,7 +112,7 @@ export const mockShooters: MockShooter[] = [
     hits: 0,
     misses: 0,
     time: 0,
-    status: 'waiting'
+    status: 'waiting',
   },
   {
     userId: '8',
@@ -122,8 +122,8 @@ export const mockShooters: MockShooter[] = [
     hits: 0,
     misses: 0,
     time: 0,
-    status: 'waiting'
-  }
+    status: 'waiting',
+  },
 ];
 
 export const mockTargets: MockTarget[] = [
@@ -136,7 +136,7 @@ export const mockTargets: MockTarget[] = [
   { id: '7', name: 'P1', type: 'popper', status: 'hit', zone: 'Down', points: 5, timeHit: 15.67 },
   { id: '8', name: 'P2', type: 'popper', status: 'default', zone: null, points: 0 },
   { id: '9', name: 'S1', type: 'steel', status: 'hit', zone: 'Down', points: 5, timeHit: 18.23 },
-  { id: '10', name: 'NS1', type: 'noshoot', status: 'default', zone: null, points: 0 }
+  { id: '10', name: 'NS1', type: 'noshoot', status: 'default', zone: null, points: 0 },
 ];
 
 // Function to simulate live updates

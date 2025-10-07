@@ -8,7 +8,6 @@ import { HeaderSimple } from '@/components/Header/HeaderSimple';
 const RootLayout = () => {
   const [navbarOpened, navbarHandlers] = useDisclosure(true);
 
-
   return (
     <>
       <AppShell
@@ -16,7 +15,7 @@ const RootLayout = () => {
         navbar={{
           breakpoint: 'sm',
           collapsed: { mobile: false },
-          width: { base: navbarOpened ? 200 : 60 }
+          width: { base: navbarOpened ? 200 : 60 },
         }}
         padding="md"
       >
@@ -44,13 +43,12 @@ const RootLayout = () => {
           <Outlet />
         </AppShell.Main>
 
-      </AppShell >
+      </AppShell>
       <TanStackRouterDevtools />
     </>
   );
 };
 
-
 export const Route = createRootRoute({
-  component: RootLayout
+  component: RootLayout,
 });

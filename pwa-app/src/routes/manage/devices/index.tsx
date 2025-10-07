@@ -12,7 +12,7 @@ import {
   Stack,
   Select,
   Switch,
-  Badge
+  Badge,
 } from '@mantine/core';
 import { IconPlus, IconEdit, IconTrash, IconSearch, IconEye } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
@@ -25,12 +25,12 @@ import {
   deviceUpdated,
   deviceRemoved,
   deviceOnline,
-  deviceOffline
+  deviceOffline,
 } from '@/features/devices/devicesSlice';
 import * as Types from '@/features/devices/types';
 
 export const Route = createFileRoute('/manage/devices/')({
-  component: DevicesManagementPage
+  component: DevicesManagementPage,
 });
 
 // Device type options for the select component
@@ -38,7 +38,7 @@ const deviceTypeOptions = [
   { value: Types.DEVICE_TYPE_TARGET, label: 'Target' },
   { value: Types.DEVICE_TYPE_POPPER, label: 'Popper' },
   { value: Types.DEVICE_TYPE_NOSHOOT, label: 'No Shoot' },
-  { value: Types.DEVICE_TYPE_STOP_PLATE, label: 'Stop Plate' }
+  { value: Types.DEVICE_TYPE_STOP_PLATE, label: 'Stop Plate' },
 ];
 
 function DevicesManagementPage() {
@@ -56,15 +56,15 @@ function DevicesManagementPage() {
       type: Types.DEVICE_TYPE_TARGET as Types.DeviceType,
     },
     validate: {
-      name: (value) => (value.length < 2 ? 'Device name must have at least 2 characters' : null),
-      type: (value) => (value ? null : 'Device type is required'),
+      name: value => (value.length < 2 ? 'Device name must have at least 2 characters' : null),
+      type: value => (value ? null : 'Device type is required'),
     },
   });
 
   // Filter devices based on search term
   const filteredDevices = devices.filter(device =>
-    device.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    device.type.toLowerCase().includes(searchTerm.toLowerCase())
+    device.name.toLowerCase().includes(searchTerm.toLowerCase())
+    || device.type.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleCreateDevice = () => {
@@ -105,7 +105,8 @@ function DevicesManagementPage() {
         message: `Device "${device.name}" is now offline.`,
         color: 'orange',
       });
-    } else {
+    }
+    else {
       dispatch(deviceOnline({ id: device.id }));
       notifications.show({
         title: 'Device Online',
@@ -128,7 +129,8 @@ function DevicesManagementPage() {
         message: `Device "${values.name}" has been successfully updated.`,
         color: 'green',
       });
-    } else {
+    }
+    else {
       // Create new device
       const newDevice: Types.Device = {
         id: crypto.randomUUID(),
@@ -175,7 +177,7 @@ function DevicesManagementPage() {
           placeholder="Search devices..."
           leftSection={<IconSearch size={16} />}
           value={searchTerm}
-          onChange={(event) => setSearchTerm(event.currentTarget.value)}
+          onChange={event => setSearchTerm(event.currentTarget.value)}
           style={{ flexGrow: 1 }}
         />
       </Group>
@@ -191,7 +193,7 @@ function DevicesManagementPage() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {filteredDevices.map((device) => (
+          {filteredDevices.map(device => (
             <Table.Tr key={device.id}>
               <Table.Td>
                 <strong>{device.name}</strong>

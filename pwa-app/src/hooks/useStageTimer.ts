@@ -5,14 +5,14 @@ import {
   timerPaused,
   timerStopped,
   timerReset,
-  selectCurrentTimer
+  selectCurrentTimer,
 } from '@/features/match/matchSlice';
 
 export interface TimerState {
-  elapsedTime: number;
-  isRunning: boolean;
-  isPaused: boolean;
-  startTime?: number;
+  elapsedTime: number
+  isRunning: boolean
+  isPaused: boolean
+  startTime?: number
 }
 
 export function useStageTimer() {
@@ -85,6 +85,6 @@ export function useStageTimer() {
     reset,
     formatTime: () => formatTime(currentElapsedTime),
     // Provide access to live time calculation for consumers who need fresh data
-    getCurrentTime: getCurrentElapsedTime
+    getCurrentTime: getCurrentElapsedTime,
   };
 }

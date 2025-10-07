@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
 export function useKeyboardShortcuts(callbacks: {
-  onStartStop?: () => void;
-  onReset?: () => void;
-  onSimulateShot?: () => void;
-  onToggleTimer?: () => void;
-  onShowHelp?: () => void;
+  onStartStop?: () => void
+  onReset?: () => void
+  onSimulateShot?: () => void
+  onToggleTimer?: () => void
+  onShowHelp?: () => void
 }) {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {

@@ -16,7 +16,7 @@ import {
   ActionIcon,
   Kbd,
   Overlay,
-  Center
+  Center,
 } from '@mantine/core';
 import { IconHelp } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
@@ -33,7 +33,7 @@ import { mockStageData, mockShooters, mockTargets, type MockShooter, type MockTa
 import classes from './big-screen.module.css';
 
 export const Route = createFileRoute('/big-screen/')({
-  component: BigScreenPage
+  component: BigScreenPage,
 });
 
 function BigScreenPage() {
@@ -51,7 +51,7 @@ function BigScreenPage() {
 
   // Current targets and shooters state
   const [currentTargets, setCurrentTargets] = useState<MockTarget[]>(mockTargets);
-  const [currentShooters /*, setCurrentShooters */] = useState<MockShooter[]>(mockShooters);
+  const [currentShooters] = useState<MockShooter[]>(mockShooters);
   const [showHelp, setShowHelp] = useState(false);
 
   // Simulation controls
@@ -63,7 +63,7 @@ function BigScreenPage() {
     onReset: simulation.resetTargets,
     onSimulateShot: simulation.simulateShot,
     onToggleTimer: () => timer.isRunning ? timer.pause() : timer.start(),
-    onShowHelp: () => setShowHelp(true)
+    onShowHelp: () => setShowHelp(true),
   });
 
   // Show help on first load
@@ -103,7 +103,6 @@ function BigScreenPage() {
     }
   };
 
-
   return (
     <div className={classes.bigScreen}>
       <Container fluid className={classes.container}>
@@ -118,10 +117,14 @@ function BigScreenPage() {
                       {stage?.name || mockStageData.stageName}
                     </Title>
                     <Text size="lg" className={classes.currentShooter}>
-                      Current: <strong>{currentShooter?.userName || 'No shooter'}</strong>
+                      Current:
+                      {' '}
+                      <strong>{currentShooter?.userName || 'No shooter'}</strong>
                     </Text>
                     <Text size="md" className={classes.nextShooter}>
-                      Next: {nextShooter?.userName || 'No shooter'}
+                      Next:
+                      {' '}
+                      {nextShooter?.userName || 'No shooter'}
                     </Text>
                   </div>
 
@@ -192,9 +195,13 @@ function BigScreenPage() {
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {currentTargets.map((target) => (
+                  {currentTargets.map(target => (
                     <Table.Tr key={target.id} data-status={target.status}>
-                      <Table.Td>{getTargetTypeIcon(target.type)} {target.name}</Table.Td>
+                      <Table.Td>
+                        {getTargetTypeIcon(target.type)}
+                        {' '}
+                        {target.name}
+                      </Table.Td>
                       <Table.Td>{target.type.toUpperCase()}</Table.Td>
                       <Table.Td>
                         <Badge
@@ -259,7 +266,10 @@ function BigScreenPage() {
                         <Table.Td>{shooter.time > 0 ? `${shooter.time}s` : '-'}</Table.Td>
                         <Table.Td>
                           <Text c="green" component="span">{shooter.hits}</Text>
-                          <Text c="red" component="span">/{shooter.misses}</Text>
+                          <Text c="red" component="span">
+                            /
+                            {shooter.misses}
+                          </Text>
                         </Table.Td>
                       </Table.Tr>
                     ))}
@@ -275,7 +285,12 @@ function BigScreenPage() {
                   color="blue"
                 />
                 <Text size="sm" c="dimmed" mt="xs">
-                  {currentShooters.filter(shooter => shooter.status === 'completed').length} of {currentShooters.length} shooters completed
+                  {currentShooters.filter(shooter => shooter.status === 'completed').length}
+                  {' '}
+                  of
+                  {currentShooters.length}
+                  {' '}
+                  shooters completed
                 </Text>
               </div>
             </Card>

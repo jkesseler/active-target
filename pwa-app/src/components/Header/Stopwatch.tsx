@@ -14,8 +14,9 @@ export const Stopwatch = () => {
   useEffect(() => {
     if (isStageActive) {
       // @ts-expect-error: Types of setInterval and clearInterval are mismatched
-      intervalId.current = setInterval(() => setTime((value) => value + 1), 10);
-    } else if (intervalId.current) {
+      intervalId.current = setInterval(() => setTime(value => value + 1), 10);
+    }
+    else if (intervalId.current) {
       clearInterval(intervalId.current);
     }
     return () => {

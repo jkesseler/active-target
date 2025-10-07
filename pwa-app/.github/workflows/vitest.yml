@@ -1,0 +1,156 @@
+name: PR Quality Checks
+
+# Only run on pull requests
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pr-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Needed for changed files detection
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v44
+      with:
+        files: |
+          src/**/*.{ts,tsx}
+          **/*.{test,spec,snapshot}.{ts,tsx}
+        files_separator: ' '
+        files_yaml: |
+          typescript:
+            - src/**/*.{ts,tsx}
+          tests:
+            - src/**/*.{test,spec,snapshot}.{ts,tsx}
+          lintable:
+            - src/**/*.{ts,tsx}
+            - '*.{js,ts,mjs}'
+
+    - name: Run type checking on changed TypeScript files
+      if: steps.changed-files.outputs.typescript_any_changed == 'true'
+      run: npm run typecheck
+
+    - name: Run ESLint on changed files
+      if: steps.changed-files.outputs.lintable_any_changed == 'true'
+      run: |
+        if [ -n "${{ steps.changed-files.outputs.lintable_all_changed_files }}" ]; then
+          npx eslint ${{ steps.changed-files.outputs.lintable_all_changed_files }} --ext .ts,.tsx
+        fi
+
+    - name: Determine test files to run
+      id: test-files
+      run: |
+        echo "Changed files: ${{ steps.changed-files.outputs.all_changed_files }}"
+
+        # Initialize arrays
+        test_files=()
+        source_files=()
+
+        # Process changed files
+        for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          if [[ "$file" == *".test."* ]] || [[ "$file" == *".spec."* ]] || [[ "$file" == *".snapshot."* ]] || [[ "$file" == *"__tests__"* ]]; then
+            # Direct test file
+            test_files+=("$file")
+          elif [[ "$file" == src/* ]] && [[ "$file" == *.ts* ]]; then
+            # Source file - find corresponding test files
+            source_files+=("$file")
+          fi
+        done
+
+        # Find test files for changed source files
+        for source_file in "${source_files[@]}"; do
+          # Get directory and filename without extension
+          dir=$(dirname "$source_file")
+          base=$(basename "$source_file" | sed 's/\.[^.]*$//')
+
+          # Look for test files in same directory and __tests__ subdirectory
+          for test_pattern in "${dir}/__tests__/${base}.test.tsx" "${dir}/__tests__/${base}.spec.tsx" "${dir}/__tests__/${base}.snapshot.tsx" "${dir}/${base}.test.tsx" "${dir}/${base}.spec.tsx" "${dir}/${base}.snapshot.tsx"; do
+            if [ -f "$test_pattern" ]; then
+              test_files+=("$test_pattern")
+            fi
+          done
+        done
+
+        # Remove duplicates and create final list
+        unique_tests=($(printf "%s\n" "${test_files[@]}" | sort -u))
+
+        if [ ${#unique_tests[@]} -eq 0 ]; then
+          echo "No test files found for changed files"
+          echo "test_files=" >> $GITHUB_OUTPUT
+          echo "run_tests=false" >> $GITHUB_OUTPUT
+        else
+          echo "Test files to run: ${unique_tests[*]}"
+          echo "test_files=${unique_tests[*]}" >> $GITHUB_OUTPUT
+          echo "run_tests=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Run relevant unit/snapshot tests
+      if: steps.test-files.outputs.run_tests == 'true'
+      run: npm test -- --run --reporter=verbose ${{ steps.test-files.outputs.test_files }}
+
+    - name: Skip tests message
+      if: steps.test-files.outputs.run_tests == 'false'
+      run: echo "ℹ️ No test files found for the changed files in this PR"
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always() && steps.test-files.outputs.run_tests == 'true'
+      with:
+        name: pr-test-results
+        path: |
+          coverage/
+          test-results/
+        retention-days: 7
+
+    - name: Comment PR Results
+      uses: actions/github-script@v7
+      if: always()
+      with:
+        script: |
+          const testResult = '${{ job.status }}' === 'success' ? '✅ All checks passed!' : '❌ Some checks failed!';
+          const runTests = '${{ steps.test-files.outputs.run_tests }}';
+          const testFiles = '${{ steps.test-files.outputs.test_files }}';
+          const changedTS = '${{ steps.changed-files.outputs.typescript_any_changed }}';
+          const changedLint = '${{ steps.changed-files.outputs.lintable_any_changed }}';
+
+          let details = [];
+
+          if (changedTS === 'true') {
+            details.push('🔍 **TypeScript**: Type checking completed');
+          }
+
+          if (changedLint === 'true') {
+            details.push('🧹 **ESLint**: Code linting completed');
+          }
+
+          if (runTests === 'true') {
+            const fileCount = testFiles.split(' ').length;
+            details.push(`🧪 **Testing**: Ran ${fileCount} relevant test file(s)`);
+          } else if (runTests === 'false') {
+            details.push('📝 **Testing**: No test files found for changed files');
+          }
+
+          const detailsText = details.length > 0 ? '\n\n' + details.join('\n') : '';
+
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## 🔍 PR Quality Checks\n\n${testResult}${detailsText}\n\n📊 View details in the [Actions tab](${context.payload.repository.html_url}/actions/runs/${context.runId})`
+          });

@@ -11,20 +11,20 @@ export type DeviceType =
 
 export enum STATUS {
   ONLINE = 'online',
-  OFFLINE = 'offline'
+  OFFLINE = 'offline',
 }
 
 export interface Device {
-  id: string;
-  name: string;
-  type: DeviceType; // one of DEVICE_TYPE_*
-  status?: STATUS;
-  lastUpdated?: Date | string;
-  responses: string[];
-  sideEffects?: SideEffect[];
+  id: string
+  name: string
+  type: DeviceType // one of DEVICE_TYPE_*
+  status?: STATUS
+  lastUpdated?: Date | string
+  responses: string[]
+  sideEffects?: SideEffect[]
 }
 
 export interface SideEffect {
-  topic: string;
-  payload: string;
+  topic: string
+  payload: string
 }

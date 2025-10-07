@@ -1,0 +1,232 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Navbar > renders without crashing 1`] = `
+<DocumentFragment>
+  <style
+    data-mantine-styles="classes"
+  >
+    @media (max-width: 35.99375em) {.mantine-visible-from-xs {display: none !important;}}@media (min-width: 36em) {.mantine-hidden-from-xs {display: none !important;}}@media (max-width: 47.99375em) {.mantine-visible-from-sm {display: none !important;}}@media (min-width: 48em) {.mantine-hidden-from-sm {display: none !important;}}@media (max-width: 61.99375em) {.mantine-visible-from-md {display: none !important;}}@media (min-width: 62em) {.mantine-hidden-from-md {display: none !important;}}@media (max-width: 74.99375em) {.mantine-visible-from-lg {display: none !important;}}@media (min-width: 75em) {.mantine-hidden-from-lg {display: none !important;}}@media (max-width: 87.99375em) {.mantine-visible-from-xl {display: none !important;}}@media (min-width: 88em) {.mantine-hidden-from-xl {display: none !important;}}
+  </style>
+  <div
+    class="_links_6d152a m_d57069b5 mantine-ScrollArea-root"
+    style="--sa-corner-width: 0px; --sa-corner-height: 0px;"
+  >
+    <div
+      class="m_c0783ff9 mantine-ScrollArea-viewport"
+      data-scrollbars="xy"
+      style="overflow-x: scroll; overflow-y: scroll;"
+    >
+      <div
+        style="min-width: 100%; display: table;"
+      >
+        <div
+          class="_linksInner_6d152a"
+        >
+          <a
+            activeprops="[object Object]"
+            class="_control_096153"
+            href="/dashboard"
+          >
+            <div
+              class="m_4081bf90 mantine-Group-root"
+              style="--group-gap: 0rem; --group-align: center; --group-justify: space-between; --group-wrap: wrap;"
+            >
+              <div
+                class=""
+                style="display: flex; align-items: center;"
+              >
+                <div
+                  class="m_7341320d mantine-ThemeIcon-root"
+                  data-variant="light"
+                  style="--ti-size: calc(1.875rem * var(--mantine-scale)); --ti-bg: var(--mantine-color-blue-light); --ti-color: var(--mantine-color-blue-light-color); --ti-bd: calc(0.0625rem * var(--mantine-scale)) solid transparent;"
+                >
+                  <svg
+                    class="tabler-icon tabler-icon-dashboard "
+                    fill="none"
+                    height="1.1rem"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="1.1rem"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"
+                    />
+                    <path
+                      d="M13.45 11.55l2.05 -2.05"
+                    />
+                    <path
+                      d="M6.4 20a9 9 0 1 1 11.2 0z"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class=""
+                  style="margin-left: var(--mantine-spacing-md);"
+                >
+                  Dashboard
+                </div>
+              </div>
+            </div>
+          </a>
+          <button
+            class="mantine-focus-auto _control_096153 m_87cf2631 mantine-UnstyledButton-root"
+            type="button"
+          >
+            <div
+              class="m_4081bf90 mantine-Group-root"
+              style="--group-gap: 0rem; --group-align: center; --group-justify: space-between; --group-wrap: wrap;"
+            >
+              <div
+                class=""
+                style="display: flex; align-items: center;"
+              >
+                <div
+                  class="m_7341320d mantine-ThemeIcon-root"
+                  data-variant="light"
+                  style="--ti-size: calc(1.875rem * var(--mantine-scale)); --ti-bg: var(--mantine-color-blue-light); --ti-color: var(--mantine-color-blue-light-color); --ti-bd: calc(0.0625rem * var(--mantine-scale)) solid transparent;"
+                >
+                  <svg
+                    class="tabler-icon tabler-icon-report "
+                    fill="none"
+                    height="1.1rem"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="1.1rem"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697"
+                    />
+                    <path
+                      d="M18 14v4h4"
+                    />
+                    <path
+                      d="M18 11v-4a2 2 0 0 0 -2 -2h-2"
+                    />
+                    <path
+                      d="M8 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"
+                    />
+                    <path
+                      d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"
+                    />
+                    <path
+                      d="M8 11h4"
+                    />
+                    <path
+                      d="M8 15h3"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class=""
+                  style="margin-left: var(--mantine-spacing-md);"
+                >
+                  Manage
+                </div>
+              </div>
+              <svg
+                class="tabler-icon tabler-icon-chevron-right _chevron_096153"
+                fill="none"
+                height="1rem"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                style="transform: none;"
+                viewBox="0 0 24 24"
+                width="1rem"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 6l6 6l-6 6"
+                />
+              </svg>
+            </div>
+          </button>
+          <div
+            aria-hidden="true"
+            class=""
+            style="box-sizing: border-box; opacity: 0; transition: opacity 200ms ease; display: none; height: 0px; overflow: hidden;"
+          >
+            <a
+              activeprops="[object Object]"
+              class="_link_096153"
+              href="/manage/devices"
+            >
+              Devices
+            </a>
+            <a
+              activeprops="[object Object]"
+              class="_link_096153"
+              href="/manage/users"
+            >
+              Users
+            </a>
+            <a
+              activeprops="[object Object]"
+              class="_link_096153"
+              href="/manage/stages"
+            >
+              Stages
+            </a>
+          </div>
+          <a
+            activeprops="[object Object]"
+            class="_control_096153"
+            href="/big-screen"
+          >
+            <div
+              class="m_4081bf90 mantine-Group-root"
+              style="--group-gap: 0rem; --group-align: center; --group-justify: space-between; --group-wrap: wrap;"
+            >
+              <div
+                class=""
+                style="display: flex; align-items: center;"
+              >
+                <div
+                  class="m_7341320d mantine-ThemeIcon-root"
+                  data-variant="light"
+                  style="--ti-size: calc(1.875rem * var(--mantine-scale)); --ti-bg: var(--mantine-color-blue-light); --ti-color: var(--mantine-color-blue-light-color); --ti-bd: calc(0.0625rem * var(--mantine-scale)) solid transparent;"
+                >
+                  <svg
+                    class="tabler-icon tabler-icon-device-tv "
+                    fill="none"
+                    height="1.1rem"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="1.1rem"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3 7m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"
+                    />
+                    <path
+                      d="M16 3l-4 4l-4 -4"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class=""
+                  style="margin-left: var(--mantine-spacing-md);"
+                >
+                  Big Screen
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

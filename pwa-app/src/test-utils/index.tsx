@@ -10,7 +10,7 @@ export const createTestStore = (preloadedState = {}) => {
   return configureStore({
     reducer: rootReducer,
     preloadedState,
-    middleware: (getDefaultMiddleware) =>
+    middleware: getDefaultMiddleware =>
       getDefaultMiddleware({
         thunk: true,
         // Disable middleware that might cause issues in tests
@@ -22,8 +22,8 @@ export const createTestStore = (preloadedState = {}) => {
 
 // Create test wrapper
 interface AllTheProvidersProps {
-  children: ReactNode;
-  store?: ReturnType<typeof createTestStore>;
+  children: ReactNode
+  store?: ReturnType<typeof createTestStore>
 }
 
 const AllTheProviders = ({ children, store }: AllTheProvidersProps) => {
@@ -40,17 +40,17 @@ const AllTheProviders = ({ children, store }: AllTheProvidersProps) => {
 
 // Custom render function
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-  preloadedState?: any;
-  store?: ReturnType<typeof createTestStore>;
+  preloadedState?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  store?: ReturnType<typeof createTestStore>
 }
 
-const customRender = (
+export const renderWithProviders = (
   ui: ReactElement,
   {
     preloadedState = {},
     store = createTestStore(preloadedState),
     ...renderOptions
-  }: CustomRenderOptions = {}
+  }: CustomRenderOptions = {},
 ) => {
   const Wrapper = ({ children }: { children: ReactNode }) => (
     <AllTheProviders store={store}>{children}</AllTheProviders>
@@ -58,7 +58,3 @@ const customRender = (
 
   return render(ui, { wrapper: Wrapper, ...renderOptions });
 };
-
-// Re-export everything
-export * from '@testing-library/react';
-export { customRender as render };

@@ -1,26 +1,26 @@
-import { createSlice /*, PayloadAction */ } from '@reduxjs/toolkit';
+import { createSlice /* , PayloadAction */ } from '@reduxjs/toolkit';
 import { AppRootState } from '@/store/configureStore';
 
 interface MqttMessage {
-  topic: string;
+  topic: string
   message: {
-    payload?: JSONValue;
-    meta?: JSONValue;
+    payload?: JSONValue
+    meta?: JSONValue
   }
 }
 
 export interface MqttState {
-  messages: MqttMessage[];
-  isConnecting: boolean;
-  isConnected: boolean;
-  isDisconnecting: boolean;
+  messages: MqttMessage[]
+  isConnecting: boolean
+  isConnected: boolean
+  isDisconnecting: boolean
 }
 
 const initialState: MqttState = {
   messages: [],
   isConnecting: false,
   isConnected: false,
-  isDisconnecting: false
+  isDisconnecting: false,
 };
 
 const mqttSlice = createSlice({
@@ -46,8 +46,8 @@ const mqttSlice = createSlice({
       state.isConnected = false;
       state.isConnecting = false;
       state.isDisconnecting = false;
-    }
-  }
+    },
+  },
 });
 export const selectIsConnected = (state: AppRootState) => state.mqtt.isConnected;
 export const selectIsConnecting = (state: AppRootState) => state.mqtt.isConnecting;

@@ -1,5 +1,5 @@
 export const calculateTotals = (scores: ('A' | 'C' | 'D')[]) => {
-  const scoreValues = scores.map(zone => {
+  const scoreValues = scores.map((zone) => {
     switch (zone) {
       case 'A': return { major: 5, minor: 5 };
       case 'C': return { major: 4, minor: 3 };
@@ -17,10 +17,9 @@ export const calculateTotals = (scores: ('A' | 'C' | 'D')[]) => {
   return [totalMajor, totalMinor];
 };
 
-
-export const calculateHitfactor = ({ major, minor, time }: { major: number; minor: number; time: number; }) => {
+export const calculateHitfactor = ({ major, minor, time }: { major: number, minor: number, time: number }) => {
   return {
     major: Math.round((major / time) * 100) / 100,
-    minor: Math.round((minor / time) * 100) / 100
+    minor: Math.round((minor / time) * 100) / 100,
   };
 };

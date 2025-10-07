@@ -29,7 +29,8 @@ export function initializeAudioContext(): void {
       audioContext = new AudioContext();
       isAudioInitialized = true;
       console.log('Audio context initialized successfully');
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to initialize audio context:', error);
       isAudioInitialized = false;
     }
@@ -74,7 +75,8 @@ export function playBeep(frequency = 2800, duration = 433, volume = 100): void {
     const currentTime = audioContext!.currentTime;
     oscillator.start(currentTime);
     oscillator.stop(currentTime + duration * 0.001);
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to play beep:', error);
   }
 }

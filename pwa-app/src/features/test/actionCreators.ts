@@ -11,14 +11,13 @@ export const deviceOnline = createAction(actionTypes.DEVICE_ONLINE, function pre
     meta: {
       id: uuidv4(),
       timestamp,
-      timeMillis
+      timeMillis,
     },
     payload: {
-      deviceType: 'POPPER'
-    }
+      deviceType: 'POPPER',
+    },
   };
 });
-
 
 export const targetHit = createAction(actionTypes.ACTIONS_DEVICE_TARGET_HIT, function prepare(deviceId: string, targetZone: string) {
   const now = new Date();
@@ -29,10 +28,10 @@ export const targetHit = createAction(actionTypes.ACTIONS_DEVICE_TARGET_HIT, fun
     meta: {
       id: deviceId,
       timestamp,
-      timeMillis
+      timeMillis,
     },
     payload: {
-      targetZone
-    }
+      targetZone,
+    },
   };
 });

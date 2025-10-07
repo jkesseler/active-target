@@ -9,7 +9,6 @@ export const stageRemoved = createAction<{ id: string }>('STAGE/REMOVED');
 export const stageActivated = createAction<{ id: string }>('STAGE/ACTIVATED');
 export const stageDeactivated = createAction<{ id: string }>('STAGE/DEACTIVATED');
 
-
 export const stagesSlice = createSlice({
   name: 'stages',
   initialState: mockData as Types.Stage[],
@@ -25,12 +24,12 @@ export const stagesSlice = createSlice({
 
         return [
           ...state,
-          payload
+          payload,
         ];
       })
       .addCase(stageUpdated, (state, { payload }) => {
         return state.map((stage: Types.Stage) =>
-          stage.id === payload.id ? { ...stage, ...payload } : stage
+          stage.id === payload.id ? { ...stage, ...payload } : stage,
         );
       }).addCase(stageRemoved, (state, { payload }) => {
         return state.filter((stage: Types.Stage) => stage.id !== payload.id);
@@ -47,7 +46,7 @@ export const stagesSlice = createSlice({
           stage.status = Types.STATUS.STAGE_INACTIVE;
         }
       });
-  }
+  },
 });
 
 export function selectStages(state: AppRootState) {
@@ -63,7 +62,7 @@ export function selectStageById(state: AppRootState, id?: string) {
 
 export function selectCurrentStage(state: AppRootState) {
   // Get current stage from match context
-  const currentMatch = state.match.matches.find(m => m.id === state.match.currentMatchId);
+  const currentMatch = state.match.matches.find(match => match.id === state.match.currentMatchId);
   if (!currentMatch?.currentStageId) {
     return null;
   }

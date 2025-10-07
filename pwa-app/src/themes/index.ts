@@ -6,9 +6,9 @@ import { ThemeName } from './types';
 export const themes = {
   corporate,
   dracula,
-  synthwave
+  synthwave,
 };
 
 export const sortedThemeNames = Object.keys(themes)
-  .map((key) => key as ThemeName)
+  .map(key => key as ThemeName)
   .sort();

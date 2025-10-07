@@ -9,9 +9,9 @@ let mqttClient: mqtt.MqttClient;
 const actions = mqttSlice.actions;
 
 interface MqttMessageObject {
-  type: string;
-  payload: JSONValue;
-  meta: JSONValue;
+  type: string
+  payload: JSONValue
+  meta: JSONValue
 }
 
 function parseMqttMessage(message: string): MqttMessageObject {
@@ -21,10 +21,10 @@ function parseMqttMessage(message: string): MqttMessageObject {
     return ({
       type,
       meta,
-      payload
+      payload,
     });
-
-  } catch (err) {
+  }
+  catch (err) {
     throw new Error('MQTT message does not a valid JSON string', { cause: err });
   }
 }
@@ -32,11 +32,11 @@ function parseMqttMessage(message: string): MqttMessageObject {
 export const mqttMiddleware: Middleware = ({ dispatch }) => {
   const isConnected = mqttClient?.connected;
 
-  return next => action => {
+  return next => (action) => {
     if (actions.startConnecting.match(action) && !isConnected) {
       mqttClient = mqtt.connect(MQTT_SEVRVER_URL, {
         clientId: `controller_${DEVICE_ID}`,
-        log: console.log
+        log: console.log,
       });
 
       mqttClient.subscribe(MQTT_MIDDLEWARE_TOPICS);
@@ -66,13 +66,13 @@ export const mqttMiddleware: Middleware = ({ dispatch }) => {
             type,
             (payload, meta) => ({
               payload,
-              meta
-            })
+              meta,
+            }),
           );
 
           dispatch(action(payload, meta));
-
-        } catch (e) {
+        }
+        catch (e) {
           console.log(e);
         }
       });

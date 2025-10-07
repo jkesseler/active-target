@@ -16,7 +16,7 @@ export const usersSlice = createSlice({
 
       return [
         ...state,
-        payload
+        payload,
       ];
     },
     userRemoved: (state, { payload }) => {
@@ -24,20 +24,20 @@ export const usersSlice = createSlice({
     },
     userUpdated: (state, { payload }) => {
       return state.map((user: Types.User) =>
-        user.id === payload.id ? { ...user, ...payload } : user
+        user.id === payload.id ? { ...user, ...payload } : user,
       );
-    }
-  }
+    },
+  },
 });
 
 export const selectUsers = (state: AppRootState) => state.users;
 
 export const selectUserById = createSelector(
   [
-    state => state.devices,
-    (_, id) => id
+    state => state.users,
+    (_, id) => id,
   ],
   (users, id) => {
     return users ? users.find((user: Types.User) => user.id === id) : null;
-  }
+  },
 );

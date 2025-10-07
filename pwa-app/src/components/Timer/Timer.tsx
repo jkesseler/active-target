@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Text,
   Group,
-  ActionIcon
+  ActionIcon,
 } from '@mantine/core';
 import { IconPlayerPlay, IconPlayerPause, IconPlayerStop, IconRefresh } from '@tabler/icons-react';
 import { useAppSelector, useAppDispatch } from '@/store/configureStore';
@@ -24,8 +24,9 @@ export const Timer = () => {
   // Handle timer intervals with proper TypeScript types and cleanup
   useEffect(() => {
     if (isStageActive) {
-      intervalId.current = setInterval(() => setTime((value) => value + 1), 10);
-    } else if (intervalId.current) {
+      intervalId.current = setInterval(() => setTime(value => value + 1), 10);
+    }
+    else if (intervalId.current) {
       clearInterval(intervalId.current);
       intervalId.current = null;
     }
@@ -54,7 +55,7 @@ export const Timer = () => {
     if (currentStage && currentMatch) {
       dispatch(activateStageInMatch({
         matchId: currentMatch.id,
-        stageId: currentStage.id
+        stageId: currentStage.id,
       }));
     }
   }, [currentStage, currentMatch, dispatch]);
@@ -64,7 +65,6 @@ export const Timer = () => {
       dispatch(stageDeactivated({ id: currentStage.id }));
     }
   }, [currentStage, dispatch]);
-
 
   return (
     <div className={classes.timer}>

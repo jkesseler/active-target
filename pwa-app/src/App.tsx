@@ -18,7 +18,7 @@ import './global.css';
 
 const router = createRouter({
   routeTree,
-  defaultPreload: 'intent'
+  defaultPreload: 'intent',
 });
 
 // Register things for typesafety
@@ -53,16 +53,18 @@ export const App = () => {
     };
   }, []);
 
-  return <Provider store={store}>
-    <MantineProvider
-      theme={themes[currentThemeName].mantineTheme}
-      defaultColorScheme="dark"
-    >
-      <Notifications />
-      <DatesProvider settings={{ locale: 'nl-NL', firstDayOfWeek: 0, weekendDays: [0], timezone: 'UTC' }}>
-        <RouterProvider router={router} />
-        <ModalsProvider data-testid="modals" />
-      </DatesProvider>
-    </MantineProvider>
-  </Provider>;
+  return (
+    <Provider store={store}>
+      <MantineProvider
+        theme={themes[currentThemeName].mantineTheme}
+        defaultColorScheme="dark"
+      >
+        <Notifications />
+        <DatesProvider settings={{ locale: 'nl-NL', firstDayOfWeek: 0, weekendDays: [0], timezone: 'UTC' }}>
+          <RouterProvider router={router} />
+          <ModalsProvider data-testid="modals" />
+        </DatesProvider>
+      </MantineProvider>
+    </Provider>
+  );
 };

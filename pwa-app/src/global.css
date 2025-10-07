@@ -1,3 +1,6 @@
+html, body {
+  font-family: 'Noto Sans', sans-serif;
+}
 .shell {
   &[data-navbar-expanded] {
     @mixin smaller-than $mantine-breakpoint-sm {

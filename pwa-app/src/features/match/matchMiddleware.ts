@@ -1,7 +1,7 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
 import { stageActivated, stageDeactivated } from '@/features/stages/stagesSlice';
+import { AppRootState } from '@/store/configureStore';
 import { activateStageInMatch, stageChanged, startShooterRun } from './matchSlice';
-import type { AppRootState } from '@/store/configureStore';
 
 // Create listener middleware for coordinated match/stage actions
 export const matchMiddleware = createListenerMiddleware();
@@ -14,7 +14,7 @@ matchMiddleware.startListening({
     const state = listenerApi.getState() as AppRootState;
 
     // Get the current match to find the previously active stage
-    const currentMatch = state.match.matches.find(m => m.id === matchId);
+    const currentMatch = state.match.matches.find(match => match.id === matchId);
     const previousStageId = currentMatch?.currentStageId;
 
     // Update match state first
@@ -27,21 +27,21 @@ matchMiddleware.startListening({
 
     // Activate the new stage
     listenerApi.dispatch(stageActivated({ id: stageId }));
-  }
+  },
 });
 
 // Listen for shooter run start to activate stage and set current shooter
 matchMiddleware.startListening({
   actionCreator: startShooterRun,
   effect: async (action, listenerApi) => {
-    const { matchId, shooterId, stageId } = action.payload;
+    const { matchId, /* shooterId, */ stageId } = action.payload;
 
     // Activate the stage for this run
     listenerApi.dispatch(activateStageInMatch({ matchId, stageId }));
 
     // Set the current shooter
     listenerApi.dispatch(stageChanged({ matchId, stageId }));
-  }
+  },
 });
 
 // Type-safe listener API

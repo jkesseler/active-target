@@ -9,7 +9,7 @@ import {
   Group,
   TextInput,
   Modal,
-  Stack
+  Stack,
 } from '@mantine/core';
 import { IconPlus, IconEdit, IconTrash, IconSearch } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
@@ -20,7 +20,7 @@ import { selectUsers, usersSlice } from '@/features/users/usersSlice';
 import type { User } from '@/features/users/types';
 
 export const Route = createFileRoute('/manage/users/')({
-  component: UsersManagementPage
+  component: UsersManagementPage,
 });
 
 function UsersManagementPage() {
@@ -38,17 +38,17 @@ function UsersManagementPage() {
       emailAddress: '',
     },
     validate: {
-      firstName: (value) => (value.length < 2 ? 'First name must have at least 2 letters' : null),
-      lastName: (value) => (value.length < 2 ? 'Last name must have at least 2 letters' : null),
-      emailAddress: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      firstName: value => (value.length < 2 ? 'First name must have at least 2 letters' : null),
+      lastName: value => (value.length < 2 ? 'Last name must have at least 2 letters' : null),
+      emailAddress: value => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
 
   // Filter users based on search term
   const filteredUsers = users.filter(user =>
-    user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.emailAddress.toLowerCase().includes(searchTerm.toLowerCase())
+    user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+    || user.lastName.toLowerCase().includes(searchTerm.toLowerCase())
+    || user.emailAddress.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleCreateUser = () => {
@@ -90,7 +90,8 @@ function UsersManagementPage() {
         message: 'User has been successfully updated.',
         color: 'green',
       });
-    } else {
+    }
+    else {
       // Create new user
       const newUser: User = {
         id: crypto.randomUUID(),
@@ -121,7 +122,7 @@ function UsersManagementPage() {
           placeholder="Search users..."
           leftSection={<IconSearch size={16} />}
           value={searchTerm}
-          onChange={(event) => setSearchTerm(event.currentTarget.value)}
+          onChange={event => setSearchTerm(event.currentTarget.value)}
           style={{ flexGrow: 1 }}
         />
       </Group>
@@ -135,7 +136,7 @@ function UsersManagementPage() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {filteredUsers.map((user) => (
+          {filteredUsers.map(user => (
             <Table.Tr key={user.id}>
               <Table.Td>{`${user.firstName} ${user.lastName}`}</Table.Td>
               <Table.Td>{user.emailAddress}</Table.Td>

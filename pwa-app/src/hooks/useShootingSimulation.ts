@@ -17,7 +17,8 @@ export function useShootingSimulation(targets: MockTarget[], onTargetUpdate: (ta
       const zone = zones[Math.floor(Math.random() * zones.length)];
       const timeHit = Math.random() * 20 + 5; // Random time between 5-25 seconds
       simulateTargetHit(randomTarget.id, zone, timeHit);
-    } else {
+    }
+    else {
       simulateTargetMiss(randomTarget.id);
     }
 
@@ -25,17 +26,17 @@ export function useShootingSimulation(targets: MockTarget[], onTargetUpdate: (ta
   }, [targets, onTargetUpdate]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let i: NodeJS.Timeout;
 
     if (isSimulating) {
-      interval = setInterval(() => {
+      i = setInterval(() => {
         simulateShot();
       }, simulationSpeed);
     }
 
     return () => {
-      if (interval) {
-        clearInterval(interval);
+      if (i) {
+        clearInterval(i);
       }
     };
   }, [isSimulating, simulationSpeed, simulateShot]);
@@ -44,7 +45,7 @@ export function useShootingSimulation(targets: MockTarget[], onTargetUpdate: (ta
   const stopSimulation = useCallback(() => setIsSimulating(false), []);
 
   const resetTargets = useCallback(() => {
-    targets.forEach(target => {
+    targets.forEach((target) => {
       target.status = 'default';
       target.zone = null;
       target.points = 0;
@@ -60,6 +61,6 @@ export function useShootingSimulation(targets: MockTarget[], onTargetUpdate: (ta
     startSimulation,
     stopSimulation,
     resetTargets,
-    simulateShot
+    simulateShot,
   };
 }

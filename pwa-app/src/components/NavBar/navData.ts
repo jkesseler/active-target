@@ -1,9 +1,7 @@
 import {
   IconDashboard,
-  IconDevicesCog,
   IconReport,
-  IconUsers,
-  IconDeviceTv
+  IconDeviceTv,
 } from '@tabler/icons-react';
 import type { NavItem } from './types';
 
@@ -11,29 +9,31 @@ export const navLinks: NavItem[] = [
   {
     label: 'Dashboard',
     icon: IconDashboard,
-    link: '/dashboard'
+    link: '/dashboard',
   },
   {
-    label: 'Devices',
-    icon: IconDevicesCog,
-    initiallyOpened: true,
-    link: '/manage/devices'
-  },
-  {
-    icon: IconUsers,
-    label: 'Users',
-    link: '/manage/users'
-  },
-  {
-    label: 'Stages',
+    label: 'Manage',
     icon: IconReport,
-    link: '/manage/stages'
+    links: [
+      {
+        label: 'Devices',
+        link: '/manage/devices',
+      },
+      {
+        label: 'Users',
+        link: '/manage/users',
+      },
+      {
+        label: 'Stages',
+        link: '/manage/stages',
+      },
+    ],
   },
   {
     label: 'Big Screen',
     icon: IconDeviceTv,
-    link: '/big-screen'
-  }
+    link: '/big-screen',
+  },
   // {
   //   label: 'ScoreSheet',
   //   icon: IconFileCertificate,

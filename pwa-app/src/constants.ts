@@ -3,6 +3,6 @@ export const MQTT_SEVRVER_URL = 'ws://localhost:9001';
 export const MQTT_MIDDLEWARE_TOPICS = [
   '*',
   'at/device/+/response',
-  'at/device/+/status'
+  'at/device/+/status',
 ];
 export const MQTT_BROADCAST_TOPIC = 'at/devices/broadcast';

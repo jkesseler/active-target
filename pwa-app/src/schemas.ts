@@ -4,49 +4,49 @@ import { z } from 'zod';
 export const MessageMetaSchema = z.object({
   timestamp: z.date(),
   timeMillies: z.number().int().positive(),
-  id: z.string().uuid()
+  id: z.uuid(),
 });
 
 export const BaseMessageSchema = z.object({
   type: z.string(),
   meta: MessageMetaSchema,
-  payload: z.record(z.any())
+  payload: z.any(),
 });
 
 // Device schemas
 export const AddDevicePayloadSchema = z.object({
-  deviceName: z.string().optional()
+  deviceName: z.string().optional(),
 });
 
 export const UpdateDevicePayloadSchema = z.object({
   deviceName: z.string().optional(),
-  deviceState: z.enum(['TEST', 'IDLE', 'ACTIVE-ON', 'ACTIVE-OFF', 'ERROR']).optional()
+  deviceState: z.enum(['TEST', 'IDLE', 'ACTIVE-ON', 'ACTIVE-OFF', 'ERROR']).optional(),
 });
 
 export const AddResultPayloadSchema = z.object({
   deviceName: z.string().optional(),
-  result: z.enum(['hit', 'miss'])
+  result: z.enum(['hit', 'miss']),
 });
 
 // Complete message schemas
 export const AddDeviceMessageSchema = BaseMessageSchema.extend({
   type: z.literal('DEVICE/ADDED'),
-  payload: AddDevicePayloadSchema
+  payload: AddDevicePayloadSchema,
 });
 
 export const UpdateDeviceMessageSchema = BaseMessageSchema.extend({
   type: z.literal('DEVICE/UPDATED'),
-  payload: UpdateDevicePayloadSchema
+  payload: UpdateDevicePayloadSchema,
 });
 
 export const AddResultMessageSchema = BaseMessageSchema.extend({
   type: z.literal('RESULTS/ADDED'),
-  payload: AddResultPayloadSchema
+  payload: AddResultPayloadSchema,
 });
 
 export const ResetResultsMessageSchema = BaseMessageSchema.extend({
   type: z.literal('RESULTS/RESET'),
-  payload: z.object({})
+  payload: z.object({}),
 });
 
 // Union of all message types
@@ -54,7 +54,7 @@ export const MqttMessageSchema = z.discriminatedUnion('type', [
   AddDeviceMessageSchema,
   UpdateDeviceMessageSchema,
   AddResultMessageSchema,
-  ResetResultsMessageSchema
+  ResetResultsMessageSchema,
 ]);
 
 // TypeScript types

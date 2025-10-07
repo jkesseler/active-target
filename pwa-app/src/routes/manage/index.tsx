@@ -4,7 +4,7 @@ import { Container, Title, Tabs } from '@mantine/core';
 import { IconTarget, IconUsers, IconTrophy, IconDeviceDesktop } from '@tabler/icons-react';
 
 export const Route = createFileRoute('/manage/')({
-  component: ManageLayout
+  component: ManageLayout,
 });
 
 function ManageLayout() {
@@ -20,9 +20,11 @@ function ManageLayout() {
         onChange={(value) => {
           if (value === 'stages') {
             navigate({ to: '/manage/stages' });
-          } else if (value === 'users') {
+          }
+          else if (value === 'users') {
             navigate({ to: '/manage/users' });
-          } else if (value === 'devices') {
+          }
+          else if (value === 'devices') {
             navigate({ to: '/manage/devices' });
           }
         }}

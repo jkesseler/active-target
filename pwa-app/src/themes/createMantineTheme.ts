@@ -4,7 +4,7 @@ import {
   DefaultMantineColor,
   MantineColorsTuple,
   MantineThemeOverride,
-  mergeMantineTheme
+  mergeMantineTheme,
 } from '@mantine/core';
 
 type CustomColor = 'primary' | 'secondary' | 'tertiary' | DefaultMantineColor;
@@ -16,18 +16,18 @@ type CustomColor = 'primary' | 'secondary' | 'tertiary' | DefaultMantineColor;
  */
 declare module '@mantine/core' {
   export interface MantineThemeColorsOverride {
-    colors: Record<CustomColor, MantineColorsTuple>;
+    colors: Record<CustomColor, MantineColorsTuple>
   }
 }
 
 type createMantineThemeProps = {
-  baseHue: number;
-  baseSaturation: number;
+  baseHue: number
+  baseSaturation: number
   colors: {
-    primary: MantineColorsTuple;
-    secondary: MantineColorsTuple;
-    tertiary: MantineColorsTuple;
-  };
+    primary: MantineColorsTuple
+    secondary: MantineColorsTuple
+    tertiary: MantineColorsTuple
+  }
 } & Omit<MantineThemeOverride, 'colors'>;
 
 /**
@@ -76,7 +76,7 @@ export function createMantineTheme({
           `hsl(${baseHue} ${baseSaturation}% 13%)`,
           `hsl(${baseHue} ${baseSaturation}% 9%)`,
           `hsl(${baseHue} ${baseSaturation}% 8%)`,
-          `hsl(${baseHue} ${baseSaturation}% 5%)`
+          `hsl(${baseHue} ${baseSaturation}% 5%)`,
         ],
         gray: [
           `hsl(${baseHue} 17% 98%)`,
@@ -88,8 +88,8 @@ export function createMantineTheme({
           `hsl(${baseHue} 8% 45%)`,
           `hsl(${baseHue} 10% 30%)`,
           `hsl(${baseHue} 10% 25%)`,
-          `hsl(${baseHue} 10% 15%)`
-        ]
+          `hsl(${baseHue} 10% 15%)`,
+        ],
       },
       black: `hsl(${baseHue} 10% 10%)`,
       white: `hsl(${baseHue} 10% 94%)`,
@@ -97,7 +97,7 @@ export function createMantineTheme({
       fontFamily: 'Roboto',
       headings: { fontFamily: 'Roboto' },
       defaultRadius: 'md',
-      ...custom
-    })
+      ...custom,
+    }),
   );
 }
