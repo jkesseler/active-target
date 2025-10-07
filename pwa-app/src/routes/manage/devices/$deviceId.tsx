@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
   Container,
   Title,
@@ -14,31 +14,31 @@ import {
   Modal,
   TextInput,
   Textarea,
-} from '@mantine/core'
-import { IconEdit, IconArrowLeft, IconPlus } from '@tabler/icons-react'
-import { useDisclosure } from '@mantine/hooks'
-import { useForm } from '@mantine/form'
-import { notifications } from '@mantine/notifications'
-import { useAppSelector, useAppDispatch } from '@/store/configureStore'
+} from '@mantine/core';
+import { IconEdit, IconArrowLeft, IconPlus } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
+import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
 import {
   selectDeviceById,
   deviceOnline,
   deviceOffline,
   deviceUpdated,
-} from '@/features/devices/devicesSlice'
-import * as Types from '@/features/devices/types'
+} from '@/features/devices/devicesSlice';
+import * as Types from '@/features/devices/types';
 
 export const Route = createFileRoute('/manage/devices/$deviceId')({
   component: DeviceDetailsPage,
-})
+});
 
 function DeviceDetailsPage() {
-  const { deviceId } = Route.useParams()
-  const device = useAppSelector(state => selectDeviceById(state, deviceId))
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false)
-  const [sideEffectOpened, { open: openSideEffect, close: closeSideEffect }] = useDisclosure(false)
+  const { deviceId } = Route.useParams();
+  const device = useAppSelector(state => selectDeviceById(state, deviceId));
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
+  const [sideEffectOpened, { open: openSideEffect, close: closeSideEffect }] = useDisclosure(false);
 
   // Form for editing device basic info
   const editForm = useForm({
@@ -48,7 +48,7 @@ function DeviceDetailsPage() {
     validate: {
       name: value => (value.length < 2 ? 'Device name must have at least 2 characters' : null),
     },
-  })
+  });
 
   // Form for adding side effects
   const sideEffectForm = useForm({
@@ -60,7 +60,7 @@ function DeviceDetailsPage() {
       topic: value => (value.length < 1 ? 'Topic is required' : null),
       payload: value => (value.length < 1 ? 'Payload is required' : null),
     },
-  })
+  });
 
   if (!device) {
     return (
@@ -70,73 +70,73 @@ function DeviceDetailsPage() {
           Back to Devices
         </Button>
       </Container>
-    )
+    );
   }
 
   const handleStatusToggle = () => {
     if (device.status === Types.STATUS.ONLINE) {
-      dispatch(deviceOffline({ id: device.id }))
+      dispatch(deviceOffline({ id: device.id }));
       notifications.show({
         title: 'Device Offline',
         message: `Device "${device.name}" is now offline.`,
         color: 'orange',
-      })
+      });
     }
     else {
-      dispatch(deviceOnline({ id: device.id }))
+      dispatch(deviceOnline({ id: device.id }));
       notifications.show({
         title: 'Device Online',
         message: `Device "${device.name}" is now online.`,
         color: 'green',
-      })
+      });
     }
-  }
+  };
 
   const handleEditSubmit = (values: typeof editForm.values) => {
     dispatch(deviceUpdated({
       id: device.id,
       name: values.name,
       lastUpdated: new Date().toISOString(),
-    }))
+    }));
     notifications.show({
       title: 'Device Updated',
       message: `Device "${values.name}" has been successfully updated.`,
       color: 'green',
-    })
-    closeEdit()
-  }
+    });
+    closeEdit();
+  };
 
   const handleSideEffectSubmit = (values: typeof sideEffectForm.values) => {
     const newSideEffect: Types.SideEffect = {
       topic: values.topic,
       payload: values.payload,
-    }
+    };
 
     dispatch(deviceUpdated({
       id: device.id,
       sideEffects: [...(device.sideEffects || []), newSideEffect],
       lastUpdated: new Date().toISOString(),
-    }))
+    }));
 
     notifications.show({
       title: 'Side Effect Added',
       message: 'Side effect has been successfully added.',
       color: 'green',
-    })
-    sideEffectForm.reset()
-    closeSideEffect()
-  }
+    });
+    sideEffectForm.reset();
+    closeSideEffect();
+  };
 
   const getStatusColor = (status: Types.STATUS | undefined) => {
     switch (status) {
       case Types.STATUS.ONLINE:
-        return 'green'
+        return 'green';
       case Types.STATUS.OFFLINE:
-        return 'red'
+        return 'red';
       default:
-        return 'gray'
+        return 'gray';
     }
-  }
+  };
 
   return (
     <Container size="xl" py="md">
@@ -156,8 +156,8 @@ function DeviceDetailsPage() {
           variant="subtle"
           color="blue"
           onClick={() => {
-            editForm.setValues({ name: device.name })
-            openEdit()
+            editForm.setValues({ name: device.name });
+            openEdit();
           }}
         >
           <IconEdit size={16} />
@@ -326,5 +326,5 @@ function DeviceDetailsPage() {
         </form>
       </Modal>
     </Container>
-  )
+  );
 }

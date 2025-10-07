@@ -1,4 +1,4 @@
-import type { ScoresTable } from '@/features/scoresTable/types'
+import type { ScoresTable } from '@/features/scoresTable/types';
 
 export interface Stage {
   id: string

@@ -1,5 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
 import {
   Table,
   Button,
@@ -11,18 +11,18 @@ import {
   Paper,
   Title,
   Badge,
-} from '@mantine/core'
-import { useForm } from '@mantine/form'
-import { IconPlus, IconEdit, IconTrash, IconTarget } from '@tabler/icons-react'
-import { notifications } from '@mantine/notifications'
-import { useAppSelector, useAppDispatch } from '@/store/configureStore'
-import { selectStages, stageAdded, stageUpdated, stageRemoved } from '@/features/stages/stagesSlice'
-import { selectDevices } from '@/features/devices/devicesSlice'
-import * as StageTypes from '@/features/stages/types'
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconPlus, IconEdit, IconTrash, IconTarget } from '@tabler/icons-react';
+import { notifications } from '@mantine/notifications';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
+import { selectStages, stageAdded, stageUpdated, stageRemoved } from '@/features/stages/stagesSlice';
+import { selectDevices } from '@/features/devices/devicesSlice';
+import * as StageTypes from '@/features/stages/types';
 
 export const Route = createFileRoute('/manage/stages/')({
   component: StageManagement,
-})
+});
 
 interface StageFormData {
   id?: string
@@ -31,11 +31,11 @@ interface StageFormData {
 }
 
 function StageManagement() {
-  const dispatch = useAppDispatch()
-  const stages = useAppSelector(selectStages)
-  const devices = useAppSelector(selectDevices)
-  const [modalOpened, setModalOpened] = useState(false)
-  const [editingStage, setEditingStage] = useState<StageTypes.Stage | null>(null)
+  const dispatch = useAppDispatch();
+  const stages = useAppSelector(selectStages);
+  const devices = useAppSelector(selectDevices);
+  const [modalOpened, setModalOpened] = useState(false);
+  const [editingStage, setEditingStage] = useState<StageTypes.Stage | null>(null);
 
   const form = useForm<StageFormData>({
     initialValues: {
@@ -46,12 +46,12 @@ function StageManagement() {
       name: value => value.length < 2 ? 'Stage name must be at least 2 characters' : null,
       devices: value => value.length === 0 ? 'At least one device must be selected' : null,
     },
-  })
+  });
 
   const deviceOptions = devices.map(device => ({
     value: device.id,
     label: `${device.name} (${device.type})`,
-  }))
+  }));
 
   const handleSubmit = (values: StageFormData) => {
     if (editingStage) {
@@ -60,12 +60,12 @@ function StageManagement() {
         id: editingStage.id,
         name: values.name,
         devices: values.devices,
-      }))
+      }));
       notifications.show({
         title: 'Stage Updated',
         message: `${values.name} has been updated successfully`,
         color: 'blue',
-      })
+      });
     }
     else {
       // Create new stage
@@ -74,49 +74,49 @@ function StageManagement() {
         name: values.name,
         devices: values.devices,
         status: StageTypes.STATUS.STAGE_INACTIVE,
-      }
-      dispatch(stageAdded(newStage))
+      };
+      dispatch(stageAdded(newStage));
       notifications.show({
         title: 'Stage Created',
         message: `${values.name} has been created successfully`,
         color: 'green',
-      })
+      });
     }
 
-    setModalOpened(false)
-    setEditingStage(null)
-    form.reset()
-  }
+    setModalOpened(false);
+    setEditingStage(null);
+    form.reset();
+  };
 
   const handleEdit = (stage: StageTypes.Stage) => {
-    setEditingStage(stage)
+    setEditingStage(stage);
     form.setValues({
       name: stage.name,
       devices: stage.devices,
-    })
-    setModalOpened(true)
-  }
+    });
+    setModalOpened(true);
+  };
 
   const handleDelete = (stage: StageTypes.Stage) => {
     if (window.confirm(`Are you sure you want to delete "${stage.name}"?`)) {
-      dispatch(stageRemoved({ id: stage.id }))
+      dispatch(stageRemoved({ id: stage.id }));
       notifications.show({
         title: 'Stage Deleted',
         message: `${stage.name} has been deleted`,
         color: 'red',
-      })
+      });
     }
-  }
+  };
 
   const handleCreate = () => {
-    setEditingStage(null)
-    form.reset()
-    setModalOpened(true)
-  }
+    setEditingStage(null);
+    form.reset();
+    setModalOpened(true);
+  };
 
   const getStatusColor = (status: StageTypes.STATUS) => {
-    return status === StageTypes.STATUS.STAGE_ACTIVE ? 'green' : 'gray'
-  }
+    return status === StageTypes.STATUS.STAGE_ACTIVE ? 'green' : 'gray';
+  };
 
   return (
     <>
@@ -152,14 +152,14 @@ function StageManagement() {
                 <Table.Td>
                   <Group gap="xs">
                     {stage.devices.map((deviceId) => {
-                      const device = devices.find(d => d.id === deviceId)
+                      const device = devices.find(device => device.id === deviceId);
                       return device
                         ? (
                             <Badge key={deviceId} size="sm" variant="outline">
                               {device.name}
                             </Badge>
                           )
-                        : null
+                        : null;
                     })}
                   </Group>
                 </Table.Td>
@@ -198,9 +198,9 @@ function StageManagement() {
       <Modal
         opened={modalOpened}
         onClose={() => {
-          setModalOpened(false)
-          setEditingStage(null)
-          form.reset()
+          setModalOpened(false);
+          setEditingStage(null);
+          form.reset();
         }}
         title={editingStage ? 'Edit Stage' : 'Create New Stage'}
         size="md"
@@ -227,9 +227,9 @@ function StageManagement() {
             <Button
               variant="light"
               onClick={() => {
-                setModalOpened(false)
-                setEditingStage(null)
-                form.reset()
+                setModalOpened(false);
+                setEditingStage(null);
+                form.reset();
               }}
             >
               Cancel
@@ -241,5 +241,5 @@ function StageManagement() {
         </form>
       </Modal>
     </>
-  )
+  );
 }

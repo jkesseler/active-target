@@ -1,12 +1,12 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { AppShell, Burger } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { Navbar } from '@/components/NavBar/NavBar'
-import { HeaderSimple } from '@/components/Header/HeaderSimple'
+import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { AppShell, Burger } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Navbar } from '@/components/NavBar/NavBar';
+import { HeaderSimple } from '@/components/Header/HeaderSimple';
 
 const RootLayout = () => {
-  const [navbarOpened, navbarHandlers] = useDisclosure(true)
+  const [navbarOpened, navbarHandlers] = useDisclosure(true);
 
   return (
     <>
@@ -46,9 +46,9 @@ const RootLayout = () => {
       </AppShell>
       <TanStackRouterDevtools />
     </>
-  )
-}
+  );
+};
 
 export const Route = createRootRoute({
   component: RootLayout,
-})
+});

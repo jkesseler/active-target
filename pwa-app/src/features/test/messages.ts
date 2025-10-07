@@ -1,6 +1,6 @@
-import * as ActionTypes from './actionTypes'
+import * as ActionTypes from './actionTypes';
 
-type ActionType = typeof ActionTypes[keyof typeof ActionTypes]
+type ActionType = typeof ActionTypes[keyof typeof ActionTypes];
 
 type Message = {
   meta: {
@@ -10,12 +10,12 @@ type Message = {
   }
   action: ActionType
   payload?: JSONValue
-}
+};
 type CreateTargetHitMessage = {
   deviceId: string
   targetZone: string
 
-}
+};
 export const createTargetHitMessage = ({ deviceId, targetZone = 'A' }: CreateTargetHitMessage): Message => {
   const message = {
     meta: {
@@ -27,7 +27,7 @@ export const createTargetHitMessage = ({ deviceId, targetZone = 'A' }: CreateTar
     payload: {
       targetZone,
     },
-  }
+  };
 
-  return message
-}
+  return message;
+};

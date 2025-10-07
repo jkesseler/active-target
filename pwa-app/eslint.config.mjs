@@ -38,6 +38,7 @@ const config = tsEslint.config(
     },
     rules: {
       '@stylistic/array-element-newline': ['error', 'consistent'],
+      '@stylistic/semi': ['error', 'always'],
       '@stylistic/space-unary-ops': 'error',
       '@stylistic/template-curly-spacing': ['error', 'never'],
       '@typescript-eslint/no-unused-expressions': ['error', {

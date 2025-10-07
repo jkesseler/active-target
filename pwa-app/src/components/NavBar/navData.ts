@@ -2,8 +2,8 @@ import {
   IconDashboard,
   IconReport,
   IconDeviceTv,
-} from '@tabler/icons-react'
-import type { NavItem } from './types'
+} from '@tabler/icons-react';
+import type { NavItem } from './types';
 
 export const navLinks: NavItem[] = [
   {
@@ -39,4 +39,4 @@ export const navLinks: NavItem[] = [
   //   icon: IconFileCertificate,
   //   link: '/scoresheet'
   // }
-]
+];

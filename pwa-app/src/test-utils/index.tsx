@@ -1,9 +1,9 @@
-import { render, RenderOptions } from '@testing-library/react'
-import { ReactElement, ReactNode } from 'react'
-import { Provider } from 'react-redux'
-import { MantineProvider } from '@mantine/core'
-import { configureStore } from '@reduxjs/toolkit'
-import { rootReducer } from '@/store/configureStore'
+import { render, RenderOptions } from '@testing-library/react';
+import { ReactElement, ReactNode } from 'react';
+import { Provider } from 'react-redux';
+import { MantineProvider } from '@mantine/core';
+import { configureStore } from '@reduxjs/toolkit';
+import { rootReducer } from '@/store/configureStore';
 
 // Create a test store function
 export const createTestStore = (preloadedState = {}) => {
@@ -17,8 +17,8 @@ export const createTestStore = (preloadedState = {}) => {
         serializableCheck: false,
         immutableCheck: false,
       }),
-  })
-}
+  });
+};
 
 // Create test wrapper
 interface AllTheProvidersProps {
@@ -27,7 +27,7 @@ interface AllTheProvidersProps {
 }
 
 const AllTheProviders = ({ children, store }: AllTheProvidersProps) => {
-  const testStore = store || createTestStore()
+  const testStore = store || createTestStore();
 
   return (
     <Provider store={testStore}>
@@ -35,12 +35,12 @@ const AllTheProviders = ({ children, store }: AllTheProvidersProps) => {
         {children}
       </MantineProvider>
     </Provider>
-  )
-}
+  );
+};
 
 // Custom render function
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-  preloadedState?: any
+  preloadedState?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   store?: ReturnType<typeof createTestStore>
 }
 
@@ -54,7 +54,7 @@ export const renderWithProviders = (
 ) => {
   const Wrapper = ({ children }: { children: ReactNode }) => (
     <AllTheProviders store={store}>{children}</AllTheProviders>
-  )
+  );
 
-  return render(ui, { wrapper: Wrapper, ...renderOptions })
-}
+  return render(ui, { wrapper: Wrapper, ...renderOptions });
+};

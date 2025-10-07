@@ -1,5 +1,5 @@
-import { createSlice /* , PayloadAction */ } from '@reduxjs/toolkit'
-import { AppRootState } from '@/store/configureStore'
+import { createSlice /* , PayloadAction */ } from '@reduxjs/toolkit';
+import { AppRootState } from '@/store/configureStore';
 
 interface MqttMessage {
   topic: string
@@ -21,35 +21,35 @@ const initialState: MqttState = {
   isConnecting: false,
   isConnected: false,
   isDisconnecting: false,
-}
+};
 
 const mqttSlice = createSlice({
   name: 'mqtt',
   initialState,
   reducers: {
     startConnecting(state) {
-      state.isConnected = false
-      state.isConnecting = true
-      state.isDisconnecting = false
+      state.isConnected = false;
+      state.isConnecting = true;
+      state.isDisconnecting = false;
     },
     startDisconnecting(state) {
-      state.isConnected = true
-      state.isConnecting = false
-      state.isDisconnecting = true
+      state.isConnected = true;
+      state.isConnecting = false;
+      state.isDisconnecting = true;
     },
     connected(state) {
-      state.isConnected = true
-      state.isConnecting = false
-      state.isDisconnecting = false
+      state.isConnected = true;
+      state.isConnecting = false;
+      state.isDisconnecting = false;
     },
     disconnected(state) {
-      state.isConnected = false
-      state.isConnecting = false
-      state.isDisconnecting = false
+      state.isConnected = false;
+      state.isConnecting = false;
+      state.isDisconnecting = false;
     },
   },
-})
-export const selectIsConnected = (state: AppRootState) => state.mqtt.isConnected
-export const selectIsConnecting = (state: AppRootState) => state.mqtt.isConnecting
-export const { startConnecting, startDisconnecting, connected } = mqttSlice.actions
-export { mqttSlice }
+});
+export const selectIsConnected = (state: AppRootState) => state.mqtt.isConnected;
+export const selectIsConnecting = (state: AppRootState) => state.mqtt.isConnecting;
+export const { startConnecting, startDisconnecting, connected } = mqttSlice.actions;
+export { mqttSlice };

@@ -4,5 +4,5 @@ export function useTranslation(nameSpace: string | string[]) {
     t: (key: string) => key,
     i18n: {
     },
-  }
+  };
 }

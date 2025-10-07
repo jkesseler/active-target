@@ -1,4 +1,4 @@
-import type { Middleware, UnknownAction } from '@reduxjs/toolkit'
+import type { Middleware, UnknownAction } from '@reduxjs/toolkit';
 
 interface TimestampAction extends UnknownAction {
   meta?: Record<string, unknown> & {
@@ -12,11 +12,11 @@ export const timestampMiddleware: Middleware
   = _store => next => (action) => {
     // Type guard to ensure action has the expected shape
     const isTypedAction = (act: unknown): act is TimestampAction => {
-      return typeof act === 'object' && act !== null && act !== undefined && 'type' in act
-    }
+      return typeof act === 'object' && act !== null && act !== undefined && 'type' in act;
+    };
 
     if (isTypedAction(action) && typeof action.type === 'string' && !action.type.startsWith('@@')) {
-      const addTimestamp = !action?.meta?.timestamp
+      const addTimestamp = !action?.meta?.timestamp;
 
       const enhancedAction: TimestampAction = {
         ...action,
@@ -27,10 +27,10 @@ export const timestampMiddleware: Middleware
             timeMillies: Date.now(),
           }),
         },
-      }
+      };
 
-      return next(enhancedAction)
+      return next(enhancedAction);
     }
 
-    return next(action)
-  }
+    return next(action);
+  };

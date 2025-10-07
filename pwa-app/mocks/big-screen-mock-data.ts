@@ -39,7 +39,7 @@ export const mockStageData: MockStageData = {
   maxTime: 45,
   currentShooterId: '1',
   nextShooterId: '2',
-}
+};
 
 export const mockShooters: MockShooter[] = [
   {
@@ -124,7 +124,7 @@ export const mockShooters: MockShooter[] = [
     time: 0,
     status: 'waiting',
   },
-]
+];
 
 export const mockTargets: MockTarget[] = [
   { id: '1', name: 'T1', type: 'paper', status: 'hit', zone: 'A', points: 5, timeHit: 2.34 },
@@ -137,24 +137,24 @@ export const mockTargets: MockTarget[] = [
   { id: '8', name: 'P2', type: 'popper', status: 'default', zone: null, points: 0 },
   { id: '9', name: 'S1', type: 'steel', status: 'hit', zone: 'Down', points: 5, timeHit: 18.23 },
   { id: '10', name: 'NS1', type: 'noshoot', status: 'default', zone: null, points: 0 },
-]
+];
 
 // Function to simulate live updates
 export const simulateTargetHit = (targetId: string, zone: 'A' | 'B' | 'C' | 'D' | 'Down', timeHit: number) => {
-  const target = mockTargets.find(t => t.id === targetId)
+  const target = mockTargets.find(t => t.id === targetId);
   if (target) {
-    target.status = 'hit'
-    target.zone = zone
-    target.timeHit = timeHit
-    target.points = zone === 'A' ? 5 : zone === 'B' ? 4 : zone === 'C' ? 3 : zone === 'D' ? 1 : zone === 'Down' ? 5 : 0
+    target.status = 'hit';
+    target.zone = zone;
+    target.timeHit = timeHit;
+    target.points = zone === 'A' ? 5 : zone === 'B' ? 4 : zone === 'C' ? 3 : zone === 'D' ? 1 : zone === 'Down' ? 5 : 0;
   }
-}
+};
 
 export const simulateTargetMiss = (targetId: string) => {
-  const target = mockTargets.find(t => t.id === targetId)
+  const target = mockTargets.find(t => t.id === targetId);
   if (target) {
-    target.status = 'missed'
-    target.zone = null
-    target.points = 0
+    target.status = 'missed';
+    target.zone = null;
+    target.points = 0;
   }
-}
+};

@@ -1,11 +1,11 @@
-import { createAction } from '@reduxjs/toolkit'
-import { v4 as uuidv4 } from 'uuid'
-import * as actionTypes from './actionTypes'
+import { createAction } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
+import * as actionTypes from './actionTypes';
 
 export const deviceOnline = createAction(actionTypes.DEVICE_ONLINE, function prepare() {
-  const now = new Date()
-  const timestamp = now.toISOString()
-  const timeMillis = now.getTime().toString()
+  const now = new Date();
+  const timestamp = now.toISOString();
+  const timeMillis = now.getTime().toString();
 
   return {
     meta: {
@@ -16,13 +16,13 @@ export const deviceOnline = createAction(actionTypes.DEVICE_ONLINE, function pre
     payload: {
       deviceType: 'POPPER',
     },
-  }
-})
+  };
+});
 
 export const targetHit = createAction(actionTypes.ACTIONS_DEVICE_TARGET_HIT, function prepare(deviceId: string, targetZone: string) {
-  const now = new Date()
-  const timestamp = now.toISOString()
-  const timeMillis = now.getTime().toString()
+  const now = new Date();
+  const timestamp = now.toISOString();
+  const timeMillis = now.getTime().toString();
 
   return {
     meta: {
@@ -33,5 +33,5 @@ export const targetHit = createAction(actionTypes.ACTIONS_DEVICE_TARGET_HIT, fun
     payload: {
       targetZone,
     },
-  }
-})
+  };
+});

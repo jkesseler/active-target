@@ -5,9 +5,9 @@ import {
   MantineColorsTuple,
   MantineThemeOverride,
   mergeMantineTheme,
-} from '@mantine/core'
+} from '@mantine/core';
 
-type CustomColor = 'primary' | 'secondary' | 'tertiary' | DefaultMantineColor
+type CustomColor = 'primary' | 'secondary' | 'tertiary' | DefaultMantineColor;
 
 /**
  * Adds the primary, secondary and tertiary colors to the MantineThemeColors interface for type safety
@@ -28,7 +28,7 @@ type createMantineThemeProps = {
     secondary: MantineColorsTuple
     tertiary: MantineColorsTuple
   }
-} & Omit<MantineThemeOverride, 'colors'>
+} & Omit<MantineThemeOverride, 'colors'>;
 
 /**
  * Creates a Mantine theme with the specified base hue/saturation and primary, secondary and
@@ -54,11 +54,11 @@ export function createMantineTheme({
   ...custom
 }: createMantineThemeProps) {
   if (baseHue < 0 || baseHue > 360) {
-    throw new Error('Hue must be between 0 and 360')
+    throw new Error('Hue must be between 0 and 360');
   }
 
   if (baseSaturation < 0 || baseSaturation > 100) {
-    throw new Error('Saturation must be between 0 and 100')
+    throw new Error('Saturation must be between 0 and 100');
   }
 
   return mergeMantineTheme(
@@ -99,5 +99,5 @@ export function createMantineTheme({
       defaultRadius: 'md',
       ...custom,
     }),
-  )
+  );
 }

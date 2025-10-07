@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { Outlet, createFileRoute } from '@tanstack/react-router'
+import * as React from 'react';
+import { Outlet, createFileRoute } from '@tanstack/react-router';
 import {
   Container,
   Title,
@@ -10,25 +10,25 @@ import {
   TextInput,
   Modal,
   Stack,
-} from '@mantine/core'
-import { IconPlus, IconEdit, IconTrash, IconSearch } from '@tabler/icons-react'
-import { useForm } from '@mantine/form'
-import { useDisclosure } from '@mantine/hooks'
-import { notifications } from '@mantine/notifications'
-import { useAppSelector, useAppDispatch } from '@/store/configureStore'
-import { selectUsers, usersSlice } from '@/features/users/usersSlice'
-import type { User } from '@/features/users/types'
+} from '@mantine/core';
+import { IconPlus, IconEdit, IconTrash, IconSearch } from '@tabler/icons-react';
+import { useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
+import { selectUsers, usersSlice } from '@/features/users/usersSlice';
+import type { User } from '@/features/users/types';
 
 export const Route = createFileRoute('/manage/users/')({
   component: UsersManagementPage,
-})
+});
 
 function UsersManagementPage() {
-  const users = useAppSelector(selectUsers)
-  const dispatch = useAppDispatch()
-  const [searchTerm, setSearchTerm] = React.useState('')
-  const [opened, { open, close }] = useDisclosure(false)
-  const [editingUser, setEditingUser] = React.useState<User | null>(null)
+  const users = useAppSelector(selectUsers);
+  const dispatch = useAppDispatch();
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [opened, { open, close }] = useDisclosure(false);
+  const [editingUser, setEditingUser] = React.useState<User | null>(null);
 
   // Form for creating/editing users
   const form = useForm({
@@ -42,41 +42,41 @@ function UsersManagementPage() {
       lastName: value => (value.length < 2 ? 'Last name must have at least 2 letters' : null),
       emailAddress: value => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
-  })
+  });
 
   // Filter users based on search term
   const filteredUsers = users.filter(user =>
     user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
     || user.lastName.toLowerCase().includes(searchTerm.toLowerCase())
     || user.emailAddress.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  );
 
   const handleCreateUser = () => {
-    setEditingUser(null)
-    form.reset()
-    open()
-  }
+    setEditingUser(null);
+    form.reset();
+    open();
+  };
 
   const handleEditUser = (user: User) => {
-    setEditingUser(user)
+    setEditingUser(user);
     form.setValues({
       firstName: user.firstName,
       lastName: user.lastName,
       emailAddress: user.emailAddress,
-    })
-    open()
-  }
+    });
+    open();
+  };
 
   const handleDeleteUser = (userId: string) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
-      dispatch(usersSlice.actions.userRemoved({ id: userId }))
+      dispatch(usersSlice.actions.userRemoved({ id: userId }));
       notifications.show({
         title: 'User Deleted',
         message: 'User has been successfully deleted.',
         color: 'red',
-      })
+      });
     }
-  }
+  };
 
   const handleSubmit = (values: typeof form.values) => {
     if (editingUser) {
@@ -84,29 +84,29 @@ function UsersManagementPage() {
       dispatch(usersSlice.actions.userUpdated({
         id: editingUser.id,
         ...values,
-      }))
+      }));
       notifications.show({
         title: 'User Updated',
         message: 'User has been successfully updated.',
         color: 'green',
-      })
+      });
     }
     else {
       // Create new user
       const newUser: User = {
         id: crypto.randomUUID(),
         ...values,
-      }
-      dispatch(usersSlice.actions.userAdded(newUser))
+      };
+      dispatch(usersSlice.actions.userAdded(newUser));
       notifications.show({
         title: 'User Created',
         message: 'User has been successfully created.',
         color: 'green',
-      })
+      });
     }
-    close()
-    form.reset()
-  }
+    close();
+    form.reset();
+  };
 
   return (
     <Container size="xl" py="md">
@@ -204,5 +204,5 @@ function UsersManagementPage() {
 
       <Outlet />
     </Container>
-  )
+  );
 }

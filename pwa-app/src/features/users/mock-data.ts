@@ -1,4 +1,4 @@
-import type { User } from './types'
+import type { User } from './types';
 
 export const mockUsers: User[] = [
   {
@@ -31,4 +31,4 @@ export const mockUsers: User[] = [
     firstName: 'Charlie',
     lastName: 'Wilson',
   },
-]
+];

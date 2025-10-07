@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router'
+import * as React from 'react';
+import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
   Container,
   Title,
@@ -13,12 +13,12 @@ import {
   Select,
   Switch,
   Badge,
-} from '@mantine/core'
-import { IconPlus, IconEdit, IconTrash, IconSearch, IconEye } from '@tabler/icons-react'
-import { useForm } from '@mantine/form'
-import { useDisclosure } from '@mantine/hooks'
-import { notifications } from '@mantine/notifications'
-import { useAppSelector, useAppDispatch } from '@/store/configureStore'
+} from '@mantine/core';
+import { IconPlus, IconEdit, IconTrash, IconSearch, IconEye } from '@tabler/icons-react';
+import { useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
+import { useAppSelector, useAppDispatch } from '@/store/configureStore';
 import {
   selectDevices,
   deviceAdded,
@@ -26,12 +26,12 @@ import {
   deviceRemoved,
   deviceOnline,
   deviceOffline,
-} from '@/features/devices/devicesSlice'
-import * as Types from '@/features/devices/types'
+} from '@/features/devices/devicesSlice';
+import * as Types from '@/features/devices/types';
 
 export const Route = createFileRoute('/manage/devices/')({
   component: DevicesManagementPage,
-})
+});
 
 // Device type options for the select component
 const deviceTypeOptions = [
@@ -39,15 +39,15 @@ const deviceTypeOptions = [
   { value: Types.DEVICE_TYPE_POPPER, label: 'Popper' },
   { value: Types.DEVICE_TYPE_NOSHOOT, label: 'No Shoot' },
   { value: Types.DEVICE_TYPE_STOP_PLATE, label: 'Stop Plate' },
-]
+];
 
 function DevicesManagementPage() {
-  const devices = useAppSelector(selectDevices)
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const [searchTerm, setSearchTerm] = React.useState('')
-  const [opened, { open, close }] = useDisclosure(false)
-  const [editingDevice, setEditingDevice] = React.useState<Types.Device | null>(null)
+  const devices = useAppSelector(selectDevices);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [opened, { open, close }] = useDisclosure(false);
+  const [editingDevice, setEditingDevice] = React.useState<Types.Device | null>(null);
 
   // Form for creating/editing devices
   const form = useForm({
@@ -59,62 +59,62 @@ function DevicesManagementPage() {
       name: value => (value.length < 2 ? 'Device name must have at least 2 characters' : null),
       type: value => (value ? null : 'Device type is required'),
     },
-  })
+  });
 
   // Filter devices based on search term
   const filteredDevices = devices.filter(device =>
     device.name.toLowerCase().includes(searchTerm.toLowerCase())
     || device.type.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  );
 
   const handleCreateDevice = () => {
-    setEditingDevice(null)
-    form.reset()
-    open()
-  }
+    setEditingDevice(null);
+    form.reset();
+    open();
+  };
 
   const handleEditDevice = (device: Types.Device) => {
-    setEditingDevice(device)
+    setEditingDevice(device);
     form.setValues({
       name: device.name,
       type: device.type,
-    })
-    open()
-  }
+    });
+    open();
+  };
 
   const handleViewDevice = (deviceId: string) => {
-    navigate({ to: '/manage/devices/$deviceId', params: { deviceId } })
-  }
+    navigate({ to: '/manage/devices/$deviceId', params: { deviceId } });
+  };
 
   const handleDeleteDevice = (deviceId: string, deviceName: string) => {
     if (window.confirm(`Are you sure you want to delete device "${deviceName}"? This will also remove all associated data.`)) {
-      dispatch(deviceRemoved({ id: deviceId }))
+      dispatch(deviceRemoved({ id: deviceId }));
       notifications.show({
         title: 'Device Deleted',
         message: `Device "${deviceName}" has been successfully deleted.`,
         color: 'red',
-      })
+      });
     }
-  }
+  };
 
   const handleStatusToggle = (device: Types.Device) => {
     if (device.status === Types.STATUS.ONLINE) {
-      dispatch(deviceOffline({ id: device.id }))
+      dispatch(deviceOffline({ id: device.id }));
       notifications.show({
         title: 'Device Offline',
         message: `Device "${device.name}" is now offline.`,
         color: 'orange',
-      })
+      });
     }
     else {
-      dispatch(deviceOnline({ id: device.id }))
+      dispatch(deviceOnline({ id: device.id }));
       notifications.show({
         title: 'Device Online',
         message: `Device "${device.name}" is now online.`,
         color: 'green',
-      })
+      });
     }
-  }
+  };
 
   const handleSubmit = (values: typeof form.values) => {
     if (editingDevice) {
@@ -123,12 +123,12 @@ function DevicesManagementPage() {
         id: editingDevice.id,
         ...values,
         lastUpdated: new Date().toISOString(),
-      }))
+      }));
       notifications.show({
         title: 'Device Updated',
         message: `Device "${values.name}" has been successfully updated.`,
         color: 'green',
-      })
+      });
     }
     else {
       // Create new device
@@ -140,28 +140,28 @@ function DevicesManagementPage() {
         lastUpdated: new Date().toISOString(),
         responses: [],
         sideEffects: [],
-      }
-      dispatch(deviceAdded(newDevice))
+      };
+      dispatch(deviceAdded(newDevice));
       notifications.show({
         title: 'Device Created',
         message: `Device "${values.name}" has been successfully created.`,
         color: 'green',
-      })
+      });
     }
-    close()
-    form.reset()
-  }
+    close();
+    form.reset();
+  };
 
   const getStatusColor = (status: Types.STATUS | undefined) => {
     switch (status) {
       case Types.STATUS.ONLINE:
-        return 'green'
+        return 'green';
       case Types.STATUS.OFFLINE:
-        return 'red'
+        return 'red';
       default:
-        return 'gray'
+        return 'gray';
     }
-  }
+  };
 
   return (
     <Container size="xl" py="md">
@@ -293,5 +293,5 @@ function DevicesManagementPage() {
 
       <Outlet />
     </Container>
-  )
+  );
 }

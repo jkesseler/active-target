@@ -1,5 +1,5 @@
-import { createMantineTheme } from './createMantineTheme'
-import type { Theme } from './types'
+import { createMantineTheme } from './createMantineTheme';
+import type { Theme } from './types';
 
 export const dracula: Theme = {
   label: '🧛 Dracula',
@@ -45,4 +45,4 @@ export const dracula: Theme = {
       ],
     },
   }),
-}
+};

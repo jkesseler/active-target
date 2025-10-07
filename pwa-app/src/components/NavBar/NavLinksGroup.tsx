@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { Link } from '@tanstack/react-router'
+import * as React from 'react';
+import { Link } from '@tanstack/react-router';
 import {
   Box,
   Collapse,
@@ -7,10 +7,10 @@ import {
   ThemeIcon,
   UnstyledButton,
   useDirection,
-} from '@mantine/core'
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
-import { useState } from 'react'
-import classes from './NavLinksGroup.module.css'
+} from '@mantine/core';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { useState } from 'react';
+import classes from './NavLinksGroup.module.css';
 
 interface LinksGroupProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,11 +28,11 @@ export function NavLinksGroup({
   initiallyOpened,
   links,
 }: LinksGroupProps) {
-  const { dir } = useDirection()
+  const { dir } = useDirection();
 
-  const hasLinks = Array.isArray(links)
-  const [opened, setOpened] = useState(initiallyOpened || false)
-  const ChevronIcon = dir === 'ltr' ? IconChevronRight : IconChevronLeft
+  const hasLinks = Array.isArray(links);
+  const [opened, setOpened] = useState(initiallyOpened || false);
+  const ChevronIcon = dir === 'ltr' ? IconChevronRight : IconChevronLeft;
   const items = (hasLinks ? links : []).map((link) => {
     return (
       <Link
@@ -45,8 +45,8 @@ export function NavLinksGroup({
       >
         {link.label}
       </Link>
-    )
-  })
+    );
+  });
 
   return (
     <>
@@ -98,5 +98,5 @@ export function NavLinksGroup({
           )}
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
-  )
+  );
 }

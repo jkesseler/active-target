@@ -1,5 +1,5 @@
-import { createMantineTheme } from './createMantineTheme'
-import type { Theme } from './types'
+import { createMantineTheme } from './createMantineTheme';
+import type { Theme } from './types';
 
 export const synthwave: Theme = {
   label: '🌆 Synthwave',
@@ -46,4 +46,4 @@ export const synthwave: Theme = {
     },
     headings: { fontFamily: 'Audiowide' },
   }),
-}
+};

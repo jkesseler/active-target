@@ -1,4 +1,4 @@
-import { Device, STATUS } from './types'
+import { Device, STATUS } from './types';
 
 const mockDevices: Device[] = [
   {
@@ -82,6 +82,6 @@ const mockDevices: Device[] = [
     responses: [],
     sideEffects: [],
   },
-]
+];
 
-export default mockDevices
+export default mockDevices;

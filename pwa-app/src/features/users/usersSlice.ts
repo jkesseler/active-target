@@ -1,36 +1,36 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit'
-import type { AppRootState } from '@/store/configureStore'
-import { mockUsers } from './mock-data'
-import type * as Types from './types'
+import { createSlice, createSelector } from '@reduxjs/toolkit';
+import type { AppRootState } from '@/store/configureStore';
+import { mockUsers } from './mock-data';
+import type * as Types from './types';
 
 export const usersSlice = createSlice({
   name: 'users',
   initialState: [...mockUsers] as Types.User[],
   reducers: {
     userAdded: (state, { payload }) => {
-      const idx = state.findIndex(user => user.id === payload.id)
+      const idx = state.findIndex(user => user.id === payload.id);
 
       if (idx !== -1) {
-        return state
+        return state;
       }
 
       return [
         ...state,
         payload,
-      ]
+      ];
     },
     userRemoved: (state, { payload }) => {
-      return state.filter(user => user.id !== payload.id)
+      return state.filter(user => user.id !== payload.id);
     },
     userUpdated: (state, { payload }) => {
       return state.map((user: Types.User) =>
         user.id === payload.id ? { ...user, ...payload } : user,
-      )
+      );
     },
   },
-})
+});
 
-export const selectUsers = (state: AppRootState) => state.users
+export const selectUsers = (state: AppRootState) => state.users;
 
 export const selectUserById = createSelector(
   [
@@ -38,6 +38,6 @@ export const selectUserById = createSelector(
     (_, id) => id,
   ],
   (users, id) => {
-    return users ? users.find((user: Types.User) => user.id === id) : null
+    return users ? users.find((user: Types.User) => user.id === id) : null;
   },
-)
+);

@@ -1,5 +1,5 @@
-import { createMantineTheme } from './createMantineTheme'
-import type { Theme } from './types'
+import { createMantineTheme } from './createMantineTheme';
+import type { Theme } from './types';
 
 export const corporate: Theme = {
   label: '💼 Corporate',
@@ -48,4 +48,4 @@ export const corporate: Theme = {
     fontFamilyMonospace: 'Monaco, Courier, monospace',
     headings: { fontFamily: 'Noto Sans, sans-serif' },
   }),
-}
+};

@@ -16,7 +16,7 @@ test.describe('Application Performance', () => {
   test('should not have console errors', async ({ page }) => {
     const consoleErrors: string[] = [];
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text());
       }
@@ -27,9 +27,9 @@ test.describe('Application Performance', () => {
 
     // Allow some common non-critical errors but fail on others
     const criticalErrors = consoleErrors.filter(error =>
-      !error.includes('favicon') &&
-      !error.includes('service-worker') &&
-      !error.includes('analytics')
+      !error.includes('favicon')
+      && !error.includes('service-worker')
+      && !error.includes('analytics'),
     );
 
     expect(criticalErrors).toHaveLength(0);

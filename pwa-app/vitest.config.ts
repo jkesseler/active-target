@@ -1,8 +1,8 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import path from 'path'
-import { defineConfig } from 'vitest/config'
+import path from 'path';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   resolve: {
@@ -26,4 +26,4 @@ export default defineConfig({
       exclude: ['node_modules/', 'test/', 'tests/', 'dist/', 'build/', 'scripts/'],
     },
   },
-})
+});
