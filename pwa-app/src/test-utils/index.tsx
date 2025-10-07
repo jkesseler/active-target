@@ -44,7 +44,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   store?: ReturnType<typeof createTestStore>;
 }
 
-const customRender = (
+export const renderWithProviders = (
   ui: ReactElement,
   {
     preloadedState = {},
@@ -58,7 +58,3 @@ const customRender = (
 
   return render(ui, { wrapper: Wrapper, ...renderOptions });
 };
-
-// Re-export everything
-export * from '@testing-library/react';
-export { customRender as render };

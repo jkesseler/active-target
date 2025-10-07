@@ -4,11 +4,11 @@ import importPlugin from 'eslint-plugin-import';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactPlugin from 'eslint-plugin-react';
 import stylistic from "@stylistic/eslint-plugin";
-import tseslint from 'typescript-eslint';
+import tsEslint from 'typescript-eslint';
 
-const config = tseslint.config(
+const config = tsEslint.config(
     eslint.configs.recommended,
-    tseslint.configs.recommended,
+    tsEslint.configs.recommended,
     {
         files: ['**/*.{ts,tsx}'],
         languageOptions: {

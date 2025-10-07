@@ -1,9 +1,7 @@
-import * as React from 'react';
 import { ScrollArea } from '@mantine/core';
 import { NavLinksGroup } from './NavLinksGroup';
 import classes from './NavBar.module.css';
 import { navLinks } from './navData';
-
 import type { NavItem } from './types';
 
 

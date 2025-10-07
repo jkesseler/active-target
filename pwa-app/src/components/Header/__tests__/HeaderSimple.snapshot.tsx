@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { renderWithProviders } from '@/test-utils';
-import { Timer } from '../Timer';
+import { HeaderSimple } from '../HeaderSimple';
+const Math_random = Math.random;
 
-describe('Timer', () => {
+describe('HeaderSimple', () => {
   it('renders without crashing', () => {
-    const { asFragment } = renderWithProviders(<Timer />);
+    const { asFragment } = renderWithProviders(<HeaderSimple />);
 
     expect(asFragment()).toMatchSnapshot();
   });

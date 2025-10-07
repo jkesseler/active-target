@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { renderWithProviders } from '@/test-utils';
-import { Timer } from '../Timer';
+import { ToggleStageButton } from '../ToggleStageButton';
 
-describe('Timer', () => {
+describe('ToggleStageButton', () => {
   it('renders without crashing', () => {
-    const { asFragment } = renderWithProviders(<Timer />);
+    const { asFragment } = renderWithProviders(<ToggleStageButton />);
 
     expect(asFragment()).toMatchSnapshot();
   });
